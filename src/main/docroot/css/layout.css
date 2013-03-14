@@ -90,7 +90,7 @@ div#left{
     clear:left;
 }
 
-menu.main, #copyright, #chirp {
+menu.main, #copyright, #chirp, #llista_enquestes {
     margin-bottom: 10px;
 }
 
@@ -108,6 +108,7 @@ menu.main a:hover{
 #copyright{
   padding: 10px;
 }
+
 
 #copyright p{
     font-size: 0.9em;
