@@ -12,5 +12,8 @@ class ChirpsService(chirpsRepository: ChirpsRepository,chirpersRepository: Chirp
   private def getChirperById(id:ObjectId) = chirpersRepository.findById(id).map(ar=>Author(ar.name,ar.username,ar.avatar))
 
   def listChirps = chirpsRepository.findAll.map(cr => Chirp(getChirperById(cr.author).get,cr.date,cr.message))
+  def novaEnquesta = "Hola!"
+
+
 
 }
