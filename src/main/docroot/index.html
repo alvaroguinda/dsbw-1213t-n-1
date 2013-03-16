@@ -1,75 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>Chirper</title>
+    <title>Enquestes</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/layout.css">
     <script src="http://code.jquery.com/jquery-1.8.0.js"></script>
-    <script src="scripts/chirper.js"></script>
+    <script src="scripts/enquestes.js"></script>
     <script src="http://modernizr.com/downloads/modernizr.js"></script>
 </head>
 <body>
-
     <div id="inici">
         <form action="#" class="novaEnquesta">
             <h1>Nova enquesta</h1>
             <input type="submit">
         </form>
     </div>
-
-    <div id="principal" class="template">    
+    <div id="principal">    
         <header>
-            <form action="#" class="logout">
-                <input type="submit" name="logout" id="logout" value="logout">
+            <h1>Nova enquesta</h1>
+            <form action="#" class="obrirFormulari">
+                <input type="submit" value="Crear" id="obrirFormulariButton">
             </form>
-            <img>
-            <h1>User real name</h1>
-            <h2>User username</h2>
-            <p class="status">User status</p>
+            <ne id = "formulariEnquesta" class = "template">
+                <h2>Títol</h2>
+                <input type="create" name="inTitol" id="inTitol">
+                <h2>Des de</h2>
+                <input type="create" name="inDes" id="inDes">
+                <h2>Fins a</h2>
+                <input type="create" name="inFins" id="inFins">
+                <form action="#" class="enviarNovaEnquesta">
+                    <input type="submit" value="Crear">
+                </form>
+            </ne>
             <p class="error template">Error message here</p>
         </header>
-
-        <section id="chirp">
-            <h1>Say something...</h1>
-            <form class="chirp">
-                <textarea></textarea>
-                <input type="submit" value="Chirp">
-            </form>
-        </section>
-
-        <menu class="main">
-            <a href="#">Chirps</a>
-            <a href="#">Following</a>
-            <a href="#">Followers</a>
-        </menu>
-
-        <section id="copyright">
-            <p>Your awesome copyright statement goes here.</p>
-        </section>
-
-        </div>
-
-        <section id="content">
-            <h1>Chirps</h1>
-            <ul id="chirps">
-                <li id="chirpTemplate" class="template">
-                    <date>date</date>
-                    <img src="img/avatar2.png">
-                    <address><span class="name">Name</span><span class="username">@username</span></address>
-                    <p>Message</p>
-                    <menu>
-                        <a href="#">Reply</a>
-                        <a href="#">Retweet</a>
-                        <a href="#">Favorite</a>
-                    </menu>
-                </li>
-            </ul>
-        </section>
-
-        <footer>
-
-        </footer>
     </div>
 </body>
 </html>
