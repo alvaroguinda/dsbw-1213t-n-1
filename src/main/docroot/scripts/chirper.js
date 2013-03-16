@@ -32,6 +32,38 @@ function nova_enquesta() {
         });
     }
 
+    function modificar_enquesta() {
+        var info;
+        if(auth_token != "") {
+            info = {
+                auth_token: auth_token
+            }
+        }else {
+            info = {
+                username: username,
+                password: password
+            }
+        }
+        $.ajax({
+            type: "PUT",
+            url: "/api/chirper/login",
+            contentType: "application/json",
+            data: JSON.stringify(info),
+            success: function(data) {
+                loggedUser = data;
+                currentUser = loggedUser;
+                document.cookie="chirper_session" + "=" + data.session_token;
+                $("#inici").fadeToggle(function() {
+                    $("#principal").fadeToggle();
+                });
+                Main.mainPage();
+            },
+            error: function(data) {
+                renderNotification("error",data.responseText);
+            }
+        });
+    }
+
 var loggedUser = {
     name: "John Doe",
     username: "john_doe",
@@ -94,11 +126,6 @@ $(function(){
 $(document).ready(function() {
 
     $("#inici form.novaEnquesta").submit(function() {
-
-
-        
-
-        
         $.ajax({
             type: "GET",
             url: "/api/enquesta",
@@ -112,7 +139,6 @@ $(document).ready(function() {
             error: function(jqXHR, textStatus, error) {
                 alert(3)
             }
-
         });
     })
 });

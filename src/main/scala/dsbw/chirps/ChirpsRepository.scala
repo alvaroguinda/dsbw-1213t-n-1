@@ -23,6 +23,9 @@ class ChirpsRepository(dao: ChirpsDao) {
 
   def findAll = dao.findAll.sort(MongoDBObject("date"-> -1)).toList
 
+  def findById(id:ObjectId) = dao.findOneByID(id)
+
+
   def incRechiprs(idChirp:String) {
     dao.updateById(new ObjectId(idChirp), $inc("rechirpsCount"->1))
   }

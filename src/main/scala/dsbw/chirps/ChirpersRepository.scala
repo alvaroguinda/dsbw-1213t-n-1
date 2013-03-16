@@ -13,6 +13,8 @@ class ChirpersRepository(dao: ChirpersDao) {
 
   def findById(id:ObjectId) = dao.findOneByID(id)
 
+  
+
   //dao.save(ChirperRecord(username="agile_jordi", name="Jordi Pradel", avatar="/img/avatar4.png"))
 
 }

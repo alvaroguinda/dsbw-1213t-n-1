@@ -120,7 +120,12 @@ $(document).ready(function() {
 
     $("form.enviarNovaEnquesta").submit(function() {
         $("#formulariEnquesta").addClass("template");
-        $("#obrirFormulariButton").removeClass("template");
+        $("#obrirFormulariButton.template").removeClass("template");
+    })
+
+    $("form.modificarFormulari").submit(function() {   
+        $("#formulariEnquestaModificar.template").removeClass("template");
+        $("#modificarFormulariButton").addClass("template");
     })
     
 });

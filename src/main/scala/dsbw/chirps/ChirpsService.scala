@@ -14,6 +14,16 @@ class ChirpsService(chirpsRepository: ChirpsRepository,chirpersRepository: Chirp
   def listChirps = chirpsRepository.findAll.map(cr => Chirp(getChirperById(cr.author).get,cr.date,cr.message))
   def novaEnquesta = "Hola!"
 
-
-
+  def getEnquesta(idAdmin:String, idEnquesta:String) {
+		// Comprobem qui està realitzant la petició
+		//val loggedUserId = sessionsRepository.findById(new ObjectId(session_token)).getOrElse(throw new HttpException(401, "Authorization required")).user_id
+		// Obtenim els dos usuaris existeixin
+		//val enquesta = chirpersRepository.findById(new ObjectId(idAdmin)).getOrElse(throw new HttpException(404, "User not found"))
+		val enquesta_id = chirpersRepository.findById(new ObjectId(idEnquesta)).getOrElse(throw new Exception( "User not found"))._id
+		// Comprobem que l'usuari autenticat es el follower
+		//if (loggedUserId.compareTo(user._id) != 0) throw new HttpException(403, "Forbidden")
+		//if (!follower.followees.exists(followee_id => true)) throw new HttpException (404, "Relation non exists")
+		
+		chirpersRepository.findById(enquesta_id)
+	}
 }
