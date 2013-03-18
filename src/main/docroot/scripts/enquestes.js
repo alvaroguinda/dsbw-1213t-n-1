@@ -69,7 +69,7 @@ $(function(){
 
     //renderLoggedUser();
 
-    var url = "/api/chirps";
+    /*var url = "/api/chirps";
     $.ajax({
         url: url,
         success: function(newChirps,textStatus,jqXHR){
@@ -86,7 +86,7 @@ $(function(){
             console.debug("Error!",jqXHR)
             console.debug("Text status", textStatus)
             console.debug("Error",error)
-        }})
+        }})*/
 });
 
 
@@ -94,9 +94,33 @@ $(function(){
 
 $(document).ready(function() {
 
-    $("#inici form.novaEnquesta").submit(function() {
+    /*$("#inici form.novaEnquesta").submit(function() {
         $.ajax({
             type: "GET",
+            url: "/api/enquesta",
+            //contentType: "application/json",
+
+            //data: JSON.stringify(),
+            success: function(data,textStatus,jqXHR) {
+                alert(2)
+            },
+            //dataType: "json",
+            error: function(jqXHR, textStatus, error) {
+                alert(3)
+            }
+
+        });
+    })*/
+
+    $("#inici form.novaEnquesta").submit(function() {
+        $("#inici").addClass("template");
+        $("#principal.template").removeClass("template");
+        $("#formulariEnquesta.template").removeClass("template");
+    })
+
+    $("#formulariEnquesta form.creaEnquesta").submit(function() {
+        $.ajax({
+            type: "POST",
             url: "/api/enquesta",
             //contentType: "application/json",
 
@@ -113,7 +137,7 @@ $(document).ready(function() {
     })
 
 
-    $("form.obrirFormulari").submit(function() {   
+    /*$("form.obrirFormulari").submit(function() {   
         $("#formulariEnquesta.template").removeClass("template");
         $("#obrirFormulariButton").addClass("template");
     })
@@ -126,6 +150,6 @@ $(document).ready(function() {
     $("form.modificarFormulari").submit(function() {   
         $("#formulariEnquestaModificar.template").removeClass("template");
         $("#modificarFormulariButton").addClass("template");
-    })
+    })*/
     
 });

@@ -11,32 +11,33 @@
 </head>
 <body>
     <div id="inici">
-        <form action="#" class="novaEnquesta">
-            <h1>Nova enquesta</h1>
-            <input type="submit">
-        </form>
-    </div>
-    <div id="principal">    
         <header>
-            <h1>Nova enquesta</h1>
+            <form action="#" class="novaEnquesta">
+                <h1>Nova enquesta</h1>
+                <input type="submit">
+            </form>
+        </header>
+    </div>
+    <div id="principal" class="template">    
+        <header>
+            <!--<h1>Nova enquesta</h1>
             <form action="#" class="obrirFormulari">
                 <input type="submit" value="Crear" id="obrirFormulariButton">
-            </form>
-            <ne id = "formulariEnquesta" class = "template">
-                <h2>Títol</h2>
-                <input type="create" name="inTitol" id="inTitol">
-                <h2>Des de</h2>
-                <input type="create" name="inDes" id="inDes">
-                <h2>Fins a</h2>
-                <input type="create" name="inFins" id="inFins">
-                <form action="#" class="enviarNova
-                Enquesta">
-                    <input type="submit" value="Crear">
+            </form>-->
+            <div id="formulariEnquesta" class="template">
+                <form action="#" class="creaEnquesta">                
+                    <h2>Títol</h2>
+                    <input type="create" name="inTitol" id="inTitol">
+                    <h2>Des de</h2>
+                    <input type="create" name="inDes" id="inDes">
+                    <h2>Fins a</h2>
+                    <input type="create" name="inFins" id="inFins">
+                    <form action="#" class="enviarNova
+                    Enquesta">
+                    <input type="submit" value="Crea">
                 </form>
-            </ne>
-            <form action="#" class="modificarFormulari">
-                <input type="submit" value="Modificar" id="modificarFormulariButton">
-            </form>
+            </div>
+            
             <ne id = "formulariEnquestaModificar" class = "template">
                 <h2>Títol</h2>
                 <input type="create" name="inTitolM" id="inTitolM">

@@ -10,7 +10,7 @@ class ChirpsApi(chirpsService:ChirpsService) extends Api {
   def service(method: String, uri: String, parameters: Map[String, List[String]] = Map(), headers: Map[String, String] = Map(), body: Option[JSON] = None): Response = {
     (method + " " + uri) match {
       case "GET /api/chirps" => Response(HttpStatusCode.Ok, chirpsService.listChirps)
-      case "POST /api/enquestes" => Response(HttpStatusCode.Ok, chirpsService.novaEnquesta)
+      case "POST /api/enquestes" => Response(HttpStatusCode.Ok, chirpsService.novaEnquesta())
       case getEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, chirpsService.getEnquesta(idAdmin,idEnquesta))
       case _ => Response(HttpStatusCode.Ok, "Hello world!")
     }

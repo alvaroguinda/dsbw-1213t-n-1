@@ -12,7 +12,6 @@ class ChirpsService(chirpsRepository: ChirpsRepository,chirpersRepository: Chirp
   private def getChirperById(id:ObjectId) = chirpersRepository.findById(id).map(ar=>Author(ar.name,ar.username,ar.avatar))
 
   def listChirps = chirpsRepository.findAll.map(cr => Chirp(getChirperById(cr.author).get,cr.date,cr.message))
-  def novaEnquesta = "Hola!"
 
   def getEnquesta(idAdmin:String, idEnquesta:String) {
 		// Comprobem qui està realitzant la petició
@@ -25,5 +24,9 @@ class ChirpsService(chirpsRepository: ChirpsRepository,chirpersRepository: Chirp
 		//if (!follower.followees.exists(followee_id => true)) throw new HttpException (404, "Relation non exists")
 		
 		chirpersRepository.findById(enquesta_id)
+	}
+
+	def novaEnquesta() {
+		print("Hola")
 	}
 }
