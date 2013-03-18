@@ -118,22 +118,66 @@ $(document).ready(function() {
         $("#formulariEnquesta.template").removeClass("template");
     })
 
+
+
+        /*var info;
+        if(auth_token != "") {
+            info = {
+                auth_token: auth_token
+            }
+        }else {
+            info = {
+                username: username,
+                password: password
+            }
+        }
+        $.ajax({
+            type: "POST",
+            url: "/api/chirper/login",
+            contentType: "application/json",
+            data: JSON.stringify(info),
+            success: function(data) {
+                loggedUser = data;
+                currentUser = loggedUser;
+                document.cookie="chirper_session" + "=" + data.session_token;
+                $("#inici").fadeToggle(function() {
+                    $("#principal").fadeToggle();
+                });
+                Main.mainPage();
+            },
+            error: function(data) {
+                renderNotification("error",data.responseText);
+            }
+        });*/
+
+
     $("#formulariEnquesta form.creaEnquesta").submit(function() {
+        
+        var enquesta = {
+            titol: $("#formulariEnquesta form.creaEnquesta input.inTitol").val(),
+            inici: $("#formulariEnquesta form.creaEnquesta input.inDes").val(),
+            fi: $("#formulariEnquesta form.creaEnquesta input.inFins").val()
+        }
+
         $.ajax({
             type: "POST",
             url: "/api/enquesta",
-            //contentType: "application/json",
-
-            //data: JSON.stringify(),
-            success: function(data,textStatus,jqXHR) {
-                alert(2)
+            contentType: "application/json",
+            data: JSON.stringify(enquesta),
+            success: function() {
+                $("#inici").addClass("template")
+                $("#principal.template").removeClass("template")
+                $("#formulariEnquesta.template").removeClass("template")
             },
-            //dataType: "json",
-            error: function(jqXHR, textStatus, error) {
-                alert(3)
+            error: function() {
+                $("#inici").addClass("template")
+                $("#principal.template").removeClass("template")
+                $("#formulariEnquesta.template").removeClass("template")
             }
 
         });
+
+
     })
 
 

@@ -4,13 +4,15 @@ import dsbw.server.{Server, HttpStatusCode, Response, Api}
 import dsbw.json.JSON
 import Config.{dbHostName, dbPort, dbName, username, pwd, webServerPort}
 
+case class NovaEnquesta(titol: String, inici: String, fi: String)
+
 /** Chirps API */
 class ChirpsApi(chirpsService:ChirpsService) extends Api {
   val getEnquestaAdmin = "GET /api/enquestes/admin([0-9]+)/enq([0-9]+)".r
   def service(method: String, uri: String, parameters: Map[String, List[String]] = Map(), headers: Map[String, String] = Map(), body: Option[JSON] = None): Response = {
     (method + " " + uri) match {
-      case "GET /api/chirps" => Response(HttpStatusCode.Ok, chirpsService.listChirps)
-      case "POST /api/enquestes" => Response(HttpStatusCode.Ok, chirpsService.novaEnquesta())
+      //case "GET /api/chirps" => Response(HttpStatusCode.Ok, chirpsService.listChirps)
+      case "POST /api/enquesta" => Response(HttpStatusCode.Ok, chirpsService.creaEnquesta(JSON.fromJSON[NovaEnquesta](body.getOrElse(throw new Exception("Bad Request")))))
       case getEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, chirpsService.getEnquesta(idAdmin,idEnquesta))
       case _ => Response(HttpStatusCode.Ok, "Hello world!")
     }

@@ -6,12 +6,13 @@ import java.util.Date
 case class Author(name:String, username:String, avatar:String)
 
 case class Chirp(author:Author, date:Date, message:String)
+case class Enquesta(titol: String, inici: String, fi: String)
 
 class ChirpsService(chirpsRepository: ChirpsRepository,chirpersRepository: ChirpersRepository) {
 
-  private def getChirperById(id:ObjectId) = chirpersRepository.findById(id).map(ar=>Author(ar.name,ar.username,ar.avatar))
+  //private def getChirperById(id:ObjectId) = chirpersRepository.findById(id).map(ar=>Author(ar.name,ar.username,ar.avatar))
 
-  def listChirps = chirpsRepository.findAll.map(cr => Chirp(getChirperById(cr.author).get,cr.date,cr.message))
+  //def listChirps = chirpsRepository.findAll.map(cr => Chirp(getChirperById(cr.author).get,cr.date,cr.message))
 
   def getEnquesta(idAdmin:String, idEnquesta:String) {
 		// Comprobem qui està realitzant la petició
@@ -26,7 +27,19 @@ class ChirpsService(chirpsRepository: ChirpsRepository,chirpersRepository: Chirp
 		chirpersRepository.findById(enquesta_id)
 	}
 
-	def novaEnquesta() {
-		print("Hola")
+	def creaEnquesta(enquesta: NovaEnquesta) {
+		println(enquesta.titol)
+		println(enquesta.inici)
+		println(enquesta.fi)
+		//if(enquesta.titol == "") throw new Exception("El titol no pot estar en blanc")
+		//if(user.inici == "") throw new HttpException(400, "La data inici no pot estar en blanc")
+		//if(user.fi == "") throw new HttpException(400, "La data fi no pot estar en blanc")
+		//if(chirpersRepository.findByTitol(enquesta.titol).isDefined) throw new HttpException(400,"El Titol ja existeix")
+		
+		val enquestaR = new EnquestaRecord (
+			_id = new ObjectId(), 
+			titol = enquesta.titol
+		)
+		chirpersRepository.save(enquestaR)
 	}
 }
