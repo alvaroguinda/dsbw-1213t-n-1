@@ -5,8 +5,8 @@ import java.util.Date
 
 case class Author(name:String, username:String, avatar:String)
 
-case class Chirp(author:Author, date:Date, message:String)
-case class Enquesta(titol: String, inici: String, fi: String)
+case class Chirp(id:String, author:Author, date:Date, message:String)
+case class Enquesta(id:String, titol: String, inici: String, fi: String)
 
 class ChirpsService(chirpsRepository: ChirpsRepository,chirpersRepository: ChirpersRepository) {
 
@@ -38,7 +38,9 @@ class ChirpsService(chirpsRepository: ChirpsRepository,chirpersRepository: Chirp
 		
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(), 
-			titol = enquesta.titol
+			titol = enquesta.titol,
+			inici = enquesta.inici,
+			fi = enquesta.fi
 		)
 		chirpersRepository.save(enquestaR)
 	}

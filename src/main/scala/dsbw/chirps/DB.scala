@@ -10,6 +10,7 @@ class DB(hostName: String, port: Int, dbName: String, username: String, pwd: Str
   db.authenticate(username, pwd)
   val chirps = db("chirps")
   val chirpers = db("chirpers")
+  val enquestes = db("enquestes")
 
   /** Initialize the DB here, mostly, ensure indexes */
   def init() {

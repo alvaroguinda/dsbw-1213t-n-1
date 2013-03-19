@@ -5,9 +5,11 @@ import dsbw.mongo.MongoDao
 
 /** Case class that documents the document scheme in the chirper MongoDB collection */
 //case class ChirperRecord(_id:ObjectId = new ObjectId(), username:String, name:String, avatar:String)
-case class EnquestaRecord(_id:ObjectId = new ObjectId(), titol:String)
+case class EnquestaRecord(_id:ObjectId = new ObjectId(), titol:String, inici:String, fi:String)
 
-class ChirpersDao(db:DB) extends MongoDao[EnquestaRecord](db.chirpers) {
+
+
+class ChirpersDao(db:DB) extends MongoDao[EnquestaRecord](db.enquestes) {
 }
 
 class ChirpersRepository(dao: ChirpersDao) {

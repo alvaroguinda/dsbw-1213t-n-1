@@ -164,21 +164,36 @@ $(document).ready(function() {
             url: "/api/enquesta",
             contentType: "application/json",
             data: JSON.stringify(enquesta),
-            success: function() {
-                $("#inici").addClass("template")
-                $("#principal.template").removeClass("template")
-                $("#formulariEnquesta.template").removeClass("template")
+            success: function(data) {
+                //$("#inici").addClass("template")
+                //$("#principal.template").removeClass("template")
+                //$("#formulariEnquesta.template").removeClass("template")
+                alert(2);
             },
-            error: function() {
-                $("#inici").addClass("template")
-                $("#principal.template").removeClass("template")
-                $("#formulariEnquesta.template").removeClass("template")
+            error: function(data) {
+               //$("#inici").addClass("template")
+                //$("#principal.template").removeClass("template")
+               // $("#formulariEnquesta.template").removeClass("template")
+                alert(1);
             }
 
         });
 
 
     })
+
+    AJAX.getEnquesta = function(idAdmin,idEnquesta,successCallback) {
+        $.ajax({
+            type: "GET",
+            url: "api/enquesta/admin" + idAdmin + "/enq" + idEnquesta,
+            //headers: {"X-Auth-Token" : loggedUser.session_token},
+            contentType: "application/json",
+            success: function(responseData) {
+                
+            },
+            dataType: "json"
+        });
+    }
 
 
     /*$("form.obrirFormulari").submit(function() {   
