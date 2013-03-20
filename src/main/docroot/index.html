@@ -5,10 +5,17 @@
     <meta charset="utf-8" />
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/layout.css">
-    <script src="http://code.jquery.com/jquery-1.8.0.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+    
+    
+    <script src="http://code.jquery.com/jquery-1.8.0.js"></script>    
+    <script src="http://modernizr.com/downloads/modernizr.js"></script>    
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>    
+
+    <script src="scripts/funcions.js"></script>
     <script src="scripts/enquestador.js"></script>
-    <script src="http://modernizr.com/downloads/modernizr.js"></script>
 </head>
+
 <body>
     <div id="inici">
         <header>
@@ -29,11 +36,11 @@
                     <h2>Nova enquesta</h2>
 
                     <label for="inTitol">Títol</label>
-                    <input type="text" class="inTitol" name="inTitol" id="inTitol"><br/>
-                    <label for="inTitol">Des de</label>
-                    <input type="text" class="inDes"  name="inDes" id="inDes"><br/>
-                    <label for="inTitol">Fins a</label>
-                    <input type="text" class="inFins"  name="inFins" id="inFins"><br/>
+                    <input type="text" class="titol" name="titol" id="titol">
+                    <label for="dataInici">Des de</label>
+                    <input type="text" id="dataInici" name="dataInici"/>
+                    <label for="dataFi">Fins a</label>
+                    <input type="text" id="dataFi" name="dataFi"/>
                     
                     <input type="submit" value="Crea">
                 </form>
