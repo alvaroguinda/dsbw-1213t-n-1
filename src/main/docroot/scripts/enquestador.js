@@ -52,13 +52,11 @@ $(document).ready(function() {
                 //$("#inici").addClass("template")
                 //$("#principal.template").removeClass("template")
                 //$("#formulariEnquesta.template").removeClass("template")
-                alert("ok");
             },
             error: function(data) {
                //$("#inici").addClass("template")
                 //$("#principal.template").removeClass("template")
                // $("#formulariEnquesta.template").removeClass("template")
-                alert("ko");
             }
 
         });
