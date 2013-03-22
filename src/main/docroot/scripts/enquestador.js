@@ -27,6 +27,12 @@ $(function(){
         $("#formulariEnquesta").removeClass("template");
     })
 
+    $("#inici form.getEnquesta").click(function(){
+         $("#inici").addClass("template");
+         $("#principal").removeClass("template");
+         $("#formulariGetEnquesta").removeClass("template");
+    }                         )
+
 });
 
 
@@ -55,6 +61,35 @@ $(document).ready(function() {
                 alert("ok");
             },
             error: function(data) {
+               //$("#inici").addClass("template")
+                //$("#principal.template").removeClass("template")
+               // $("#formulariEnquesta.template").removeClass("template")
+                alert("ko");
+            }
+
+        });
+                     })
+
+    $("#formulariGetEnquesta form.getEnquesta").submit(function() {
+
+        var enquesta = {
+            id: $("#formulariGetEnquesta form.getEnquesta input#id").val(),
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/api/enquestes/admin0/enq"+enquesta.id,
+            success: function(enquesta) {
+                $("#inici").addClass("template")
+                $("#principal.template").removeClass("template")
+                $("#veureEnquesta.template").removeClass("template")
+                $("input[name='veureTitol']").val(enquesta.titol)
+                $("input[name='veureDesM']").val(enquesta.inici)
+                $("input[name='veureFinsM']").val(enquesta.fi)
+              //  alert(enquesta.titol);
+            },
+            dataType: "json",
+            error: function(enquesta) {
                //$("#inici").addClass("template")
                 //$("#principal.template").removeClass("template")
                // $("#formulariEnquesta.template").removeClass("template")
