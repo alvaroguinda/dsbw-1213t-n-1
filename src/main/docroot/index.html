@@ -23,6 +23,10 @@
                 <h1>Benvingut al Enquestador</h1>
                 <input type="button" value="Nova enquesta">
             </form>
+            <form action="#" class="getEnquesta">
+                <h1>Get Enquesta</h1>
+                <input type="button" value="Get Enquesta">
+            </form>
         </header>
     </div>
     <div id="principal" class="template">    
@@ -45,17 +49,26 @@
                     <input type="submit" value="Crea">
                 </form>
             </div>
+
+            <div id="formulariGetEnquesta" class="template">
+                <form action="#" class="getEnquesta">
+                    <h2>Nova enquesta</h2>
+
+                    <label for="getTitolEnq">Id</label>
+                    <input type="text" class="titol" name="titol" id="id">
+
+                    <input type="submit" value="Crea">
+                </form>
+            </div>
             
-            <div id = "formulariEnquestaModificar" class = "template">
-                <form action="#" class="enviarEnquestaModificada">
-                    <h2>Títol</h2>
-                    <input type="create" name="inTitolM" id="inTitolM">
+            <div id = "veureEnquesta" class = "template">
+                <form action="#" class="veureEnquesta">
+                    <h2>Enquesta: </h2>
+                    <input type="create" name="veureTitol" id="veureTitol">
                     <h2>Des de</h2>
-                    <input type="create" name="inDesM" id="inDesM">
+                    <input type="create" name="veureDesM" id="veureDesM">
                     <h2>Fins a</h2>
-                    <input type="create" name="inFinsM" id="inFinsM">
-                
-                    <input type="submit" value="Modificar">
+                    <input type="create" name="veureFinsM" id="veureFinsM">
                 </form>
             </div>
             <p class="error template">Error message here</p>

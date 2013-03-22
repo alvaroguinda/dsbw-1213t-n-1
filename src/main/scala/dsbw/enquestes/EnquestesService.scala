@@ -11,17 +11,18 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 
   //def listEnquestes = enquestesRepository.findAll.map(cr => Enquesta(getEnquestaById(cr.author).get,cr.date,cr.message))
 
-  def getEnquesta(idAdmin:String, idEnquesta:String) {
+  def getEnquesta(idAdmin:String, idEnquesta:String):Enquesta= {
 		// Comprobem qui està realitzant la petició
 		//val loggedUserId = sessionsRepository.findById(new ObjectId(session_token)).getOrElse(throw new HttpException(401, "Authorization required")).user_id
 		// Obtenim els dos usuaris existeixin
 		//val enquesta = enquestesRepository.findById(new ObjectId(idAdmin)).getOrElse(throw new HttpException(404, "User not found"))
-		val enquesta_id = enquestesRepository.findById(new ObjectId(idEnquesta)).getOrElse(throw new Exception( "User not found"))._id
+		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+    new Enquesta(enquesta._id.toString(),enquesta.titol,enquesta.inici,enquesta.fi)
 		// Comprobem que l'usuari autenticat es el follower
 		//if (loggedUserId.compareTo(user._id) != 0) throw new HttpException(403, "Forbidden")
 		//if (!follower.followees.exists(followee_id => true)) throw new HttpException (404, "Relation non exists")
-    println(new ObjectId(idEnquesta))
-		enquestesRepository.findById(enquesta_id)
+
+	//	enquestesRepository.findById(enquesta_id)
 	}
 
 	def creaEnquesta(enquesta: NovaEnquesta) {
