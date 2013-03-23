@@ -42,4 +42,14 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 		)
 		enquestesRepository.save(enquestaR)
 	}
+
+	def putEnquesta(idAdmin:String, idEnquesta:String, enquesta: NovaEnquesta){
+		val enquestaR = new EnquestaRecord (
+			_id = new ObjectId(idEnquesta),
+			titol = enquesta.titol,
+			inici = enquesta.inici,
+			fi = enquesta.fi
+		)
+		enquestesRepository.save(enquestaR)
+	}
 }
