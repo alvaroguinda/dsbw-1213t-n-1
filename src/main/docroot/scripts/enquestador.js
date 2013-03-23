@@ -31,7 +31,7 @@ $(function(){
          $("#inici").addClass("template");
          $("#principal").removeClass("template");
          $("#formulariGetEnquesta").removeClass("template");
-    }                         )
+    })
 
 });
 
@@ -78,8 +78,6 @@ $(document).ready(function() {
             type: "GET",
             url: "/api/enquestes/admin0/enq"+enquesta.id,
             success: function(enquesta) {
-                $("#inici").addClass("template")
-                $("#principal.template").removeClass("template")
                 $("#veureEnquesta.template").removeClass("template")
                 $("input[name='veureTitol']").val(enquesta.titol)
                 $("input[name='veureDesM']").val(enquesta.inici)
@@ -99,6 +97,32 @@ $(document).ready(function() {
 
     })
 
+    $("#veureEnquesta form.veureEnquesta").submit(function() {
+
+        var enquesta2 = {
+            id: $("#formulariGetEnquesta form.getEnquesta input#id").val(),
+        }
+        var enquesta = {
+            titol: $("#veureEnquesta form.veureEnquesta input#veureTitol").val(),
+            inici: $("#veureEnquesta form.veureEnquesta input#veureDesM").val(),
+            fi: $("#veureEnquesta form.veureEnquesta input#veureFinsM").val()
+        }
+        alert(enquesta.titol);
+        $.ajax({
+            type: "PUT",
+            url: "/api/enquestes/admin0/enq"+enquesta2.id,
+            contentType: "application/json",
+            data: JSON.stringify(enquesta),
+            success: function(data) {
+                alert("Modificada! :)");
+            },
+            error: function(data) {
+               alert("FAIL!!");
+            }
+
+        });
+    })
+
 
     /*$("form.obrirFormulari").submit(function() {   
         $("#formulariEnquesta.template").removeClass("template");
@@ -116,3 +140,4 @@ $(document).ready(function() {
     })*/
     
 });
+
