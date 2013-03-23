@@ -14,6 +14,7 @@ object HttpStatusCode extends Enumeration{
   val NotFound = Value(404)
   val NotAcceptable = Value(406)
 
+  val ServerError = Value(500)
 }
 
 case class Response private (status: HttpStatusCode.Value, body:Option[Any]=None)

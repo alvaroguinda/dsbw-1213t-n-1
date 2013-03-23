@@ -26,9 +26,9 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 	}
 
 	def creaEnquesta(enquesta: NovaEnquesta) {
-		println(enquesta.titol)
-		println(enquesta.inici)
-		println(enquesta.fi)
+		//println(enquesta.titol)
+		//println(enquesta.inici)
+		//println(enquesta.fi)
 		//if(enquesta.titol == "") throw new Exception("El titol no pot estar en blanc")
 		//if(user.inici == "") throw new HttpException(400, "La data inici no pot estar en blanc")
 		//if(user.fi == "") throw new HttpException(400, "La data fi no pot estar en blanc")

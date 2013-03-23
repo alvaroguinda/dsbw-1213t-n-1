@@ -31,18 +31,15 @@ $(function(){
          $("#inici").addClass("template");
          $("#principal").removeClass("template");
          $("#formulariGetEnquesta").removeClass("template");
-    }                         )
+    })
 
 });
 
 
 $(document).ready(function() {
 
-    
-
-
     $("#formulariEnquesta form.creaEnquesta").submit(function() {
-
+        event.preventDefault(); //D'aquesta manera no fem refresh de la pantalla
         var enquesta = {
             titol: $("#formulariEnquesta form.creaEnquesta input#titol").val(),
             inici: $("#formulariEnquesta form.creaEnquesta input#dataInici").val(),
@@ -54,10 +51,10 @@ $(document).ready(function() {
             url: "/api/enquesta",
             contentType: "application/json",
             data: JSON.stringify(enquesta),
-            success: function(data) {
-                //$("#inici").addClass("template")
-                //$("#principal.template").removeClass("template")
-                //$("#formulariEnquesta.template").removeClass("template")
+            success: function() {
+                $("#inici").addClass("template");
+                $("#principal").removeClass("template");
+                $("#formulariEnquesta").removeClass("template");
             },
             error: function(data) {
                //$("#inici").addClass("template")
@@ -66,7 +63,7 @@ $(document).ready(function() {
             }
 
         });
-                     })
+     })
 
     $("#formulariGetEnquesta form.getEnquesta").submit(function() {
 
@@ -88,10 +85,9 @@ $(document).ready(function() {
             },
             dataType: "json",
             error: function(enquesta) {
-               //$("#inici").addClass("template")
+                //$("#inici").addClass("template")
                 //$("#principal.template").removeClass("template")
-               // $("#formulariEnquesta.template").removeClass("template")
-                alert("ko");
+                //$("#formulariEnquesta.template").removeClass("template")
             }
 
         });
