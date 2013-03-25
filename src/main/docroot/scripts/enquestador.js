@@ -38,13 +38,14 @@ $(function(){
 
 $(document).ready(function() {
 
-    $("#formulariEnquesta form.creaEnquesta").submit(function() {
-        event.preventDefault(); //D'aquesta manera no fem refresh de la pantalla
+    $("#formulariEnquesta form.creaEnquesta").submit(function(e) {
+        e.preventDefault(); //D'aquesta manera no fem refresh de la pantalla
+
         var enquesta = {
             titol: $("#formulariEnquesta form.creaEnquesta input#titol").val(),
             inici: $("#formulariEnquesta form.creaEnquesta input#dataInici").val(),
             fi: $("#formulariEnquesta form.creaEnquesta input#dataFi").val()
-        }
+        };
 
         $.ajax({
             type: "POST",
@@ -54,7 +55,11 @@ $(document).ready(function() {
             success: function() {
                 $("#inici").addClass("template");
                 $("#principal").removeClass("template");
-                $("#formulariEnquesta").removeClass("template");
+                $("#formulariEnquesta").addClass("template");
+                $("#veureEnquesta").removeClass("template");
+                $("#veureEnquesta form.veureEnquesta input#veureTitol").val(enquesta["titol"]);
+                $("#veureEnquesta form.veureEnquesta input#veureDesM").val(enquesta["inici"]);
+                $("#veureEnquesta form.veureEnquesta input#veureFinsM").val(enquesta["fi"]);
             },
             error: function(data) {
                //$("#inici").addClass("template")

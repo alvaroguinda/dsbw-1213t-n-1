@@ -34,6 +34,10 @@ p.error{
     margin: 5px;
 }
 
+.logo {
+    height: 100px;
+}
+
 header p.error{
     clear:left;
 }
