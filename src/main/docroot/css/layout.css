@@ -67,6 +67,7 @@ header, menu.main, section{
   border-radius: 5px;
   -moz-border-radius: 5px;
   border: 1px solid #EEE;
+  padding:10px;
 }
 
 header {
@@ -140,8 +141,10 @@ menu.main a:hover{
 }
 
 #content {
+    /*
     width: 70%;
     float:left;
+    */
 }
 
 #content h1 {
