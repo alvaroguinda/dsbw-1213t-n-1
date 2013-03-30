@@ -1,8 +1,3 @@
-$(function() {
-    //datepicker individual
-    $( ".datepicker" ).datepicker({ dateFormat: 'dd-mm-yy' });
-});
-
 /*$("#dataInici").datepicker({
     dateFormat: "dd-mm-yy",
     firstDay: 1,
@@ -17,6 +12,9 @@ $(function() {
 });*/
 
 $(function() {
+    //datepicker individual
+    $( ".datepicker" ).datepicker({ dateFormat: 'dd-mm-yy' });
+
     //datapicker per fer interval de dates
     $( ".from" ).datepicker({
         dateFormat: 'dd-mm-yy',
