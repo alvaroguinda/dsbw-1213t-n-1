@@ -1,45 +1,54 @@
+//Map de les seccions de la web cap als fitxers que les contenen:
+var secc = {
+    Inici : "inici",
+    CrearEnquesta : "crearEnquesta",
+    ObtindreEnquesta : "getEnquesta",
+    VeureEnquesta : "veureEnquesta"
+};
+
+//Funció per carregar el contingut de cada secció dinamicament:
+var carregaSeccio = function(nomSeccio,data){
+    $("#sectionContainer").empty(); //Buidem el DOM relatiu a la secció
+    if(!nomSeccio){ //si no hem rebut arguments per carregar una determinada secció...
+        var path = location.pathname.substring(1); //capturem el path contingut a la url
+        if(!secc[path]){ //si aquet path no existeix al nostre Map es que estem entrant per primer cop a
+            path = "Inici"; // la web i la url té el path en blanc o és "index.html", per tant és "Inici"
+            history.pushState({page:path}, path, path); //modifiquem la url de la web + l'historic associat del navegador
+        }
+        $("#sectionContainer").load("ajax/"+secc[path]+".html", configuraSeccio); //carreguem el contingut de la secc. dinamicament
+    }
+    else{ //si hem rebut arguments es tracta d'un click a un botó que ha de conduir a una determinada secció
+        history.pushState({page:nomSeccio}, nomSeccio, nomSeccio); //modifiquem la url de la web + l'historic associat del navegador
+        $("#sectionContainer").load("ajax/"+secc[nomSeccio]+".html",function(){configuraSeccio(data);}); //carreguem el contingut de la secc. dinamicament
+    }
+};
+
 var Events = {
    inici: function() {
-        $("#novaEnquesta").click(function(e) {
-        /*
-           $("#inici").addClass("template");
-           $("#principal").removeClass("template");
-           $("#formulariEnquesta").removeClass("template");
-        */
+        $("#crearEnquesta").click(function(e) {
             e.preventDefault();
-            $("#sectionContainer").empty();
-            history.pushState({page:"Nova Enquesta"}, "Nova Enquesta", "NovaEnquesta");
-            $("#sectionContainer").load("ajax/crearEnquesta.html", carregarEventHandlers);
-
+            carregaSeccio("CrearEnquesta");
         });
 
         $("#getEnquesta").click(function(e){
-        /*
-            $("#inici").addClass("template");
-            $("#principal").removeClass("template");
-            $("#formulariGetEnquesta").removeClass("template");
-        */
             e.preventDefault();
-            $("#sectionContainer").empty();
-            history.pushState({page:"Obtindre Enquesta"}, "Obtindre Enquesta", "ObtindreEnquesta");
-            $("#sectionContainer").load("ajax/getEnquesta.html");
-       });
+            carregaSeccio("ObtindreEnquesta");
+        });
    },
 
    crearEnquesta: function() {
         $("#tornar").click(function(e) {
             e.preventDefault();
-            $("#sectionContainer").empty();
-            history.pushState({page:"Inici"}, "Inici", "Inici");
-            $("#sectionContainer").load("ajax/inici.html", carregarEventHandlers);
+            carregaSeccio("Inici");
         });
-       $("#formulariEnquesta form.creaEnquesta").submit(function(e) {
+
+        $("form.creaEnquesta").submit(function(e) {
            e.preventDefault(); //D'aquesta manera no fem refresh de la pantalla
 
            var enquesta = {
-               titol: $("#formulariEnquesta form.creaEnquesta input#titol").val(),
-               inici: $("#formulariEnquesta form.creaEnquesta input#dataInici").val(),
-               fi: $("#formulariEnquesta form.creaEnquesta input#dataFi").val()
+               titol: $("#titol").val(),
+               inici: $("#dataInici").val(),
+               fi: $("#dataFi").val()
            };
 
            $.ajax({
@@ -48,62 +57,58 @@ var Events = {
                contentType: "application/json",
                data: JSON.stringify(enquesta),
                success: function() {
-                   $("#inici").addClass("template");
-                   $("#principal").removeClass("template");
-                   $("#formulariEnquesta").addClass("template");
-                   $("#veureEnquesta").removeClass("template");
-                   $("#veureEnquesta form.veureEnquesta input#veureTitol").val(enquesta["titol"]);
-                   $("#veureEnquesta form.veureEnquesta input#veureDesM").val(enquesta["inici"]);
-                   $("#veureEnquesta form.veureEnquesta input#veureFinsM").val(enquesta["fi"]);
+                   carregaSeccio("VeureEnquesta",enquesta);
                },
                error: function(data) {
-                  //$("#inici").addClass("template")
-                   //$("#principal.template").removeClass("template")
-                  // $("#formulariEnquesta.template").removeClass("template")
+                  alert("No s'ha pogut crear l'enquesta.");
                }
 
            });
         });
    },
+
    getEnquesta: function() {
-       $("#formulariGetEnquesta form.getEnquesta").submit(function() {
+        $("#tornar").click(function(e) {
+            e.preventDefault();
+            carregaSeccio("Inici");
+        });
+
+        $("form.getEnquesta").submit(function() {
 
            var enquesta = {
-               id: $("#formulariGetEnquesta form.getEnquesta input#id").val(),
+               id: $("form.getEnquesta input#id").val(),
            }
 
            $.ajax({
                type: "GET",
                url: "/api/enquestes/admin0/enq"+enquesta.id,
                success: function(enquesta) {
-                   $("#veureEnquesta.template").removeClass("template")
-                   $("input[name='veureTitol']").val(enquesta.titol)
-                   $("input[name='veureDesM']").val(enquesta.inici)
-                   $("input[name='veureFinsM']").val(enquesta.fi)
-                 //  alert(enquesta.titol);
+                   carregaSeccio("VeureEnquesta",enquesta);
                },
                dataType: "json",
                error: function(enquesta) {
-                   //$("#inici").addClass("template")
-                   //$("#principal.template").removeClass("template")
-                   //$("#formulariEnquesta.template").removeClass("template")
+                   alert("No s'ha pogut obtindre l'enquesta");
                }
-
            });
-
-
-       });
+        });
    },
+
    veureEnquesta: function() {
-       $("#veureEnquesta form.veureEnquesta").submit(function() {
+        $("#tornar").click(function(e) {
+            e.preventDefault();
+            carregaSeccio("Inici");
+        });
+
+        $("form.veureEnquesta").submit(function() {
 
            var enquesta2 = {
-               id: $("#formulariGetEnquesta form.getEnquesta input#id").val(),
-           }
+               id: $("form.getEnquesta input#id").val()
+           } // si venim d'haver creat una enquesta nova aquest id no existeix... ¿?¿?
+
            var enquesta = {
-               titol: $("#veureEnquesta form.veureEnquesta input#veureTitol").val(),
-               inici: $("#veureEnquesta form.veureEnquesta input#veureDesM").val(),
-               fi: $("#veureEnquesta form.veureEnquesta input#veureFinsM").val()
+               titol: $("#veureTitol").val(),
+               inici: $("#veureDesM").val(),
+               fi: $("#veureFinsM").val()
            }
            alert(enquesta.titol);
            $.ajax({
@@ -119,129 +124,39 @@ var Events = {
                }
 
            });
-       });
+        });
    }
 };
 
-var carregarEventHandlers = function(){
+//Funció de configuració dels diversos elements de la web segons la secció en que ens trobem
+var configuraSeccio = function(data){
     var path = location.pathname.substring(1);
     switch (path){
-        case "NovaEnquesta":
+        case "CrearEnquesta":
+            initDatePicker();
             Events.crearEnquesta();
+            break;
+        case "VeureEnquesta":
+            $("#veureTitol").val(data["titol"]);
+            $("#veureDesM").val(data["inici"]);
+            $("#veureFinsM").val(data["fi"]);
+            Events.veureEnquesta();
+            break;
+        case "ObtindreEnquesta":
+            Events.getEnquesta();
             break;
         default:
             Events.inici();
     }
 };
 
+//Funció d'inicialització de la WebApp
 var init = function(){
-    $(window).bind("popstate", function(e){
-        carregarEventHandlers();
-    });
+    //Event que s'executa quan entrem per primer cop a la web o premem les fletxes d'historial de navegació:
+    window.onpopstate = function(event) {
+        //Carreguem la secció que pertoqui després d'un canvi d'url
+        carregaSeccio();
+    };
 };
 
 $( document ).ready( init );
-
-/*
-$(document).ready(function() {
-
-    $("#inici form.novaEnquesta").click(function() {
-        $("#inici").addClass("template");
-        $("#principal").removeClass("template");
-        $("#formulariEnquesta").removeClass("template");
-    });
-
-    $("#inici form.getEnquesta").click(function(){
-         $("#inici").addClass("template");
-         $("#principal").removeClass("template");
-         $("#formulariGetEnquesta").removeClass("template");
-    });
-
-    $("#formulariEnquesta form.creaEnquesta").submit(function(e) {
-        e.preventDefault(); //D'aquesta manera no fem refresh de la pantalla
-
-        var enquesta = {
-            titol: $("#formulariEnquesta form.creaEnquesta input#titol").val(),
-            inici: $("#formulariEnquesta form.creaEnquesta input#dataInici").val(),
-            fi: $("#formulariEnquesta form.creaEnquesta input#dataFi").val()
-        };
-
-        $.ajax({
-            type: "POST",
-            url: "/api/enquesta",
-            contentType: "application/json",
-            data: JSON.stringify(enquesta),
-            success: function() {
-                $("#inici").addClass("template");
-                $("#principal").removeClass("template");
-                $("#formulariEnquesta").addClass("template");
-                $("#veureEnquesta").removeClass("template");
-                $("#veureEnquesta form.veureEnquesta input#veureTitol").val(enquesta["titol"]);
-                $("#veureEnquesta form.veureEnquesta input#veureDesM").val(enquesta["inici"]);
-                $("#veureEnquesta form.veureEnquesta input#veureFinsM").val(enquesta["fi"]);
-            },
-            error: function(data) {
-               //$("#inici").addClass("template")
-                //$("#principal.template").removeClass("template")
-               // $("#formulariEnquesta.template").removeClass("template")
-            }
-
-        });
-     });
-
-    $("#formulariGetEnquesta form.getEnquesta").submit(function() {
-
-        var enquesta = {
-            id: $("#formulariGetEnquesta form.getEnquesta input#id").val(),
-        }
-
-        $.ajax({
-            type: "GET",
-            url: "/api/enquestes/admin0/enq"+enquesta.id,
-            success: function(enquesta) {
-                $("#veureEnquesta.template").removeClass("template")
-                $("input[name='veureTitol']").val(enquesta.titol)
-                $("input[name='veureDesM']").val(enquesta.inici)
-                $("input[name='veureFinsM']").val(enquesta.fi)
-              //  alert(enquesta.titol);
-            },
-            dataType: "json",
-            error: function(enquesta) {
-                //$("#inici").addClass("template")
-                //$("#principal.template").removeClass("template")
-                //$("#formulariEnquesta.template").removeClass("template")
-            }
-
-        });
-
-
-    });
-
-    $("#veureEnquesta form.veureEnquesta").submit(function() {
-
-        var enquesta2 = {
-            id: $("#formulariGetEnquesta form.getEnquesta input#id").val(),
-        }
-        var enquesta = {
-            titol: $("#veureEnquesta form.veureEnquesta input#veureTitol").val(),
-            inici: $("#veureEnquesta form.veureEnquesta input#veureDesM").val(),
-            fi: $("#veureEnquesta form.veureEnquesta input#veureFinsM").val()
-        }
-        alert(enquesta.titol);
-        $.ajax({
-            type: "PUT",
-            url: "/api/enquestes/admin0/enq"+enquesta2.id,
-            contentType: "application/json",
-            data: JSON.stringify(enquesta),
-            success: function(data) {
-                alert("Modificada! :)");
-            },
-            error: function(data) {
-               alert("FAIL!!");
-            }
-
-        });
-    });
-    
-});
-*/
