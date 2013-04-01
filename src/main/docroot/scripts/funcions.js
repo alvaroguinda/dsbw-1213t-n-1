@@ -11,7 +11,7 @@
         "Ago", "Set", "Oct", "Nov", "Dec"]
 });*/
 
-$(function() {
+var initDatePicker = function() {
     //datepicker individual
     $( ".datepicker" ).datepicker({ dateFormat: 'dd-mm-yy' });
 
@@ -35,5 +35,5 @@ $(function() {
             $( ".from" ).datepicker( "option", "maxDate", selectedDate );
         }
     });
-});
+};
 
