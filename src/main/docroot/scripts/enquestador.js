@@ -27,17 +27,59 @@ $(function(){
         $("#formulariEnquesta").removeClass("template");
     })
 
-    $("#inici form.getEnquesta").click(function(){
-         $("#inici").addClass("template");
-         $("#principal").removeClass("template");
-         $("#formulariGetEnquesta").removeClass("template");
-    })
+
+    $("#inici form.getEnquesta").click(activateGetEnquesta)
 
 });
 
+function activateGetEnquesta(){
+    $("#inici").addClass("template");
+    $("#principal").removeClass("template");
+    $("#formulariGetEnquesta").removeClass("template");
+}
+
+function gup( name ) {
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( window.location.href );
+    if( results == null )
+        return "";
+    else
+        return results[1];
+}
+
+
+function getEnquestaURL(id2) {
+        activateGetEnquesta()
+        var enquesta = {
+            id: id2,
+        }
+        $.ajax({
+            type: "GET",
+            url: "/api/enquestes/admin0/enq"+enquesta.id,
+            success: function(enquesta) {
+                $("#veureEnquesta.template").removeClass("template")
+                $("input[name='veureTitol']").val(enquesta.titol)
+                $("input[name='veureDesM']").val(enquesta.inici)
+                $("input[name='veureFinsM']").val(enquesta.fi)
+              //  alert(enquesta.titol);
+            },
+            dataType: "json",
+            error: function(enquesta) {
+                //$("#inici").addClass("template")
+                //$("#principal.template").removeClass("template")
+                //$("#formulariEnquesta.template").removeClass("template")
+            }
+
+        });
+    }
 
 $(document).ready(function() {
-
+    var id = gup("id")
+    if(id != ""){
+       getEnquestaURL(id)
+    }
     $("#formulariEnquesta form.creaEnquesta").submit(function(e) {
         e.preventDefault(); //D'aquesta manera no fem refresh de la pantalla
 
@@ -71,7 +113,6 @@ $(document).ready(function() {
      })
 
     $("#formulariGetEnquesta form.getEnquesta").submit(function() {
-
         var enquesta = {
             id: $("#formulariGetEnquesta form.getEnquesta input#id").val(),
         }
