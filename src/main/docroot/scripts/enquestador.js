@@ -49,6 +49,18 @@ function gup( name ) {
         return results[1];
 }
 
+function getUrlVars(){
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
+
 
 function getEnquestaURL(id2) {
         activateGetEnquesta()
@@ -139,27 +151,23 @@ $(document).ready(function() {
 
     })
 
-    $("#veureEnquesta form.veureEnquesta").submit(function() {
-
-        var enquesta2 = {
-            id: $("#formulariGetEnquesta form.getEnquesta input#id").val(),
-        }
+    $("#veureEnquesta form.veureEnquesta").submit(function(e) {
+        e.preventDefault();
+        var id = getUrlVars()["id"]
         var enquesta = {
             titol: $("#veureEnquesta form.veureEnquesta input#veureTitol").val(),
             inici: $("#veureEnquesta form.veureEnquesta input#veureDesM").val(),
             fi: $("#veureEnquesta form.veureEnquesta input#veureFinsM").val()
         }
-        alert(enquesta.titol);
         $.ajax({
             type: "PUT",
-            url: "/api/enquestes/admin0/enq"+enquesta2.id,
+            url: "/api/enquestes/admin0/enq"+id,
             contentType: "application/json",
             data: JSON.stringify(enquesta),
             success: function(data) {
-                alert("Modificada! :)");
+                window.location = "http://localhost:8080/"
             },
             error: function(data) {
-               alert("FAIL!!");
             }
 
         });
