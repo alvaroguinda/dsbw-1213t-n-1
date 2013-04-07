@@ -4,6 +4,7 @@ import org.bson.types.ObjectId
 import java.util.Date
 
 case class Enquesta(id:String, titol: String, inici: String, fi: String)
+case class EnquestaID(id:String)
 
 class EnquestesService(enquestesRepository: EnquestesRepository) {
 
@@ -25,7 +26,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 	//	enquestesRepository.findById(enquesta_id)
 	}
 
-	def creaEnquesta(enquesta: NovaEnquesta) {
+	def creaEnquesta(enquesta: NovaEnquesta):EnquestaID= {
 		//println(enquesta.titol)
 		//println(enquesta.inici)
 		//println(enquesta.fi)
@@ -33,7 +34,6 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 		//if(user.inici == "") throw new HttpException(400, "La data inici no pot estar en blanc")
 		//if(user.fi == "") throw new HttpException(400, "La data fi no pot estar en blanc")
 		//if(enquestesRepository.findByTitol(enquesta.titol).isDefined) throw new HttpException(400,"El Titol ja existeix")
-		
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(),
 			titol = enquesta.titol,
@@ -41,6 +41,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 			fi = enquesta.fi
 		)
 		enquestesRepository.save(enquestaR)
+		new EnquestaID(enquestaR._id.toString())
 	}
 
 	def putEnquesta(idAdmin:String, idEnquesta:String, enquesta: NovaEnquesta){
