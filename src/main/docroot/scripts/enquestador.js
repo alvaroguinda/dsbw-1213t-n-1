@@ -75,6 +75,13 @@ function getEnquestaURL(id2) {
                 $("input[name='veureTitol']").val(enquesta.titol)
                 $("input[name='veureDesM']").val(enquesta.inici)
                 $("input[name='veureFinsM']").val(enquesta.fi)
+                $.each(enquesta.preguntes, function(num,pregunta) {
+                    $("#veureEnquesta form.veureEnquesta").append("<p>", num+1, " ")
+                    $.each(pregunta, function(num2,value){
+                        $("#veureEnquesta form.veureEnquesta").append(value, " ")
+                    });
+                    $("#veureEnquesta form.veureEnquesta").append("</p>")
+                });
               //  alert(enquesta.titol);
             },
             dataType: "json",
@@ -137,7 +144,6 @@ $(document).ready(function() {
                 $("input[name='veureTitol']").val(enquesta.titol)
                 $("input[name='veureDesM']").val(enquesta.inici)
                 $("input[name='veureFinsM']").val(enquesta.fi)
-              //  alert(enquesta.titol);
             },
             dataType: "json",
             error: function(enquesta) {
@@ -173,7 +179,33 @@ $(document).ready(function() {
         });
     })
 
+    $("#veureEnquesta form.afegirPreguntesButton").click(function() {
+        $("#afegirPreguntes").removeClass("template");
+    })
 
+    $("#afegirPreguntes form.afegirPreguntes").submit(function(){
+        event.preventDefault();
+        var enquestaId = getUrlVars()["id"]
+        var pregunta = {
+            tipus: "text",
+            enunciat: $("#afegirPreguntes form.afegirPreguntes input#titolPregunta").val()
+        }
+        console.log(enquestaId);
+        console.log(pregunta);
+
+        $.ajax({
+            type: "POST",
+            url: "/api/enquestes/admin0/enq"+enquestaId,
+            contentType: "application/json",
+            data: JSON.stringify(pregunta),
+            success: function(enquesta){
+                window.location = "http://localhost:8080/?id="+enquestaId
+            },
+            error: function(){
+                console.log("Error");
+            }
+        });
+    })
     /*$("form.obrirFormulari").submit(function() {   
         $("#formulariEnquesta.template").removeClass("template");
         $("#obrirFormulariButton").addClass("template");

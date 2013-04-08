@@ -5,12 +5,14 @@ import dsbw.json.JSON
 import Config.{dbHostName, dbPort, dbName, username, pwd, webServerPort}
 import java.util.Date
 
-case class NovaEnquesta(titol: String, inici: String, fi: String)
+case class NovaEnquesta(titol: String, inici: String, fi: String, preguntes: List[List[String]])
+case class NovaPregunta(tipus: String, enunciat: String)
 
 /** Enquestes API */
 class EnquestesApi(enquestesService:EnquestesService) extends Api {
   val getEnquestaAdmin = "GET /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
   val putEnquestaAdmin = "PUT /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
+  val postEnquestaAdmin = "POST /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
   def service(method: String, uri: String, parameters: Map[String, List[String]] = Map(), headers: Map[String, String] = Map(), body: Option[JSON] = None): Response = {
     try {
       (method + " " + uri) match {
@@ -18,6 +20,7 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
         case "POST /api/enquesta" => Response(HttpStatusCode.Created, enquestesService.creaEnquesta(JSON.fromJSON[NovaEnquesta](body.getOrElse(throw new Exception("Bad Request")))))
         case getEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.getEnquesta(idAdmin,idEnquesta))
         case putEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.putEnquesta(idAdmin,idEnquesta,JSON.fromJSON[NovaEnquesta](body.getOrElse(throw new Exception("Bad Request")))))
+        case postEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Created, enquestesService.postEnquesta(idAdmin,idEnquesta,JSON.fromJSON[NovaPregunta](body.getOrElse(throw new Exception("Bad Request")))))
         case _ => Response(HttpStatusCode.Ok, "Hello world!")
       }
     } catch {

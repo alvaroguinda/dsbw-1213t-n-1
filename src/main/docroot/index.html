@@ -71,8 +71,32 @@
                     <h2>Fins a</h2>
                     <input type="text" name="veureFinsM" id="veureFinsM">
                     <input type="submit" value="Modifica">
+                    <h2>Preguntes:</h2>
+                </form>
+                 <form action="#" class="afegirPreguntesButton">
+                    <input type="button" value="Afegir preguntes" class="afegirPreguntesButton">
                 </form>
             </div>
+
+            <div id = "afegirPreguntes" class="template">
+                <form action="#" class="afegirPreguntes">
+                    <h2>Tipus de pregunta: </h2>
+                    <input type="radio" name="tipusPregunta" id="tipusText" value="Text" checked>Text 
+                    <input type="radio" name="tipusPregunta" id="tipusTest" value="Test" class="template">Test
+                    <h2>Pregunta: <h2>
+                    <input type="text" name="titolPregunta" id="titolPregunta">
+                    <div id="preguntaTest" class="template">
+                        <h2>Respostes: <h2>
+                        1- <input type="text" name="respostaPregunta" id="respostaPregunta1"> <br>
+                        2- <input type="text" name="respostaPregunta" id="respostaPregunta2"> <br>
+                        3- <input type="text" name="respostaPregunta" id="respostaPregunta3"> <br>
+                        4- <input type="text" name="respostaPregunta" id="respostaPregunta4"> 
+                        <input type="button" value="Afegir resposta" id="afegirResposta">
+                    </div>
+                    <input type="submit" value="Guardar">
+                </form>
+            </div>
+
             <p class="error template">Error message here</p>
         </header>
     </div>
