@@ -113,7 +113,7 @@ $(document).ready(function() {
             url: "/api/enquesta",
             contentType: "application/json",
             data: JSON.stringify(enquesta),
-            success: function() {
+            success: function(data) {
                 $("#inici").addClass("template");
                 $("#principal").removeClass("template");
                 $("#formulariEnquesta").addClass("template");
@@ -121,6 +121,7 @@ $(document).ready(function() {
                 $("#veureEnquesta form.veureEnquesta input#veureTitol").val(enquesta["titol"]);
                 $("#veureEnquesta form.veureEnquesta input#veureDesM").val(enquesta["inici"]);
                 $("#veureEnquesta form.veureEnquesta input#veureFinsM").val(enquesta["fi"]);
+                alert("Enquesta creada amb èxit. Per a accedir a la seva pàgina d'administració a partir d'aquest moment, segueix el següent enllaç \n\nlocalhost:8080?id="+data.id+"\n\nGuarda aquest enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta");
             },
             error: function(data) {
                //$("#inici").addClass("template")
