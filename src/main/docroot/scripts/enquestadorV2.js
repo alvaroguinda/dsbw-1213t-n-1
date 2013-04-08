@@ -73,8 +73,8 @@ var Events = {
             carregaSeccio("Inici");
         });
 
-        $("form.getEnquesta").submit(function() {
-
+        $("form.getEnquesta").submit(function(e) {
+          e.preventDefault();
            var enquesta = {
                id: $("form.getEnquesta input#id").val(),
            }
@@ -99,10 +99,10 @@ var Events = {
             carregaSeccio("Inici");
         });
 
-        $("form.veureEnquesta").submit(function() {
-
+        $("form.veureEnquesta").submit(function(e) {
+           e.preventDefault();
            var enquesta2 = {
-               id: $("form.getEnquesta input#id").val()
+               id: $("input#id").val(),
            } // si venim d'haver creat una enquesta nova aquest id no existeix... ¿?¿?
 
            var enquesta = {
@@ -110,7 +110,9 @@ var Events = {
                inici: $("#veureDesM").val(),
                fi: $("#veureFinsM").val()
            }
-           alert(enquesta.titol);
+           console.log(enquesta2);
+           console.log(enquesta);
+           /*
            $.ajax({
                type: "PUT",
                url: "/api/enquestes/admin0/enq"+enquesta2.id,
@@ -124,6 +126,7 @@ var Events = {
                }
 
            });
+*/
         });
    }
 };
@@ -140,6 +143,14 @@ var configuraSeccio = function(data){
             $("#veureTitol").val(data["titol"]);
             $("#veureDesM").val(data["inici"]);
             $("#veureFinsM").val(data["fi"]);
+            $.each(data.preguntes, function(num,pregunta) {
+              $("form.veureEnquesta").append("<p>", num+1, " ")
+              $.each(pregunta, function(num2,value){
+                $("form.veureEnquesta").append(value, " ")
+              });
+              $("form.veureEnquesta").append("</p>")
+            });
+            $("form.veureEnquesta").append("<input type='button' id='afegirPregunta' name='afegirPregunta' value='Afegir pregunta'/>")
             Events.veureEnquesta();
             break;
         case "ObtindreEnquesta":

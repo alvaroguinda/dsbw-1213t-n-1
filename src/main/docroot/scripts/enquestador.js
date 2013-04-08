@@ -188,7 +188,7 @@ $(document).ready(function() {
         event.preventDefault();
         var enquestaId = getUrlVars()["id"]
         var pregunta = {
-            tipus: "text",
+            tipus: $('#afegirPreguntes form.afegirPreguntes input[name=tipusPregunta]:checked').val(),
             enunciat: $("#afegirPreguntes form.afegirPreguntes input#titolPregunta").val()
         }
         console.log(enquestaId);
