@@ -27,17 +27,78 @@ $(function(){
         $("#formulariEnquesta").removeClass("template");
     })
 
-    $("#inici form.getEnquesta").click(function(){
-         $("#inici").addClass("template");
-         $("#principal").removeClass("template");
-         $("#formulariGetEnquesta").removeClass("template");
-    })
+
+    $("#inici form.getEnquesta").click(activateGetEnquesta)
 
 });
 
+function activateGetEnquesta(){
+    $("#inici").addClass("template");
+    $("#principal").removeClass("template");
+    $("#formulariGetEnquesta").removeClass("template");
+}
+
+function gup( name ) {
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( window.location.href );
+    if( results == null )
+        return "";
+    else
+        return results[1];
+}
+
+function getUrlVars(){
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
+
+
+function getEnquestaURL(id2) {
+        activateGetEnquesta()
+        var enquesta = {
+            id: id2,
+        }
+        $.ajax({
+            type: "GET",
+            url: "/api/enquestes/admin0/enq"+enquesta.id,
+            success: function(enquesta) {
+                $("#veureEnquesta.template").removeClass("template")
+                $("input[name='veureTitol']").val(enquesta.titol)
+                $("input[name='veureDesM']").val(enquesta.inici)
+                $("input[name='veureFinsM']").val(enquesta.fi)
+                $.each(enquesta.preguntes, function(num,pregunta) {
+                    $("#veureEnquesta form.veureEnquesta").append("<p>", num+1, " ")
+                    $.each(pregunta, function(num2,value){
+                        $("#veureEnquesta form.veureEnquesta").append(value, " ")
+                    });
+                    $("#veureEnquesta form.veureEnquesta").append("</p>")
+                });
+              //  alert(enquesta.titol);
+            },
+            dataType: "json",
+            error: function(enquesta) {
+                //$("#inici").addClass("template")
+                //$("#principal.template").removeClass("template")
+                //$("#formulariEnquesta.template").removeClass("template")
+            }
+
+        });
+    }
 
 $(document).ready(function() {
-
+    var id = gup("id")
+    if(id != ""){
+       getEnquestaURL(id)
+    }
     $("#formulariEnquesta form.creaEnquesta").submit(function(e) {
         e.preventDefault(); //D'aquesta manera no fem refresh de la pantalla
 
@@ -52,7 +113,7 @@ $(document).ready(function() {
             url: "/api/enquesta",
             contentType: "application/json",
             data: JSON.stringify(enquesta),
-            success: function() {
+            success: function(data) {
                 $("#inici").addClass("template");
                 $("#principal").removeClass("template");
                 $("#formulariEnquesta").addClass("template");
@@ -60,6 +121,7 @@ $(document).ready(function() {
                 $("#veureEnquesta form.veureEnquesta input#veureTitol").val(enquesta["titol"]);
                 $("#veureEnquesta form.veureEnquesta input#veureDesM").val(enquesta["inici"]);
                 $("#veureEnquesta form.veureEnquesta input#veureFinsM").val(enquesta["fi"]);
+                alert("Enquesta creada amb èxit. Per a accedir a la seva pàgina d'administració a partir d'aquest moment, segueix el següent enllaç \n\nlocalhost:8080?id="+data.id+"\n\nGuarda aquest enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta");
             },
             error: function(data) {
                //$("#inici").addClass("template")
@@ -71,7 +133,6 @@ $(document).ready(function() {
      })
 
     $("#formulariGetEnquesta form.getEnquesta").submit(function() {
-
         var enquesta = {
             id: $("#formulariGetEnquesta form.getEnquesta input#id").val(),
         }
@@ -84,7 +145,6 @@ $(document).ready(function() {
                 $("input[name='veureTitol']").val(enquesta.titol)
                 $("input[name='veureDesM']").val(enquesta.inici)
                 $("input[name='veureFinsM']").val(enquesta.fi)
-              //  alert(enquesta.titol);
             },
             dataType: "json",
             error: function(enquesta) {
@@ -98,33 +158,55 @@ $(document).ready(function() {
 
     })
 
-    $("#veureEnquesta form.veureEnquesta").submit(function() {
-
-        var enquesta2 = {
-            id: $("#formulariGetEnquesta form.getEnquesta input#id").val(),
-        }
+    $("#veureEnquesta form.veureEnquesta").submit(function(e) {
+        e.preventDefault();
+        var id = getUrlVars()["id"]
         var enquesta = {
             titol: $("#veureEnquesta form.veureEnquesta input#veureTitol").val(),
             inici: $("#veureEnquesta form.veureEnquesta input#veureDesM").val(),
             fi: $("#veureEnquesta form.veureEnquesta input#veureFinsM").val()
         }
-        alert(enquesta.titol);
         $.ajax({
             type: "PUT",
-            url: "/api/enquestes/admin0/enq"+enquesta2.id,
+            url: "/api/enquestes/admin0/enq"+id,
             contentType: "application/json",
             data: JSON.stringify(enquesta),
             success: function(data) {
-                alert("Modificada! :)");
+                window.location = "http://localhost:8080/"
             },
             error: function(data) {
-               alert("FAIL!!");
             }
 
         });
     })
 
+    $("#veureEnquesta form.afegirPreguntesButton").click(function() {
+        $("#afegirPreguntes").removeClass("template");
+    })
 
+    $("#afegirPreguntes form.afegirPreguntes").submit(function(){
+        event.preventDefault();
+        var enquestaId = getUrlVars()["id"]
+        var pregunta = {
+            tipus: "text",
+            enunciat: $("#afegirPreguntes form.afegirPreguntes input#titolPregunta").val()
+        }
+        console.log(enquestaId);
+        console.log(pregunta);
+
+        $.ajax({
+            type: "POST",
+            url: "/api/enquestes/admin0/enq"+enquestaId,
+            contentType: "application/json",
+            data: JSON.stringify(pregunta),
+            success: function(enquesta){
+                window.location = "http://localhost:8080/?id="+enquestaId
+            },
+            error: function(){
+                console.log("Error");
+            }
+        });
+    })
     /*$("form.obrirFormulari").submit(function() {   
         $("#formulariEnquesta.template").removeClass("template");
         $("#obrirFormulariButton").addClass("template");

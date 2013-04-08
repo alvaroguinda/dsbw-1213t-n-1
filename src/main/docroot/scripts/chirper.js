@@ -123,8 +123,8 @@ $(function(){
 
 })();
 
-$(document).ready(function() {
 
+$(document).ready(function() {
     $("#inici form.novaEnquesta").submit(function() {
         $.ajax({
             type: "GET",
