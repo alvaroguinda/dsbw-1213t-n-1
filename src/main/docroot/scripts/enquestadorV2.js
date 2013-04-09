@@ -56,8 +56,10 @@ var Events = {
                url: "/api/enquesta",
                contentType: "application/json",
                data: JSON.stringify(enquesta),
-               success: function() {
+               success: function(data) {
+
                    carregaSeccio("VeureEnquesta",enquesta);
+                   alert("Enquesta creada amb èxit. Per a accedir a la seva pàgina d'administració a partir d'aquest moment, segueix el següent enllaç \n\nlocalhost:8080?id="+data.id+"\n\nGuarda aquest enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta");
                },
                error: function(data) {
                   alert("No s'ha pogut crear l'enquesta.");

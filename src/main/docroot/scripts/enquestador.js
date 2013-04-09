@@ -20,6 +20,8 @@ $(function(){
             console.debug("Text status", textStatus)
             console.debug("Error",error)
         }})*/
+    initDatePicker();
+
 
     $("#inici form.novaEnquesta").click(function() {
         $("#inici").addClass("template");

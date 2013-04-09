@@ -19,6 +19,7 @@ var initDatePicker = function() {
     $( ".from" ).datepicker({
         dateFormat: 'dd-mm-yy',
         defaultDate: "+1w",
+        minDate: 0,
         changeMonth: true,
         numberOfMonths: 3,
         onClose: function( selectedDate ) {
