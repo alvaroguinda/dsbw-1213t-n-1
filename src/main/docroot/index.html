@@ -8,97 +8,115 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
     
     
-    <script src="http://code.jquery.com/jquery-1.8.0.js"></script>    
-    <script src="http://modernizr.com/downloads/modernizr.js"></script>    
-    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>    
+    <script src="http://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="http://modernizr.com/downloads/modernizr.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 
     <script src="scripts/funcions.js"></script>
-    <script src="scripts/enquestador.js"></script>
+    <script src="scripts/enquestadorV3.js"></script>
 </head>
 
 <body>
-    <img src="img/LogoW.png" class="logo">
-    <div id="inici">
-        <header>
-            <form action="#" class="novaEnquesta">
-                <h1>Benvingut al Enquestador</h1>
-                <input type="button" value="Nova enquesta">
-            </form>
-            <!--<form action="#" class="getEnquesta">
-                <h1>Get Enquesta</h1>
-                <input type="button" value="Get Enquesta">
-            </form>-->
-        </header>
-    </div>
-    <div id="principal" class="template">    
-        <header>
-            <!--<h1>Nova enquesta</h1>
-            <form action="#" class="obrirFormulari">
-                <input type="submit" value="Crear" id="obrirFormulariButton">
-            </form>-->
-            <div id="formulariEnquesta" class="template">
-                <form action="#" class="creaEnquesta">                
-                    <h2>Nova enquesta</h2>
+    <header>
+        <img src="img/LogoB.png" class="logo">
+        <h1>Generador d'enquestes online</h1>
+    </header>
 
-                    <label for="inTitol">Títol</label>
-                    <input type="text" class="titol" name="titol" id="titol">
-                    <label for="dataInici">Des de</label>
-                    <input type="text" id="dataInici" name="dataInici" class="from"/>
-                    <label for="dataFi">Fins a</label>
-                    <input type="text" id="dataFi" name="dataFi" class="to"/>
-                    
-                    <input type="submit" value="Crea">
+    <div id="content">
+        <!-- DYNAMIC CONTENT -->
+        <section id="sectionContainer">
+            <!-- INICI -->
+            <div id="inici">
+                <form action="#">
+                    <h1>Benvingut al Enquestador</h1>
+                    <input id="bCrearEnquesta" type="button" value="Crear enquesta">
+                    <hr/>
+                    <!--
+                    <h1>Get Enquesta</h1>
+                    <input id="bGetEnquesta" type="button" value="Get Enquesta">
+                    -->
                 </form>
             </div>
+            <!-- FI INICI -->
+            <!-- CREAR ENQUESTA -->
+            <div id="crearEnquesta" class="template">
+                <form action="#" id="formCrearEnquesta">
+                    <h2>Crear enquesta</h2>
+                    <div>
+                        <label for="titol">Títol</label>
+                        <input type="text" class="titol" name="titol" id="titol">
 
-            <div id="formulariGetEnquesta" class="template">
-                <form action="#" class="getEnquesta">
-                    <h2>Nova enquesta</h2>
+                        <label for="dataInici">Des de</label>
+                        <input type="text" id="dataInici" name="dataInici" class="from"/>
 
-                    <label for="getTitolEnq">Id</label>
-                    <input type="text" class="titol" name="titol" id="id">
-
-                    <input type="submit" value="Cerca">
-                </form>
-            </div>
-            
-            <div id = "veureEnquesta" class = "template">
-                <form action="#" class="veureEnquesta">
-                    <h2>Enquesta: </h2>
-                    <input type="text" name="veureTitol" id="veureTitol">
-                    <h2>Des de</h2>
-                    <input type="text" name="veureDesM" id="veureDesM">
-                    <h2>Fins a</h2>
-                    <input type="text" name="veureFinsM" id="veureFinsM">
-                    <input type="submit" value="Modifica">
-                    <h2>Preguntes:</h2>
-                </form>
-                 <form action="#" class="afegirPreguntesButton">
-                    <input type="button" value="Afegir preguntes" class="afegirPreguntesButton">
-                </form>
-            </div>
-
-            <div id = "afegirPreguntes" class="template">
-                <form action="#" class="afegirPreguntes">
-                    <h2>Tipus de pregunta: </h2>
-                    <input type="radio" name="tipusPregunta" id="tipusText" value="Text" checked>Text 
-                    <input type="radio" name="tipusPregunta" id="tipusTest" value="Test">Test
-                    <h2>Pregunta: <h2>
-                    <input type="text" name="titolPregunta" id="titolPregunta">
-                    <div id="preguntaTest" class="template">
-                        <h2>Respostes: <h2>
-                        1- <input type="text" name="respostaPregunta" id="respostaPregunta1"> <br>
-                        2- <input type="text" name="respostaPregunta" id="respostaPregunta2"> <br>
-                        3- <input type="text" name="respostaPregunta" id="respostaPregunta3"> <br>
-                        4- <input type="text" name="respostaPregunta" id="respostaPregunta4"> 
-                        <input type="button" value="Afegir resposta" id="afegirResposta">
+                        <label for="dataFi">Fins a</label>
+                        <input type="text" id="dataFi" name="dataFi" class="to"/>
                     </div>
-                    <input type="submit" value="Guardar">
+                    <input type="submit" value="Crea">
+                    <input type="button" class="tornar" name="tornar" value="Tornar"/>
                 </form>
             </div>
+            <!-- FI CREAR ENQUESTA -->
+            <!-- VEURE ENQUESTA -->
+            <div id = "veureEnquesta" class="template">
+                <form action="#" id="formVeureEnquesta">
+                    <h2>Veure Enquesta: </h2>
+                    <div>
+                        <label for="titol">Títol</label>
+                        <input type="text" class="veureTitol" name="titol" id="veureTitol">
 
+                        <label for="dataInici">Des de</label>
+                        <input type="text" id="veureDesM" name="veureDesM" class="from"/>
+
+                        <label for="dataFi">Fins a</label>
+                        <input type="text" id="veureFinsM" name="veureFinsM" class="to"/>
+                    </div>
+                    <input type="submit" value="Modifica">
+                    <input type="button"  class="tornar" name="tornar" value="Tornar"/>
+                    <h2>Preguntes:</h2>
+                    <input type="button" value="Afegir preguntes" id="bAfegirPreguntes"/>
+                </form>
+            </div>
+            <!-- FI VEURE ENQUESTA -->
+            <!-- OBTINDRE ENQUESTA -->
+            <div id="getEnquesta" class="template">
+                <form action="#" class="formGetEnquesta">
+                    <h2>Nova enquesta</h2>
+                    <div>
+                        <label for="titol">Id</label>
+                        <input type="text" class="titol" name="titol" id="id">
+
+                        <input type="submit" value="Cerca">
+                    </div>
+                    <input type="button" class="tornar" name="tornar" value="Tornar"/>
+                </form>
+            </div>
+            <!-- FI OBTINDRE ENQUESTA -->
+            <!-- AFEGIR PREGUNTES -->
+            <div id = "afegirPreguntes" class="template">
+                <form action="#" id="formAfegirPreguntes">
+                    <h2>Tipus de pregunta: </h2>
+                    <input type="radio" name="tipusPregunta" id="tipusText" value="Text" checked>Text
+                    <input type="radio" name="tipusPregunta" id="tipusTest" value="Test">Test
+                    <h2>Pregunta: </h2>
+                        <input type="text" name="titolPregunta" id="titolPregunta">
+                        <div id="preguntaTest" class="template">
+                            <h2>Respostes: </h2>
+                                1- <input type="text" name="respostaPregunta" id="respostaPregunta1"/> <br>
+                                2- <input type="text" name="respostaPregunta" id="respostaPregunta2"/> <br>
+                                3- <input type="text" name="respostaPregunta" id="respostaPregunta3"/> <br>
+                                4- <input type="text" name="respostaPregunta" id="respostaPregunta4"/>
+                                <input type="button" value="Afegir resposta" id="afegirResposta"/>
+                        </div>
+                        <input type="submit" value="Guardar">
+                </form>
+            </div>
+            <!-- FI AFEGIR PREGUNTES -->
+        </section>
+        <section class="template">
             <p class="error template">Error message here</p>
-        </header>
+        </section>
     </div>
+
 </body>
 </html>

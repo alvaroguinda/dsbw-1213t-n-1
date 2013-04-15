@@ -10,25 +10,28 @@ var domini = "http://" + location.host + "/";
 
 //Funció per carregar el contingut de cada secció dinamicament:
 var carregaSeccio = function(nomSeccio,data){
+    var id = "";
     $("#sectionContainer > div").addClass("template"); //Ocultem totes les seccions
     if(!nomSeccio){ //si no hem rebut arguments per carregar una determinada secció...
         var path = location.pathname.substring(1).split("/")[0]; //capturem el path contingut a la url
         if(!secc[path]){ //si aquet path no existeix al nostre Map es que estem entrant per primer cop a la web i la url té el path en blanc o és "index.html"
-            var id = gup("id");
+            id = gup("id");
             if(id != ""){
                 path = "Enquesta";
-                data = getEnquestaURL(id);
+                getEnquestaURL(id);
+                id += "/";
             }
             else{
                 path = "Inici";
+                configuraSeccio(data); //configurem els handlers d'aquesta secció
             }
             history.pushState({page:path}, path, domini+path+"/"+id); //modifiquem la url de la web + l'historic associat del navegador
         }
         $("#"+secc[path]).removeClass("template"); //mostrem la secció segons el path
-        configuraSeccio(data); //configurem els handlers d'aquesta secció
     }
     else{ //si hem rebut arguments es tracta d'un click a un botó que ha de conduir a una determinada secció
-        history.pushState({page:nomSeccio}, nomSeccio, domini+nomSeccio+"/"); //modifiquem la url de la web + l'historic associat del navegador
+        if(data && data.id) id = data.id+"/"; //si rebem l'id d'una enquesta el concatenarem a la URL
+        history.pushState({page:nomSeccio}, nomSeccio, domini+nomSeccio+"/"+id); //modifiquem la url de la web + l'historic associat del navegador
         $("#"+secc[nomSeccio]).removeClass("template"); //mostrem la secció nomSeccio
         configuraSeccio(data); //configurem els handlers d'aquesta secció
     }
@@ -66,20 +69,24 @@ function getEnquestaURL(id){
         type: "GET",
         url: "/api/enquestes/admin0/enq"+id,
         success: function(enquesta) {
-            result = enquesta;
+            configuraSeccio(enquesta); //configurem els handlers d'aquesta secció
         },
         dataType: "json",
         error: function(enquesta) {
-            //$("#inici").addClass("template")
-            //$("#principal.template").removeClass("template")
-            //$("#formulariEnquesta.template").removeClass("template")
+            console.log("Error!");
         }
     });
-    return result;
 }
 
 var Events = {
-   inici: function() {
+   init: function() {
+        //Event que s'executa quan entrem per primer cop a la web o premem les fletxes d'historial de navegació:
+       window.onpopstate = function(event) {
+           //Carreguem la secció que pertoqui després d'un canvi d'url
+           carregaSeccio();
+       };
+
+        /*** HOME ***/
         $("#bCrearEnquesta").click(function(e) {
             e.preventDefault();
             carregaSeccio("CrearEnquesta");
@@ -90,9 +97,10 @@ var Events = {
             carregaSeccio("ObtindreEnquesta");
         });
         */
-   },
 
-   crearEnquesta: function() {
+
+        /*** CREAR ENQUESTA ***/
+        initDatePicker();
         $("#crearEnquesta .tornar").click(function(e) {
             e.preventDefault();
             carregaSeccio("Inici");
@@ -113,17 +121,17 @@ var Events = {
                contentType: "application/json",
                data: JSON.stringify(enquesta),
                success: function(data) {
+                   enquesta.id = data.id;
                    carregaSeccio("Enquesta",enquesta);
-                   alert("Enquesta creada amb èxit. Per a accedir a la seva pàgina d'administració a partir d'aquest moment, segueix el següent enllaç \n\nlocalhost:8080?id="+data.id+"\n\nGuarda aquest enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta");
+                   alert("Enquesta creada amb èxit. Per a accedir a la seva pàgina d'administració a partir d'aquest moment, segueix el següent enllaç \n\nlocalhost:8080?id="+enquesta.id+"\n\nGuarda aquest enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta");
                },
                error: function(data) {
                   alert("No s'ha pogut crear l'enquesta.");
                }
            });
         });
-   },
 
-   getEnquesta: function() {
+        /*** GET ENQUESTA ***/
         $("#getEnquesta .tornar").click(function(e) {
             e.preventDefault();
             carregaSeccio("Inici");
@@ -147,9 +155,8 @@ var Events = {
                }
            });
         });
-   },
 
-   veureEnquesta: function() {
+        /*** VEURE ENQUESTA ***/
         $("#veureEnquesta .tornar").click(function(e) {
             e.preventDefault();
             carregaSeccio("Inici");
@@ -157,8 +164,8 @@ var Events = {
 
         $("#formVeureEnquesta").submit(function(e) {
            e.preventDefault();
-           var id = getUrlVars()["id"];
-
+           var enquestaId = getUrlVars()["id"];
+           if(!enquestaId) enquestaId = location.pathname.substring(1).split("/")[1];
            var enquesta = {
                titol: $("#veureTitol").val(),
                inici: $("#veureDesM").val(),
@@ -168,7 +175,7 @@ var Events = {
 
            $.ajax({
                type: "PUT",
-               url: "/api/enquestes/admin0/enq"+enquesta2.id,
+               url: "/api/enquestes/admin0/enq"+enquestaId,
                contentType: "application/json",
                data: JSON.stringify(enquesta),
                success: function(data) {
@@ -190,6 +197,7 @@ var Events = {
         $("#formAfegirPreguntes").submit(function(){
             event.preventDefault();
             var enquestaId = getUrlVars()["id"];
+            if(!enquestaId) enquestaId = location.pathname.substring(1).split("/")[1];
             var pregunta = {
                 tipus: $('#formAfegirPreguntes input[name=tipusPregunta]:checked').val(),
                 enunciat: $("#formAfegirPreguntes input#titolPregunta").val()
@@ -203,8 +211,8 @@ var Events = {
                 contentType: "application/json",
                 data: JSON.stringify(pregunta),
                 success: function(enquesta){
-                    //window.location = "http://localhost:8080/?id="+enquestaId
-                    history.pushState({page:"Enquesta"}, "Enquesta", domini+"Enquesta/"+enquestaId+"/");
+                    window.location = "http://localhost:8080/?id="+enquestaId
+                    //history.pushState({page:"Enquesta"}, "Enquesta", domini+"Enquesta/"+enquestaId+"/");
                 },
                 error: function(){
                     console.log("Error");
@@ -219,10 +227,6 @@ var configuraSeccio = function(data){
     var path = location.pathname.substring(1).split("/")[0];
     //alert("Config. seccio: " + path);
     switch (path){
-        case "CrearEnquesta":
-            initDatePicker();
-            Events.crearEnquesta();
-            break;
         case "Enquesta":
             // if(data == null) --> ERROR...
             $("#veureTitol").val(data["titol"]);
@@ -230,31 +234,19 @@ var configuraSeccio = function(data){
             $("#veureFinsM").val(data["fi"]);
             if(data.preguntes){
                 $.each(data.preguntes, function(num,pregunta) {
-                  $("form.veureEnquesta").append("<p>", num+1, " ");
-                  $.each(pregunta, function(num2,value){
-                    $("form.veureEnquesta").append(value, " ");
-                  });
-                  $("form.veureEnquesta").append("</p>");
+                    $("#formVeureEnquesta").append("<p>", num+1, " ");
+                    $.each(pregunta, function(num2,value){
+                        $("#formVeureEnquesta").append(value, " ");
+                    });
+                    $("#formVeureEnquesta").append("</p>");
                 });
             }
-            $("form.veureEnquesta").append("<input type='button' id='afegirPregunta' name='afegirPregunta' value='Afegir pregunta'/>");
-            Events.veureEnquesta();
-            break;
-        case "ObtindreEnquesta":
-            Events.getEnquesta();
+            //$("#formVeureEnquesta").append("<input type='button' id='afegirPregunta' name='afegirPregunta' value='Afegir pregunta'/>");
             break;
         default:
-            Events.inici();
+            ;
     }
 };
 
 //Funció d'inicialització de la WebApp
-var init = function(){
-    //Event que s'executa quan entrem per primer cop a la web o premem les fletxes d'historial de navegació:
-    window.onpopstate = function(event) {
-        //Carreguem la secció que pertoqui després d'un canvi d'url
-        carregaSeccio();
-    };
-};
-
-$( document ).ready( init );
+$( document ).ready( Events.init );
