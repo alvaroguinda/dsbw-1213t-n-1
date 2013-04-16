@@ -76,7 +76,7 @@ class Servlet(api:Api) extends HttpServlet {
       val (body, parameters, headers) = parseRequest(request)
 
       val r = api.service(request.getMethod,request.getRequestURI, parameters, headers, body)
-
+      //request.getRequestDispatcher("/index.html").forward()
       writeResponse(r,out)
 
     } catch {

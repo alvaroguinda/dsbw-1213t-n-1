@@ -12,6 +12,10 @@
     <script src="http://modernizr.com/downloads/modernizr.js"></script>
     <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 
+     <!-- Per validar formularis -->
+    <script type="text/javascript" src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>
+    <script type="text/javascript" src="scripts/jquery.ui.datepicker.validation.js"></script> 
+
     <script src="scripts/funcions.js"></script>
     <script src="scripts/enquestadorV3.js"></script>
 </head>
@@ -40,17 +44,17 @@
             <!-- FI INICI -->
             <!-- CREAR ENQUESTA -->
             <div id="crearEnquesta" class="template">
-                <form action="#" id="formCrearEnquesta">
+                <form action="#" id="formCrearEnquesta" class="validarFormulari">
                     <h2>Crear enquesta</h2>
                     <div>
                         <label for="titol">Títol</label>
-                        <input type="text" class="titol" name="titol" id="titol">
+                        <input type="text" name="titol" id="titol" class="required">
 
                         <label for="dataInici">Des de</label>
-                        <input type="text" id="dataInici" name="dataInici" class="from"/>
+                        <input type="text" id="dataInici" name="dataInici" class="from required"/>
 
                         <label for="dataFi">Fins a</label>
-                        <input type="text" id="dataFi" name="dataFi" class="to"/>
+                        <input type="text" id="dataFi" name="dataFi" class="to required"/>
                     </div>
                     <input type="submit" value="Crea">
                     <input type="button" class="tornar" name="tornar" value="Tornar"/>
@@ -59,22 +63,22 @@
             <!-- FI CREAR ENQUESTA -->
             <!-- VEURE ENQUESTA -->
             <div id = "veureEnquesta" class="template">
-                <form action="#" id="formVeureEnquesta">
+                <form action="#" id="formVeureEnquesta" class="validarFormulari">
                     <h2>Veure Enquesta: </h2>
                     <div>
                         <label for="titol">Títol</label>
-                        <input type="text" class="veureTitol" name="titol" id="veureTitol">
+                        <input type="text" name="titol" id="veureTitol" class="required">
 
                         <label for="dataInici">Des de</label>
-                        <input type="text" id="veureDesM" name="veureDesM" class="from"/>
+                        <input type="text" id="veureDesM" name="veureDesM" class="from required"/>
 
                         <label for="dataFi">Fins a</label>
-                        <input type="text" id="veureFinsM" name="veureFinsM" class="to"/>
+                        <input type="text" id="veureFinsM" name="veureFinsM" class="to required"/>
                     </div>
                     <input type="submit" value="Modifica">
                     <input type="button"  class="tornar" name="tornar" value="Tornar"/>
                     <h2>Preguntes:</h2>
-                    <input type="button" value="Afegir preguntes" id="bAfegirPreguntes"/>
+                    <input type="button" name="afegir" value="Afegir preguntes" id="bAfegirPreguntes"/>
                 </form>
             </div>
             <!-- FI VEURE ENQUESTA -->

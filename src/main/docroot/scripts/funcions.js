@@ -11,7 +11,10 @@
         "Ago", "Set", "Oct", "Nov", "Dec"]
 });*/
 
+
+//Inicialitzem l'api del calendari
 var initDatePicker = function() {
+
     //datepicker individual
     $( ".datepicker" ).datepicker({ dateFormat: 'dd-mm-yy' });
 
@@ -19,22 +22,68 @@ var initDatePicker = function() {
     $( ".from" ).datepicker({
         dateFormat: 'dd-mm-yy',
         defaultDate: "+1w",
-        minDate: 0,
+        minDate: new Date(),
         changeMonth: true,
-        numberOfMonths: 3,
+        numberOfMonths: 1,
+        showOtherMonths: true,
+        selectOtherMonths: true,
         onClose: function( selectedDate ) {
-            $( ".to" ).datepicker( "option", "minDate", selectedDate );
+            if($(this).datepicker('getDate') != null) {
+                toDataMin = new Date($(this).datepicker('getDate').getTime());
+                toDataMin.setDate(toDataMin.getDate() + 1);
+                $( ".to" ).datepicker( "option", "minDate", toDataMin );
+            }
         }
     });
     
     $( ".to" ).datepicker({
         dateFormat: 'dd-mm-yy',
         defaultDate: "+1w",
+        minDate: new Date(),
         changeMonth: true,
-        numberOfMonths: 3,
+        numberOfMonths: 1,
+        showOtherMonths: true,
+        selectOtherMonths: true,
         onClose: function( selectedDate ) {
-            $( ".from" ).datepicker( "option", "maxDate", selectedDate );
+            if($(this).datepicker('getDate') != null) {
+                fromDataMax = new Date($(this).datepicker('getDate').getTime());
+                fromDataMax.setDate(fromDataMax.getDate() - 1);
+                $( ".from" ).datepicker( "option", "maxDate", fromDataMax );
+            }
         }
     });
 };
 
+//Funcio per fer validacions de formularis
+//Per poder validar un formulari hem d'afegir a la declaracio del form class="validarFormulari"
+//Per poder fer validacio d'un selector d'un formulari hem d'afegir-li la classe required (class="required")
+//En el cas que el formulari tingui un rang de dates i les volguem validar he d'afegir al form
+var validaFormulari = function ( form ) {
+    var formulari = "#"+form;
+    
+    //Valida tots els selectors del formulari que tenen class="required"
+    $(formulari).validate();
+    
+    //Valida un rang de dates, afeh¡gir la classe to a la data inici i from a la data de fi
+    if(($(formulari).find(".from").length != 0) && ($(formulari).find(".to").length != 0)) {
+        $(formulari).find(".from").rules("add", { 
+            required: true, 
+            dpDate: true,
+            dpCompareDate: ['before', '#dataFi'] 
+        });
+
+        $(formulari).find(".to").rules("add", { 
+            required: true, 
+            dpDate: true,
+            dpCompareDate: {after: '#dataInici'} 
+        });
+    }
+
+    //Valida un email, afegir classe email al selector i comprova que tingui @ i .com, .cat, .net, ...
+    if($(formulari).find(".email").length != 0) {
+        $(formulari).find(".email").rules("add", {
+            email:true
+        });
+    }
+
+};
