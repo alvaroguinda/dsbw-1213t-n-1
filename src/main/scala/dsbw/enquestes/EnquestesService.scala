@@ -57,7 +57,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 		enquestesRepository.save(enquestaR)
 	}
 
-	def postEnquesta(idAdmin:String, idEnquesta:String, pregunta: NovaPregunta):Enquesta= {
+	def postPregunta(idAdmin:String, idEnquesta:String, pregunta: NovaPregunta):Enquesta= {
 		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
@@ -70,5 +70,22 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 
 		val enquestaNew = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
 		new Enquesta(enquestaNew._id.toString(),enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.preguntes)
+	}
+
+	def deletlePregunta(idAdmin:String, idEnquesta:String, idPregunta:String){
+		/*val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+		val enquestaR = new EnquestaRecord (
+			_id = new ObjectId(idEnquesta),
+			titol = enquesta.titol,
+			inici = enquesta.inici,
+			fi = enquesta.fi,
+			preguntes = List
+			for(int i = 0; i < enquesta.preguntes.size(); ++i){
+				if(enquesta.preguntes)
+				preguntes = preguntes :: 
+			}
+			preguntes =  List(new ObjectId().toString,pregunta.tipus, pregunta.enunciat) :: enquesta.preguntes
+		)
+		enquestesRepository.save(enquestaR)*/
 	}
 }
