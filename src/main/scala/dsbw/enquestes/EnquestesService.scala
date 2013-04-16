@@ -72,19 +72,17 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 		new Enquesta(enquestaNew._id.toString(),enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.preguntes)
 	}
 
-	def deletlePregunta(idAdmin:String, idEnquesta:String, idPregunta:String){
+	def deletePregunta(idAdmin:String, idEnquesta:String, idPregunta:String){
 		/*val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+		println("eeeeeooooo")
+		val preguntesn = enquesta.preguntes.dropWhile(_(0) == idPregunta)
+		println("llega")
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
 			titol = enquesta.titol,
 			inici = enquesta.inici,
 			fi = enquesta.fi,
-			preguntes = List
-			for(int i = 0; i < enquesta.preguntes.size(); ++i){
-				if(enquesta.preguntes)
-				preguntes = preguntes :: 
-			}
-			preguntes =  List(new ObjectId().toString,pregunta.tipus, pregunta.enunciat) :: enquesta.preguntes
+			preguntes =  preguntesn
 		)
 		enquestesRepository.save(enquestaR)*/
 	}
