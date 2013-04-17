@@ -29,12 +29,7 @@ var carregaSeccio = function(nomSeccio,data){
         }
         $("#"+secc[path]).removeClass("template"); //mostrem la secció segons el path
         
-        //Si es un formulari amb validacions
-        if($("#"+secc[path]).find(".validarFormulari").length > 0) {
-          $("#"+secc[path]).find(".validarFormulari").each(function() {
-            validaFormulari($(this).attr('id'));
-          });          
-        }
+        //validaSeccio();
 
     }
     else { //si hem rebut arguments es tracta d'un click a un botó que ha de conduir a una determinada secció
@@ -42,16 +37,24 @@ var carregaSeccio = function(nomSeccio,data){
         history.pushState({page:nomSeccio}, nomSeccio, domini+nomSeccio+"/"+id); //modifiquem la url de la web + l'historic associat del navegador
         $("#"+secc[nomSeccio]).removeClass("template"); //mostrem la secció nomSeccio
 
-        //Si es un formulari amb validacions
-        if($("#"+secc[nomSeccio]).find(".validarFormulari").length > 0) {
-          $("#"+secc[nomSeccio]).find(".validarFormulari").each(function() {
-            validaFormulari($(this).attr('id'));
-          });
-        }
-
         configuraSeccio(data); //configurem els handlers d'aquesta secció
     }
 };
+
+//Funcio que valida tots els formularis que tenen la classe validarFormulari
+var validaSeccio = function() {
+  //Si es un formulari amb validacions
+
+  //Si existeix algun formulari per validar que no estigui amb la classe template fem la validacio
+  if($(".contentContainer").find(".validarFormulari").length > 0) {
+    $(".contentContainer").find(".validarFormulari").each(function() {
+      //Si esta amagat no fem la validacio
+      if($(this).parent('.template').length == 0) {
+        validaFormulari($(this).attr('id'));
+      }
+    });
+  }
+}
 
 // Retorna el "value" del parametre amb la key "name" contingut a la URL:
 function gup( name ) {
@@ -249,6 +252,9 @@ var Events = {
 
 //Funció de configuració dels diversos elements de la web segons la secció en que ens trobem
 var configuraSeccio = function(data){
+    //Si el formulari te validacions les fara automaticament
+    validaSeccio();
+
     var path = location.pathname.substring(1).split("/")[0];
     //alert("Config. seccio: " + path);
     switch (path){

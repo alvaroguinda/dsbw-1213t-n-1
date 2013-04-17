@@ -26,14 +26,7 @@ var initDatePicker = function() {
         changeMonth: true,
         numberOfMonths: 1,
         showOtherMonths: true,
-        selectOtherMonths: true,
-        onClose: function( selectedDate ) {
-            if($(this).datepicker('getDate') != null) {
-                toDataMin = new Date($(this).datepicker('getDate').getTime());
-                toDataMin.setDate(toDataMin.getDate() + 1);
-                $( ".to" ).datepicker( "option", "minDate", toDataMin );
-            }
-        }
+        selectOtherMonths: true
     });
     
     $( ".to" ).datepicker({
@@ -43,14 +36,7 @@ var initDatePicker = function() {
         changeMonth: true,
         numberOfMonths: 1,
         showOtherMonths: true,
-        selectOtherMonths: true,
-        onClose: function( selectedDate ) {
-            if($(this).datepicker('getDate') != null) {
-                fromDataMax = new Date($(this).datepicker('getDate').getTime());
-                fromDataMax.setDate(fromDataMax.getDate() - 1);
-                $( ".from" ).datepicker( "option", "maxDate", fromDataMax );
-            }
-        }
+        selectOtherMonths: true
     });
 };
 
@@ -66,23 +52,26 @@ var validaFormulari = function ( form ) {
     
     //Valida un rang de dates, afeh¡gir la classe to a la data inici i from a la data de fi
     if(($(formulari).find(".from").length != 0) && ($(formulari).find(".to").length != 0)) {
+        var idDataInici = '#'+$(formulari).find(".from").attr('id');
+        var idDataFi = '#'+$(formulari).find(".to").attr('id');
+
         $(formulari).find(".from").rules("add", { 
             required: true, 
             dpDate: true,
-            dpCompareDate: ['before', '#dataFi'] 
+            dpCompareDate: ['before', idDataFi] 
         });
 
         $(formulari).find(".to").rules("add", { 
             required: true, 
             dpDate: true,
-            dpCompareDate: {after: '#dataInici'} 
+            dpCompareDate: {after: idDataInici} 
         });
     }
 
     //Valida un email, afegir classe email al selector i comprova que tingui @ i .com, .cat, .net, ...
     if($(formulari).find(".email").length != 0) {
         $(formulari).find(".email").rules("add", {
-            email:true
+            email: true
         });
     }
 
