@@ -146,10 +146,23 @@ var Events = {
                    success: function(data) {
                        enquesta.id = data.id;
                        carregaSeccio("Enquesta",enquesta);
-                       alert("Enquesta creada amb èxit. Per a accedir a la seva pàgina d'administració a partir d'aquest moment, segueix el següent enllaç \n\nlocalhost:8080?id="+enquesta.id+"\n\nGuarda aquest enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta");
+
+                       //$.alert("Enquesta creada amb èxit. Per a accedir a la seva pàgina d'administració a partir d'aquest moment, segueix el següent enllaç \n\nlocalhost:8080?id="+enquesta.id+"\n\nGuarda aquest enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta");
+                       //alert("Enquesta creada amb èxit. Per a accedir a la seva pàgina d'administració a partir d'aquest moment, segueix el següent enllaç \n\nlocalhost:8080?id="+enquesta.id+"\n\nGuarda aquest enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta");
+
+                       $.alert("Per a accedir a la seva pàgina d'administració, copia el següent enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta.<br><br><p align='center'><b>localhost:8080?id="+enquesta.id+"</b></p>", {
+                          title:'Enquesta creada amb èxit.',
+                          icon:'',
+                          buttons:[
+                              {
+                                title:'Tanca',
+                                callback:function() { $(this).dialog("close");}
+                            }
+                          ]
+                      });
                    },
                    error: function(data) {
-                      alert("No s'ha pogut crear l'enquesta.");
+                      $.alert("No s'ha pogut crear l'enquesta.");
                    }
                });
              }
