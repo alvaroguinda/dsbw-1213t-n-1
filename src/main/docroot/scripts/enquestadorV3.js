@@ -3,7 +3,7 @@ var secc = {
     Inici : "inici",
     CrearEnquesta : "crearEnquesta",
     ObtindreEnquesta : "getEnquesta",
-    Enquesta : "veureEnquesta"
+    Enquestes : "veureEnquesta"
 };
 
 var domini = "http://" + location.host + "/";
@@ -15,25 +15,21 @@ var carregaSeccio = function(nomSeccio,data){
     if(!nomSeccio){ //si no hem rebut arguments per carregar una determinada secció...
         var path = location.pathname.substring(1).split("/")[0]; //capturem el path contingut a la url
         if(!secc[path]){ //si aquet path no existeix al nostre Map es que estem entrant per primer cop a la web i la url té el path en blanc o és "index.html"
-            id = gup("id");
+            path = "Inici";
+            configuraSeccio(data); //configurem els handlers d'aquesta secció
+            history.pushState({page:path}, path, domini+path+"/"); //modifiquem la url de la web + l'historic associat del navegador
+        }
+        else if(path == "Enquestes"){
+            id = location.pathname.substring(1).split("/")[1].substring(3);
             if(id != ""){
-                path = "Enquesta";
                 getEnquestaURL(id);
-                id += "/";
             }
-            else{
-                path = "Inici";
-                configuraSeccio(data); //configurem els handlers d'aquesta secció
-            }
-            history.pushState({page:path}, path, domini+path+"/"+id); //modifiquem la url de la web + l'historic associat del navegador
         }
         $("#"+secc[path]).removeClass("template"); //mostrem la secció segons el path
-        
         //validaSeccio();
-
     }
     else { //si hem rebut arguments es tracta d'un click a un botó que ha de conduir a una determinada secció
-        if(data && data.id) id = data.id+"/"; //si rebem l'id d'una enquesta el concatenarem a la URL
+        if(data && data.id) id = "Enq"+data.id+"/"; //si rebem l'id d'una enquesta el concatenarem a la URL
         history.pushState({page:nomSeccio}, nomSeccio, domini+nomSeccio+"/"+id); //modifiquem la url de la web + l'historic associat del navegador
         $("#"+secc[nomSeccio]).removeClass("template"); //mostrem la secció nomSeccio
 
@@ -145,12 +141,12 @@ var Events = {
                    data: JSON.stringify(enquesta),
                    success: function(data) {
                        enquesta.id = data.id;
-                       carregaSeccio("Enquesta",enquesta);
+                       carregaSeccio("Enquestes",enquesta);
 
                        //$.alert("Enquesta creada amb èxit. Per a accedir a la seva pàgina d'administració a partir d'aquest moment, segueix el següent enllaç \n\nlocalhost:8080?id="+enquesta.id+"\n\nGuarda aquest enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta");
                        //alert("Enquesta creada amb èxit. Per a accedir a la seva pàgina d'administració a partir d'aquest moment, segueix el següent enllaç \n\nlocalhost:8080?id="+enquesta.id+"\n\nGuarda aquest enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta");
 
-                       $.alert("Per a accedir a la seva pàgina d'administració, copia el següent enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta.<br><br><p align='center'><b>localhost:8080?id="+enquesta.id+"</b></p>", {
+                       $.alert("Per a accedir a la teva pàgina d'administració, copia el següent enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta.<br><br><p align='center'><b>"+domini+"Enquestes/Enq"+enquesta.id+"/</b></p>", {
                           title:'Enquesta creada amb èxit.',
                           icon:'',
                           buttons:[
@@ -184,7 +180,7 @@ var Events = {
               type: "GET",
               url: "/api/enquestes/admin0/enq"+enquesta.id,
               success: function(enquesta) {
-                 carregaSeccio("Enquesta",enquesta);
+                 carregaSeccio("Enquestes",enquesta);
               },
               dataType: "json",
               error: function(enquesta) {
@@ -205,8 +201,8 @@ var Events = {
             var isValidate=$("#formVeureEnquesta").valid();
 
             if(isValidate) {
-              var enquestaId = getUrlVars()["id"];
-              if(!enquestaId) enquestaId = location.pathname.substring(1).split("/")[1];
+              //var enquestaId = getUrlVars()["id"];
+              if(!enquestaId) enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
               
               var enquesta = {
                 titol: $("#veureTitol").val(),
@@ -237,8 +233,8 @@ var Events = {
 
         $("#formAfegirPreguntes").submit(function(){
             event.preventDefault();
-            var enquestaId = getUrlVars()["id"];
-            if(!enquestaId) enquestaId = location.pathname.substring(1).split("/")[1];
+            //var enquestaId = getUrlVars()["id"];
+            if(!enquestaId) enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
             var pregunta = {
                 tipus: $('#formAfegirPreguntes input[name=tipusPregunta]:checked').val(),
                 enunciat: $("#formAfegirPreguntes input#titolPregunta").val()
@@ -252,7 +248,7 @@ var Events = {
                 contentType: "application/json",
                 data: JSON.stringify(pregunta),
                 success: function(enquesta){
-                    window.location = "http://localhost:8080/?id="+enquestaId
+                    window.location = domini+"Enquestes/Enq"+enquestaId+"/";
                     //history.pushState({page:"Enquesta"}, "Enquesta", domini+"Enquesta/"+enquestaId+"/");
                 },
                 error: function(){
@@ -269,9 +265,8 @@ var configuraSeccio = function(data){
     validaSeccio();
 
     var path = location.pathname.substring(1).split("/")[0];
-    //alert("Config. seccio: " + path);
     switch (path){
-        case "Enquesta":
+        case "Enquestes":
             // if(data == null) --> ERROR...
             $("#veureTitol").val(data["titol"]);
             $("#veureDesM").val(data["inici"]);
@@ -285,7 +280,6 @@ var configuraSeccio = function(data){
                     $("#formVeureEnquesta").append("</p>");
                 });
             }
-            //$("#formVeureEnquesta").append("<input type='button' id='afegirPregunta' name='afegirPregunta' value='Afegir pregunta'/>");
             break;
         default:
             ;

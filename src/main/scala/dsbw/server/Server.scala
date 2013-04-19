@@ -77,7 +77,7 @@ class Servlet(api:Api) extends HttpServlet {
       }
 
       /*** AFEGIT PER FER LA REDIRECCIÓ CAP A INDEX.HTML ***/
-      println("requestURI: "+request.getRequestURI)
+      //println("requestURI: "+request.getRequestURI)
       if (request.getRequestURI.split("/")(1) != "api"){
         getServletContext.getRequestDispatcher( "/index.html" ).forward( request, response )
         return
