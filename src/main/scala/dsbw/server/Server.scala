@@ -9,6 +9,8 @@ import javax.servlet.http.{HttpServletResponse, HttpServletRequest, HttpServlet}
 import io.Source
 import collection.JavaConversions.{enumerationAsScalaIterator, mapAsScalaMap}
 import java.io.PrintWriter
+import javax.servlet.RequestDispatcher
+import scala.util.control.Breaks._
 
 /** Trait to be implemented by HTTP apis */
 trait Api{
@@ -62,6 +64,7 @@ class Servlet(api:Api) extends HttpServlet {
     }
 
 
+
     val initialTimeMillis = System.currentTimeMillis()
 
     val out = initializeResponse(response)
@@ -73,10 +76,17 @@ class Servlet(api:Api) extends HttpServlet {
         return
       }
 
+      /*** AFEGIT PER FER LA REDIRECCIÓ CAP A INDEX.HTML ***/
+      println("requestURI: "+request.getRequestURI)
+      if (request.getRequestURI.split("/")(1) != "api"){
+        getServletContext.getRequestDispatcher( "/index.html" ).forward( request, response )
+        return
+      }
+      /*****************************************************/
+
       val (body, parameters, headers) = parseRequest(request)
 
       val r = api.service(request.getMethod,request.getRequestURI, parameters, headers, body)
-      //request.getRequestDispatcher("/index.html").forward()
       writeResponse(r,out)
 
     } catch {
@@ -108,9 +118,18 @@ class Server(api:Api, port:Int) {
   resourceHandler.setWelcomeFiles(Array("index.html"))
   resourceHandler.setResourceBase("src/main/docroot")
 
+  /** DECLAREM UN SEGON RESOURCE HANDLER PER AFEGIR-LO AL CONTEXT HANDLER **
+   ** I QUE PUGUI SERVIR TANT RECURSOS LOGICS COM EXISTENTS               **/
+  val resourceHandlerContext = new ResourceHandler
+  resourceHandlerContext.setDirectoriesListed(true)
+  resourceHandlerContext.setWelcomeFiles(Array("index.html"))
+  resourceHandlerContext.setResourceBase("src/main/docroot")
+
+  context.setHandler(resourceHandlerContext)
+  /*************************************************************************/
+
   val handlers = new HandlerList()
   handlers.setHandlers(Array(resourceHandler,context))
-
   server.setHandler(handlers)
 
   def start() {
