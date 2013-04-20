@@ -2,6 +2,7 @@ package dsbw.enquestes
 
 import org.bson.types.ObjectId
 import java.util.Date
+import com.mongodb.casbah.commons.MongoDBList
 
 case class Enquesta(id:String, idResp:String, titol: String, inici: String, fi: String, preguntes:List[List[String]])
 case class EnquestaID(id:String)
@@ -60,14 +61,28 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 	}
 
 	def postPregunta(idAdmin:String, idEnquesta:String, pregunta: NovaPregunta):Enquesta= {
-		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
-		val enquestaR = new EnquestaRecord (
+		var enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+		val builder = MongoDBList.newBuilder
+		builder += List("foo", "bar")
+		builder += List("bar", "foo")
+		val nwlist= builder.result
+		nwlist.foreach(e =>
+			println(e)
+			)
+		/*
+		enquesta.preguntes.foreach( e=>
+			println("1")
+			)
+		//builder += List(new ObjectId().toString,pregunta.tipus, pregunta.enunciat)
+		*/
+		var preguntesN = builder.result
+		var enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
 			idResp = enquesta.idResp,
 			titol = enquesta.titol,
 			inici = enquesta.inici,
 			fi = enquesta.fi,
-			preguntes =  List(new ObjectId().toString,pregunta.tipus, pregunta.enunciat) :: enquesta.preguntes
+			preguntes = (List(new ObjectId().toString,pregunta.tipus, pregunta.enunciat) :: enquesta.preguntes.reverse).reverse
 		)
 		enquestesRepository.save(enquestaR)
 

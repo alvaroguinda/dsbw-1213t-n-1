@@ -4,6 +4,7 @@ import dsbw.server.{Server, HttpStatusCode, Response, Api}
 import dsbw.json.JSON
 import Config.{dbHostName, dbPort, dbName, username, pwd, webServerPort}
 import java.util.Date
+import com.mongodb.casbah.commons.MongoDBList
 
 case class NovaEnquesta(titol: String, inici: String, fi: String, preguntes: List[List[String]])
 case class NovaPregunta(tipus: String, enunciat: String)

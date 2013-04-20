@@ -239,7 +239,7 @@ var Events = {
                 tipus: $('#formAfegirPreguntes input[name=tipusPregunta]:checked').val(),
                 enunciat: $("#formAfegirPreguntes input#titolPregunta").val()
             }
-            alert(1);
+            console.log(1);
             console.log(enquestaId);
             console.log(pregunta);
 
