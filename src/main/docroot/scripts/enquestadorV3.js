@@ -202,7 +202,7 @@ var Events = {
 
             if(isValidate) {
               //var enquestaId = getUrlVars()["id"];
-              if(!enquestaId) enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
+              enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
               
               var enquesta = {
                 titol: $("#veureTitol").val(),
@@ -234,11 +234,12 @@ var Events = {
         $("#formAfegirPreguntes").submit(function(){
             event.preventDefault();
             //var enquestaId = getUrlVars()["id"];
-            if(!enquestaId) enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
+            enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
             var pregunta = {
                 tipus: $('#formAfegirPreguntes input[name=tipusPregunta]:checked').val(),
                 enunciat: $("#formAfegirPreguntes input#titolPregunta").val()
             }
+            alert(1);
             console.log(enquestaId);
             console.log(pregunta);
 
@@ -277,7 +278,7 @@ var configuraSeccio = function(data){
                     $.each(pregunta, function(num2,value){
                         $("#formVeureEnquesta").append(value, " ");
                     });
-                    $("#formVeureEnquesta").append("</p>");
+                    $("#formVeureEnquesta").append("<input type=\"button\" name=\"deletePreg\" value=\"Delete Pregunta\" id=\"bDeletePregunta\"/> </p>");
                 });
             }
             break;

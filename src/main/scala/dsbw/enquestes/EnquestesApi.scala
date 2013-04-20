@@ -14,6 +14,7 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
   val putEnquestaAdmin = "PUT /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
   val postPreguntaAdmin = "POST /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
   val deletePreguntaAdmin = "DELETE /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
+  val putPreguntaAdmin = "PUT /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
   def service(method: String, uri: String, parameters: Map[String, List[String]] = Map(), headers: Map[String, String] = Map(), body: Option[JSON] = None): Response = {
     try {
       (method + " " + uri) match {
@@ -23,6 +24,7 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
         case putEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.putEnquesta(idAdmin,idEnquesta,JSON.fromJSON[NovaEnquesta](body.getOrElse(throw new Exception("Bad Request")))))
         case postPreguntaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Created, enquestesService.postPregunta(idAdmin,idEnquesta,JSON.fromJSON[NovaPregunta](body.getOrElse(throw new Exception("Bad Request")))))
         case deletePreguntaAdmin(idAdmin,idEnquesta,idPregunta) => Response(HttpStatusCode.Ok, enquestesService.deletePregunta(idAdmin,idEnquesta,idPregunta))
+        case putPreguntaAdmin(idAdmin,idEnquesta,idPregunta) => Response(HttpStatusCode.Ok, enquestesService.putPregunta(idAdmin,idEnquesta,idPregunta,JSON.fromJSON[NovaPregunta](body.getOrElse(throw new Exception("Bad Request")))))
         case _ => Response(HttpStatusCode.Ok, "Hello world!")
       }
     } catch {
