@@ -4,7 +4,9 @@ import org.bson.types.ObjectId
 import java.util.Date
 import com.mongodb.casbah.commons.MongoDBList
 
-case class Enquesta(id:String, idResp:String, titol: String, inici: String, fi: String, preguntes:List[List[String]])
+case class Resposta(idEnquestat:String, resposta:String)
+case class Pregunta(id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[Resposta])
+case class Enquesta(id:String, idResp:String, titol: String, inici: String, fi: String, preguntes:List[Pregunta])
 case class EnquestaID(id:String)
 
 class EnquestesService(enquestesRepository: EnquestesRepository) {
@@ -13,7 +15,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 
   //def listEnquestes = enquestesRepository.findAll.map(cr => Enquesta(getEnquestaById(cr.author).get,cr.date,cr.message))
 
-  def getEnquesta(idAdmin:String, idEnquesta:String):Enquesta= {
+  	def getEnquesta(idAdmin:String, idEnquesta:String):Enquesta= {
 		// Comprobem qui està realitzant la petició
 		//val loggedUserId = sessionsRepository.findById(new ObjectId(session_token)).getOrElse(throw new HttpException(401, "Authorization required")).user_id
 		// Obtenim els dos usuaris existeixin
@@ -67,37 +69,13 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 
 	def postPregunta(idAdmin:String, idEnquesta:String, pregunta: NovaPregunta):Enquesta= {
 		var enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
-		/*
-		val builder = MongoDBList.newBuilder
-		builder += List("foo", "bar")
-		builder += List("bar", "foo")
-		val nwlist= builder.result
-		nwlist.foreach(e =>
-			println(e)
-			)
-		
-		enquesta.preguntes.foreach( e=>
-			println("1")
-			)
-		//builder += List(new ObjectId().toString,
-		.tipus, pregunta.enunciat)
-		
-		var preguntesN = builder.result
-		*/
-		var nPregunta:List[String] = List(new ObjectId().toString,pregunta.tipus, pregunta.enunciat)
-		pregunta.respostes.foreach{ e=> 
-			println(e)
-			if (e != "") nPregunta = nPregunta ::: List(e)
-		}
-		println(nPregunta)
-
 		var enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
 			idResp = enquesta.idResp,
 			titol = enquesta.titol,
 			inici = enquesta.inici,
 			fi = enquesta.fi,
-			preguntes =  enquesta.preguntes ::: List(nPregunta)
+			preguntes = enquesta.preguntes ::: List(new Pregunta(new ObjectId().toString,pregunta.enunciat, pregunta.tipus, pregunta.respostes, List()))
 		)
 		enquestesRepository.save(enquestaR)
 
@@ -106,32 +84,17 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 	}
 
 	def deletePregunta(idAdmin:String, idEnquesta:String, idPregunta:String){
-		/*val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
-		//println(enquesta.preguntes)
-		var ret = List[List[String]]()
-		var i = 0
-		while(i < enquesta.preguntes.length){
-
-			println(enquesta.preguntes.apply(i)
-			println("Hola")
-			println(enquesta.preguntes.apply(i).apply(0))
-			val ant: List[String] = List(enquesta.preguntes.apply(i).apply(0))
-			println(ant)
-			println("Hola2")
-			if(!ant.apply(0).equals(idPregunta)){
-				println("Hola3")
-				ret ::= ant
-			}
-		}
-		println("llega")
+		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+		val preguntesn = enquesta.preguntes.filter(_.id != idPregunta)
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
+			idResp = enquesta.idResp,
 			titol = enquesta.titol,
 			inici = enquesta.inici,
 			fi = enquesta.fi,
-			preguntes =  ret
+			preguntes =  preguntesn
 		)
-		enquestesRepository.save(enquestaR)*/
+		enquestesRepository.save(enquestaR)
 	}
 
 	def putPregunta(idAdmin:String, idEnquesta:String, idPregunta:String, pregunta:NovaPregunta){

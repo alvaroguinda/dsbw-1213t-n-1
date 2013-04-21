@@ -5,10 +5,10 @@ import dsbw.mongo.MongoDao
 import java.util.Date
 
 /** Case class that documents the document scheme in the enquesta MongoDB collection */
-case class PreguntaRecord(_id:ObjectId = new ObjectId(), text:String, tipus:Int, possiblesRespostes:List[String], respostes:List[List[String]])
-case class EnquestaRecord(_id:ObjectId = new ObjectId(), idResp: ObjectId= new ObjectId(),titol:String, inici:String, fi:String, preguntes:List[List[String]])
-//Proposta de classe per a enquesta record
-//case class EnquestaRecord(_id:ObjectId = new ObjectId(), titol:String, inici:String, fi:String, preguntes:List[PreguntaRecord])
+//case class RespostaRecord(idEnquestat:String, resposta:String)
+//case class PreguntaRecord(_id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[RespostaRecord])
+//case class EnquestaRecord(_id:ObjectId = new ObjectId(), titol:String, inici:String, fi:String, preguntes:List[List[String]])
+case class EnquestaRecord(_id:ObjectId = new ObjectId(), idResp: ObjectId= new ObjectId(),titol:String, inici:String, fi:String, preguntes:List[Pregunta])
 
 
 
