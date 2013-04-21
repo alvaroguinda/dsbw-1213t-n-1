@@ -81,7 +81,7 @@
                     <input type="submit" value="Modifica">
                     <input type="button"  class="tornar" name="tornar" value="Tornar"/>
                     <h2>Preguntes:</h2>
-                    <input type="button" name="afegir" value="Afegir preguntes" id="bAfegirPreguntes"/>
+                    <input type="button" name="afegir" value="Afegir pregunta" id="bAfegirPreguntes"/>
                 </form>
             </div>
             <!-- FI VEURE ENQUESTA -->
@@ -105,8 +105,9 @@
                     <h2>Tipus de pregunta: </h2>
                     <input type="radio" name="tipusPregunta" id="rbTipusText" value="Text" checked>Text
                     <input type="radio" name="tipusPregunta" id="rbTipusTest" value="Test">Test
+                    <input type="radio" name="tipusPregunta" id="rbTipusMulti" value="Multi">Multiresposta
                     <h2>Pregunta: </h2>
-                        <input type="text" name="titolPregunta" id="titolPregunta">
+                        <input type="text" name="titolPregunta" id="titolPregunta" class ="required">
                         <div id="preguntaTest" class="template">
                             <h2>Respostes: </h2>
                                 <input type="text" name="respostaPregunta" id="respostaPregunta"> <br>

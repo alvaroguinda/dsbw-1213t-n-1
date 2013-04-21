@@ -80,9 +80,11 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 		var preguntesN = builder.result
 		*/
 		var nPregunta:List[String] = List(new ObjectId().toString,pregunta.tipus, pregunta.enunciat)
-		pregunta.respostes.foreach( e=> 
-			nPregunta = nPregunta ::: List(e)
-		)
+		pregunta.respostes.foreach{ e=> 
+			println(e)
+			if (e != "") nPregunta = nPregunta ::: List(e)
+		}
+		println(nPregunta)
 
 		var enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),

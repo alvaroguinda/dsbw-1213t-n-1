@@ -231,12 +231,16 @@ var Events = {
           $("#afegirPreguntes").removeClass("template");
         });
 
+        $("#rbTipusText").click(function() {
+          $("#preguntaTest").addClass("template");
+        });
+
         $("#rbTipusTest").click(function() {
           $("#preguntaTest").removeClass("template");
         });
 
-        $("#rbTipusText").click(function() {
-          $("#preguntaTest").addClass("template");
+        $("#rbTipusMulti").click(function() {
+          $("#preguntaTest").removeClass("template");
         });
 
         $("#bAfegirResposta").click(function() {
@@ -253,7 +257,6 @@ var Events = {
             var respostesP = new Array();
             $("#preguntaTest input#respostaPregunta").each(function(index){
               respostesP[index] = $(this).val();
-              console.log(index+": "+$(this).val());
             });
 
             var pregunta = {
@@ -264,7 +267,6 @@ var Events = {
 
             console.log(enquestaId);
             console.log(pregunta);
-            console.log(pregunta.respostes)
 
             $.ajax({
                 type: "POST",
@@ -272,7 +274,7 @@ var Events = {
                 contentType: "application/json",
                 data: JSON.stringify(pregunta),
                 success: function(enquesta){
-                    //window.location = domini+"Enquestes/Enq"+enquestaId+"/";
+                    window.location = domini+"Enquestes/Enq"+enquestaId+"/";
                     //history.pushState({page:"Enquesta"}, "Enquesta", domini+"Enquesta/"+enquestaId+"/");
                 },
                 error: function(){
@@ -303,6 +305,7 @@ var configuraSeccio = function(data){
                     });
                     $("#formVeureEnquesta").append("<input type=\"button\" name=\"deletePreg\" value=\"Delete Pregunta\" id=\"bDeletePregunta\"/> </p>");
                 });
+                $("#formVeureEnquesta").append($("#formVeureEnquesta input#bAfegirPreguntes"))
             }
             break;
         default:
