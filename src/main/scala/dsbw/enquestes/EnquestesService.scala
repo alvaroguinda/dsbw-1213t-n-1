@@ -27,6 +27,11 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 	//	enquestesRepository.findById(enquesta_id)
 	}
 
+	 def getEnquestaResp(idUser:String, idEnquesta:String):Enquesta= {
+		val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
+        new Enquesta(enquesta._id.toString(),enquesta.idResp.toString(),enquesta.titol,enquesta.inici,enquesta.fi,enquesta.preguntes)
+	}
+
 	def creaEnquesta(enquesta: NovaEnquesta):EnquestaID= {
 		//println(enquesta.titol)
 		//println(enquesta.inici)

@@ -20,6 +20,8 @@ class EnquestesRepository(dao: EnquestesDao) {
 
   def findById(id:ObjectId) = dao.findOneByID(id)
 
+  def findByIdResp(id:ObjectId) = dao.findOne(Map("idResp" -> id))
+
   def save (e:EnquestaRecord) = dao.save(e)
 
   //dao.save(EnquestaRecord(username="agile_jordi", name="Jordi Pradel", avatar="/img/avatar4.png"))
