@@ -79,13 +79,18 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 		
 		var preguntesN = builder.result
 		*/
+		var nPregunta:List[String] = List(new ObjectId().toString,pregunta.tipus, pregunta.enunciat)
+		pregunta.respostes.foreach( e=> 
+			nPregunta = nPregunta ::: List(e)
+		)
+
 		var enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
 			idResp = enquesta.idResp,
 			titol = enquesta.titol,
 			inici = enquesta.inici,
 			fi = enquesta.fi,
-			preguntes = (List(new ObjectId().toString,pregunta.tipus, pregunta.enunciat) :: enquesta.preguntes.reverse).reverse
+			preguntes =  enquesta.preguntes ::: List(nPregunta)
 		)
 		enquestesRepository.save(enquestaR)
 
