@@ -62,6 +62,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 
 	def postPregunta(idAdmin:String, idEnquesta:String, pregunta: NovaPregunta):Enquesta= {
 		var enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+		/*
 		val builder = MongoDBList.newBuilder
 		builder += List("foo", "bar")
 		builder += List("bar", "foo")
@@ -69,13 +70,15 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 		nwlist.foreach(e =>
 			println(e)
 			)
-		/*
+		
 		enquesta.preguntes.foreach( e=>
 			println("1")
 			)
-		//builder += List(new ObjectId().toString,pregunta.tipus, pregunta.enunciat)
-		*/
+		//builder += List(new ObjectId().toString,
+		.tipus, pregunta.enunciat)
+		
 		var preguntesN = builder.result
+		*/
 		var enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
 			idResp = enquesta.idResp,

@@ -7,7 +7,7 @@ import java.util.Date
 import com.mongodb.casbah.commons.MongoDBList
 
 case class NovaEnquesta(titol: String, inici: String, fi: String, preguntes: List[List[String]])
-case class NovaPregunta(tipus: String, enunciat: String)
+case class NovaPregunta(tipus: String, enunciat: String, respostes: List[String])
 
 /** Enquestes API */
 class EnquestesApi(enquestesService:EnquestesService) extends Api {

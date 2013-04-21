@@ -228,20 +228,43 @@ var Events = {
         });
 
         $("#bAfegirPreguntes").click(function() {
-            $("#afegirPreguntes").removeClass("template");
+          $("#afegirPreguntes").removeClass("template");
         });
+
+        $("#rbTipusTest").click(function() {
+          $("#preguntaTest").removeClass("template");
+        });
+
+        $("#rbTipusText").click(function() {
+          $("#preguntaTest").addClass("template");
+        });
+
+        $("#bAfegirResposta").click(function() {
+          $("#preguntaTest").append("<input type=\"text\" name=\"respostaPregunta\" id=\"respostaPregunta\"/> <br>");
+          $("#preguntaTest").append($("#preguntaTest input#bAfegirResposta"));
+
+       });
 
         $("#formAfegirPreguntes").submit(function(){
             event.preventDefault();
             //var enquestaId = getUrlVars()["id"];
             enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
+
+            var respostesP = new Array();
+            $("#preguntaTest input#respostaPregunta").each(function(index){
+              respostesP[index] = $(this).val();
+              console.log(index+": "+$(this).val());
+            });
+
             var pregunta = {
                 tipus: $('#formAfegirPreguntes input[name=tipusPregunta]:checked').val(),
-                enunciat: $("#formAfegirPreguntes input#titolPregunta").val()
+                enunciat: $("#formAfegirPreguntes input#titolPregunta").val(),
+                respostes: respostesP
             }
-            console.log(1);
+
             console.log(enquestaId);
             console.log(pregunta);
+            console.log(pregunta.respostes)
 
             $.ajax({
                 type: "POST",
@@ -249,7 +272,7 @@ var Events = {
                 contentType: "application/json",
                 data: JSON.stringify(pregunta),
                 success: function(enquesta){
-                    window.location = domini+"Enquestes/Enq"+enquestaId+"/";
+                    //window.location = domini+"Enquestes/Enq"+enquestaId+"/";
                     //history.pushState({page:"Enquesta"}, "Enquesta", domini+"Enquesta/"+enquestaId+"/");
                 },
                 error: function(){
