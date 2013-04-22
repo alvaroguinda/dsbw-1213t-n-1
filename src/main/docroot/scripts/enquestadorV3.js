@@ -310,13 +310,25 @@ var configuraSeccio = function(data){
             $("#veureFinsM").val(data["fi"]);
             if(data.preguntes){
                 $.each(data.preguntes, function(num,pregunta) {
-                    $("#formVeureEnquesta").append("<p>", num+1, " ");
+                    $("#divPreguntes").append(function(index,html){
+                        var result = "<div><p>"+(num+1)+" ";
+                        $.each(pregunta, function(num2,value){
+                            result += value+" ";
+                        });
+                        result += '</p><input type="button" name="deletePreg" value="Delete Pregunta" id="bDeletePregunta"/></div>';
+                        return result;
+                    });
+                });
+                /*
+                $.each(data.preguntes, function(num,pregunta) {
+                    $("#divPreguntes").append("<p>", num+1, " ");
                     $.each(pregunta, function(num2,value){
                         $("#formVeureEnquesta").append(value, " ");
                     });
                     $("#formVeureEnquesta").append("<input type=\"button\" name=\"deletePreg\" value=\"Delete Pregunta\" id=\"bDeletePregunta\"/> </p>");
                 });
                 $("#formVeureEnquesta").append($("#formVeureEnquesta input#bAfegirPreguntes"))
+                */
             }
             break;
         default:

@@ -126,11 +126,17 @@ header:after, section:after, #content ul li:after {
 
 header img {
     float: left;
-    margin: 1em;
 }
 
 header form.logout{
     float:right;
+}
+
+.titolDescriptor{
+    float: right;
+    padding: 40px 80px 0 0;
+    font-size: 200%;
+    font-family: brush script mt;
 }
 
 div#left{
@@ -296,4 +302,17 @@ div.inputdata input[type="radio"]{
     width:100%;
     text-align:center;
     margin-top:25px;
+}
+
+#divPreguntes div{
+    line-height:35px;
+}
+
+#divPreguntes p{
+    display:inline;
+    padding:5px;
+}
+
+#divPreguntes input[type="button"]{
+    float:right;
 }
