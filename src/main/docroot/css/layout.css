@@ -5,6 +5,7 @@
 h1 {
     font-size: 1.3em;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 h2 {
@@ -22,17 +23,24 @@ h3 {
     font-size: 0.9em;
     margin-bottom: 10px;
     margin-left: 10px;
-    margin-right: 10px;
-    background-color: #DCDCDC;
+    margin-right: 10px;    
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 10px;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
+    border-bottom: 1px solid #DCDCDC;
+}
+
+.separador {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;    
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    border-bottom: 1px solid #DCDCDC;
 }
 
 #afegirPreguntes h4 {
-
     width:30%;
     text-align:right;
     margin-right:10px;
@@ -77,7 +85,12 @@ label.error {
 }
 
 .logo {
-    height: 100px;
+    text-align: center;
+}
+
+.logo img {
+    height: 140px;
+    width: 375px;
 }
 
 header p.error{
@@ -115,7 +128,6 @@ header, menu.main, section{
 header {
   padding: 10px;
   margin: 15px 0;
-
 }
 
 header:after, section:after, #content ul li:after {
