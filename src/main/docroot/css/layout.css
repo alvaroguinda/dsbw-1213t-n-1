@@ -336,7 +336,6 @@ div.inputdata input[type="radio"]{
 .divContingutPregunta {
     font-style: italic;
     text-align: justify;
-    padding-bottom: 40px !important;
     margin-left: 5% !important;
     margin-right: 20% !important;
 }
