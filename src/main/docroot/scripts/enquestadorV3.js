@@ -241,7 +241,11 @@ var Events = {
         });
 
         $("#bAfegirResposta").click(function() {
-          $("#preguntaTest").append("<input type=\"text\" name=\"respostaPregunta\" id=\"respostaPregunta\"/> <br>");
+          var novaResposta = "<div class='inputdata'><label for='respostaPregunta'>Resposta 1</label>";
+          novaResposta += "<span><input type=\"text\" id=\"respostaPregunta\" name=\"respostaPregunta\" class=\"required\"/></span>";
+          novaResposta += "</div>";
+          $("#preguntaTest").append(novaResposta);
+          //$("#preguntaTest").append("<input type=\"text\" name=\"respostaPregunta\" id=\"respostaPregunta\"/> <br>");
           $("#preguntaTest").append($("#preguntaTest input#bAfegirResposta"));
 
        });

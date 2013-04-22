@@ -121,19 +121,41 @@
             <!-- FI OBTINDRE ENQUESTA -->
             <!-- AFEGIR PREGUNTES -->
             <div id = "afegirPreguntes" class="template">
-                <form action="#" id="formAfegirPreguntes">
-                    <h2>Tipus de pregunta: </h2>
-                    <input type="radio" name="tipusPregunta" id="rbTipusText" value="Text" checked>Text
-                    <input type="radio" name="tipusPregunta" id="rbTipusTest" value="Test">Test
-                    <input type="radio" name="tipusPregunta" id="rbTipusMulti" value="Multi">Multiresposta
-                    <h2>Pregunta: </h2>
-                        <input type="text" name="titolPregunta" id="titolPregunta" class ="required">
-                        <div id="preguntaTest" class="template">
-                            <h2>Respostes: </h2>
-                                <input type="text" name="respostaPregunta" id="respostaPregunta"> <br>
-                                <input type="button" value="Afegir resposta" id="bAfegirResposta">
+                <form action="#" id="formAfegirPreguntes" class="validarFormulari">
+                    <div class="divFormulari">
+                        <div class="inputdata">
+                            <label for="rbTipusText">Text</label>
+                            <span><input type="radio" name="tipusPregunta" id="rbTipusText" value="Text" checked></span>
                         </div>
-                        <input type="submit" value="Guardar">
+
+                        <div class="inputdata">
+                            <label for="rbTipusTest">Test</label>
+                            <span><input type="radio" name="tipusPregunta" id="rbTipusTest" value="Test"></span>
+                        </div>
+
+                        <div class="inputdata">
+                            <label for="rbTipusMulti">Multiresposta</label>
+                            <span><input type="radio" name="tipusPregunta" id="rbTipusMulti" value="Multi"></span>
+                        </div>
+
+                        <div class="inputdata">
+                            <label for="titolPregunta">Pregunta</label>
+                            <span><input type="text" name="titolPregunta" id="titolPregunta" class="required"></span>
+                        </div>
+
+                        <div id="preguntaTest" class="template">                            
+                            <h3>Respostes: </h3>
+                            <div class="inputdata">
+                                <label for="respostaPregunta">Respostes</label>
+                                <span><input type="text" name="respostaPregunta" id="respostaPregunta" class="required"></span>
+                            </div>
+
+                            <input type="button" id="bAfegirResposta" name="bAfegirResposta" value="Afegir resposta">
+                        </div>
+                        <div class="boto">
+                            <input type="submit" id="bGuardarResposta" name="bGuardarResposta" value="Guardar">
+                        </div>
+                    </div>
                 </form>
             </div>
             <!-- FI AFEGIR PREGUNTES -->
