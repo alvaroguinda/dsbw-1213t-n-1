@@ -241,8 +241,13 @@ var Events = {
         });
 
         $("#bAfegirResposta").click(function() {
-          var novaResposta = "<div class='inputdata'><label for='respostaPregunta'>Resposta 1</label>";
-          novaResposta += "<span><input type=\"text\" id=\"respostaPregunta\" name=\"respostaPregunta\" class=\"required\"/></span>";
+          //Cada cop que afegim una pregunta incrementem el seu identificador
+          var numRespostes = 1;
+          $("#preguntaTest").find("input[type=text]").each(function() {
+            numRespostes++;
+          });
+          var novaResposta = "<div class='inputdata'><label for='respostaPregunta" + numRespostes + "'>Resposta "+ numRespostes +"</label>";
+          novaResposta += "<span><input type=\"text\" id=\"respostaPregunta"+ numRespostes +"\" name=\"respostaPregunta"+ numRespostes +"\" class=\"required\"/></span>";
           novaResposta += "</div>";
           $("#preguntaTest").append(novaResposta);
           //$("#preguntaTest").append("<input type=\"text\" name=\"respostaPregunta\" id=\"respostaPregunta\"/> <br>");
