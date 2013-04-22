@@ -26,7 +26,7 @@ var carregaSeccio = function(nomSeccio,data){
             }
         }
         $("#"+secc[path]).removeClass("template"); //mostrem la secció segons el path
-        //validaSeccio();
+        validaSeccio();
     }
     else { //si hem rebut arguments es tracta d'un click a un botó que ha de conduir a una determinada secció
         if(data && data.id) id = "Enq"+data.id+"/"; //si rebem l'id d'una enquesta el concatenarem a la URL
@@ -143,9 +143,6 @@ var Events = {
                        enquesta.id = data.id;
                        carregaSeccio("Enquestes",enquesta);
 
-                       //$.alert("Enquesta creada amb èxit. Per a accedir a la seva pàgina d'administració a partir d'aquest moment, segueix el següent enllaç \n\nlocalhost:8080?id="+enquesta.id+"\n\nGuarda aquest enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta");
-                       //alert("Enquesta creada amb èxit. Per a accedir a la seva pàgina d'administració a partir d'aquest moment, segueix el següent enllaç \n\nlocalhost:8080?id="+enquesta.id+"\n\nGuarda aquest enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta");
-
                        $.alert("Per a accedir a la teva pàgina d'administració, copia el següent enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta.<br><br><p align='center'><b>"+domini+"Enquestes/Enq"+enquesta.id+"/</b></p>", {
                           title:'Enquesta creada amb èxit.',
                           icon:'',
@@ -251,36 +248,41 @@ var Events = {
 
         $("#formAfegirPreguntes").submit(function(){
             event.preventDefault();
-            //var enquestaId = getUrlVars()["id"];
-            enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
 
-            var respostesP = new Array();
-            $("#preguntaTest input#respostaPregunta").each(function(index){
-              respostesP[index] = $(this).val();
-            });
+            var isValidate=$("#formAfegirPreguntes").valid();
 
-            var pregunta = {
-                tipus: $('#formAfegirPreguntes input[name=tipusPregunta]:checked').val(),
-                enunciat: $("#formAfegirPreguntes input#titolPregunta").val(),
-                respostes: respostesP
+            if(isValidate) {
+              //var enquestaId = getUrlVars()["id"];
+              enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
+
+              var respostesP = new Array();
+              $("#preguntaTest input#respostaPregunta").each(function(index){
+                respostesP[index] = $(this).val();
+              });
+
+              var pregunta = {
+                  tipus: $('#formAfegirPreguntes input[name=tipusPregunta]:checked').val(),
+                  enunciat: $("#formAfegirPreguntes input#titolPregunta").val(),
+                  respostes: respostesP
+              }
+
+              console.log(enquestaId);
+              console.log(pregunta);
+
+              $.ajax({
+                  type: "POST",
+                  url: "/api/enquestes/admin0/enq"+enquestaId,
+                  contentType: "application/json",
+                  data: JSON.stringify(pregunta),
+                  success: function(enquesta){
+                      window.location = domini+"Enquestes/Enq"+enquestaId+"/";
+                      //history.pushState({page:"Enquesta"}, "Enquesta", domini+"Enquesta/"+enquestaId+"/");
+                  },
+                  error: function(){
+                      console.log("Error");
+                  }
+              });
             }
-
-            console.log(enquestaId);
-            console.log(pregunta);
-
-            $.ajax({
-                type: "POST",
-                url: "/api/enquestes/admin0/enq"+enquestaId,
-                contentType: "application/json",
-                data: JSON.stringify(pregunta),
-                success: function(enquesta){
-                    window.location = domini+"Enquestes/Enq"+enquestaId+"/";
-                    //history.pushState({page:"Enquesta"}, "Enquesta", domini+"Enquesta/"+enquestaId+"/");
-                },
-                error: function(){
-                    console.log("Error");
-                }
-            });
         });
    }
 };
