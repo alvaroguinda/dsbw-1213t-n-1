@@ -10,6 +10,12 @@ h1 {
 h2 {
     font-size: 1.1em;
     margin-bottom: 10px;
+    background-color: #DCDCDC;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
 }
 
 a {
@@ -40,10 +46,12 @@ input.error {
 }
 
 label.error {
-    display: inline;
-    float: none;
-    color: red;
-    padding-left: .5em;
+    width: 45% !important;
+    display: inline-block !important;
+    float: none !important;
+    color: red !important;
+    padding-left: .5em !important;
+    text-align: left !important;
 }
 
 .logo {
@@ -217,4 +225,53 @@ menu.main a:hover{
 
 #content ul li:hover menu a{
     padding: 0 5px;
+}
+
+.divFormulari {
+    margin-bottom: 15px;
+}
+
+div.inputdata{
+    
+    padding:0.1em;
+    margin:0.1em;
+}
+
+div.inputdata label{
+    float:left;
+    width:30%;
+    text-align:right;
+    margin-right:10px;
+    padding:5px 0;
+    color:gray;
+}
+
+div.inputdata span{
+    width:60%;
+    display: inline-block;
+    text-align:left;
+}
+
+div.inputdata input{
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    width:50%;
+    text-align:left;
+    padding-top:4px;
+    padding-bottom:4px;
+    padding-left:4px;
+    
+}
+
+div.inputdata input[type="radio"]{
+    width:5%;
+    margin-top:5.5px;
+    margin-bottom:5.5px;
+}
+
+.boto {
+    clear: both;
+    width:100%;
+    text-align:center;
+    margin-top:25px;
 }
