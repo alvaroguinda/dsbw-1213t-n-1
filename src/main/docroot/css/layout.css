@@ -313,6 +313,8 @@ div.inputdata input[type="radio"]{
 }
 
 #divPreguntes div{
+    margin-left: 5px;
+    margin-right: 10px;   
     line-height:35px;
 }
 
@@ -333,7 +335,10 @@ div.inputdata input[type="radio"]{
 
 .divContingutPregunta {
     font-style: italic;
-    margin-left: 2%;
+    text-align: justify;
+    padding-bottom: 40px !important;
+    margin-left: 5% !important;
+    margin-right: 20% !important;
 }
 
 .filaEven {
