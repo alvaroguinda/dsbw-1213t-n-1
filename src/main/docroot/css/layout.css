@@ -20,7 +20,7 @@ h2 {
 }
 
 h3 {
-    font-size: 0.9em;
+    font-size: 1.1em;
     margin-bottom: 10px;
     margin-left: 10px;
     margin-right: 10px;    
@@ -323,4 +323,32 @@ div.inputdata input[type="radio"]{
 
 #divPreguntes input[type="button"]{
     float:right;
+}
+
+.divTitolFilaPregunta {
+    /*border-bottom: 1px solid #DCDCDC;*/
+
+    font-weight: bold;
+}
+
+.divContingutPregunta {
+    font-style: italic;
+    margin-left: 2%;
+}
+
+.filaEven {
+    background-color: #F0F8FF;
+}
+
+.filaOdd {
+    background-color: white;
+}
+
+.divFilaPregunta {
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+
+.divFilaPregunta:hover{
+   background-color:#E0EEEE;
 }

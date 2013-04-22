@@ -311,14 +311,33 @@ var configuraSeccio = function(data){
             if(data.preguntes){
                 $.each(data.preguntes, function(num,pregunta) {
                     $("#divPreguntes").append(function(index,html){
-                        var result = "<div><p>"+(num+1)+" ";
-                        $.each(pregunta, function(num2,value){
-                            result += value+" ";
-                        });
-                        result += '</p><input type="button" name="deletePreg" value="Delete Pregunta" id="bDeletePregunta"/></div>';
+                        console.log(pregunta);
+
+                        //$.each(pregunta, function(num2,value){
+                        //    result += value+" ";
+                        //});
+
+                        var result = "<div class='divFilaPregunta'>";
+                          result += "<div class='divTitolFilaPregunta'>";
+                            result += "<p>Pregunta "+(num+1)+"</p>";
+                            result += "<p>"+pregunta.id+"</p>";
+                            result += "<p>"+pregunta.tipus+"</p>";                            
+                          result += "</div>";
+                          result += "<div class='divBotoPregunta'>";
+                            result += "<input type='button' id='bDeletePregunta"+(num+1)+"' name='deletePreg"+(num+1)+"' value='Delete Pregunta'/>";
+                          result += "</div>";
+                          result += "<div class='divContingutPregunta'>";
+                            result += "<p>"+pregunta.text+"</p>";
+                          result += "</div>";
+
+                          
+                        result += "</div>";
                         return result;
                     });
                 });
+
+                $(".divFilaPregunta:even").addClass("filaEven"); 
+                $(".divFilaPregunta:odd").addClass("filaOdd"); 
                 /*
                 $.each(data.preguntes, function(num,pregunta) {
                     $("#divPreguntes").append("<p>", num+1, " ");
