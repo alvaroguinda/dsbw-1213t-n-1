@@ -136,10 +136,6 @@ header:after, section:after, #content ul li:after {
   clear: both;
 }
 
-header img {
-    float: left;
-}
-
 header form.logout{
     float:right;
 }
