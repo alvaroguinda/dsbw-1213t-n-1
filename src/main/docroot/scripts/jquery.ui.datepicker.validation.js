@@ -13,11 +13,11 @@ if ($.fn.validate) {
 	$.datepicker._selectDate2 = $.datepicker._selectDate;
 	
 	$.extend($.datepicker.regional[''], {
-		validateDate: 'Please enter a valid date',
-		validateDateMin: 'Please enter a date on or after {0}',
-		validateDateMax: 'Please enter a date on or before {0}',
-		validateDateMinMax: 'Please enter a date between {0} and {1}',
-		validateDateCompare: 'Please enter a date {0} {1}',
+		validateDate: 'Enter a valid date',
+		validateDateMin: 'Date on or after {0}',
+		validateDateMax: 'Date on or before {0}',
+		validateDateMinMax: 'Date between {0} and {1}',
+		validateDateCompare: 'Date {0} {1}',
 		validateDateToday: 'today',
 		validateDateOther: 'the other date',
 		validateDateEQ: 'equal to',
@@ -103,6 +103,20 @@ if ($.fn.validate) {
 
 	/* And allow as a class rule. */
 	$.validator.addClassRules('dpDate', {dpDate: true});
+
+	//addmethod jquery validator format date
+	//jQuery.validator.addMethod("mydate", function(value, element) { 
+	//  return this.optional(element) || /^\d\d?-\w\w\w-\d\d\d\d/.test(value); 
+	//}, "Please specify the date in DD-MMM-YYYY format");
+
+	$.validator.addMethod(
+	    "catalanDate",
+	    function(value, element) {
+	        // put your own logic here, this is just a (crappy) example
+	        return value.match(/^\d\d?\-\d\d?\-\d\d\d\d$/);
+	    },
+	    "Format dd-mm-yyyy."
+	);
 
 	var comparisons = {equal: 'eq', same: 'eq', notEqual: 'ne', notSame: 'ne',
 		lessThan: 'lt', before: 'lt', greaterThan: 'gt', after: 'gt',
@@ -198,3 +212,7 @@ if ($.fn.validate) {
 }
 
 })(jQuery);
+
+//jQuery.validator.addMethod("mydate", function(value, element) { 
+//  return this.optional(element) || /^\d\d?-\w\w\w-\d\d\d\d/.test(value); 
+//}, "Please specify the date in DD-MMM-YYYY format");

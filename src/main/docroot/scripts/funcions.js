@@ -55,15 +55,17 @@ var validaFormulari = function ( form ) {
         var idDataInici = '#'+$(formulari).find(".from").attr('id');
         var idDataFi = '#'+$(formulari).find(".to").attr('id');
 
-        $(formulari).find(".from").rules("add", { 
+        $(formulari).find(".from").rules("add", {
             required: true, 
             dpDate: true,
+            catalanDate: true,
             dpCompareDate: ['before', idDataFi] 
         });
 
-        $(formulari).find(".to").rules("add", { 
+        $(formulari).find(".to").rules("add", {
             required: true, 
             dpDate: true,
+            catalanDate: true,
             dpCompareDate: {after: idDataInici} 
         });
     }
