@@ -23,8 +23,17 @@ h3 {
     font-size: 0.9em;
     margin-bottom: 10px;
     margin-left: 10px;
-    margin-right: 10px;
-    
+    margin-right: 10px;    
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    border-bottom: 1px solid #DCDCDC;
+}
+
+.separador {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;    
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 10px;
