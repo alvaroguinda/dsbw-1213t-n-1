@@ -115,7 +115,7 @@ if ($.fn.validate) {
 	        // put your own logic here, this is just a (crappy) example
 	        return value.match(/^\d\d?\-\d\d?\-\d\d\d\d$/);
 	    },
-	    "Format dd-mm-yyyy."
+	    "Format dd-mm-aaaa."
 	);
 
 	var comparisons = {equal: 'eq', same: 'eq', notEqual: 'ne', notSame: 'ne',
