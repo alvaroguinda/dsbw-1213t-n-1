@@ -49,18 +49,27 @@
             <div id="crearEnquesta" class="template">
                 <form action="#" id="formCrearEnquesta" class="validarFormulari">
                     <h2>Crear enquesta</h2>
-                    <div>
-                        <label for="titol">Títol</label>
-                        <input type="text" name="titol" id="titol" class="required">
+                    <div class="divFormulari">
+                        <div class="inputdata">
+		                  <label for="titol">Títol</label>
+		                  <span><input type="text" name="titol" id="titol" class="required"></span>
+                        </div>
 
-                        <label for="dataInici">Des de</label>
-                        <input type="text" id="dataInici" name="dataInici" class="from required"/>
+                        <div class="inputdata">
+		                  <label for="dataInici">Des de</label>
+		                  <span><input type="text" id="dataInici" name="dataInici" class="from required"/></span>
+	                   </div>
 
-                        <label for="dataFi">Fins a</label>
-                        <input type="text" id="dataFi" name="dataFi" class="to required"/>
+                        <div class="inputdata">
+		                  <label for="dataFi">Fins a</label>
+		                  <span><input type="text" id="dataFi" name="dataFi" class="to required"/></span>
+                        </div>
+                    
+                        <div class="boto">
+                            <input type="submit" value="Crea">
+                            <input type="button" class="tornar" name="tornar" value="Tornar"/>
+                        </div>
                     </div>
-                    <input type="submit" value="Crea">
-                    <input type="button" class="tornar" name="tornar" value="Tornar"/>
                 </form>
             </div>
             <!-- FI CREAR ENQUESTA -->
@@ -68,20 +77,31 @@
             <div id = "veureEnquesta" class="template">
                 <form action="#" id="formVeureEnquesta" class="validarFormulari">
                     <h2>Veure Enquesta: </h2>
-                    <div>
-                        <label for="titol">Títol</label>
-                        <input type="text" name="titol" id="veureTitol" class="required">
+                    <div class="divFormulari">
+                        <div class="inputdata">
+                            <label for="titol">Títol</label>
+                            <span><input type="text" name="titol" id="veureTitol" class="required"></span>
+                        </div>
 
-                        <label for="dataInici">Des de</label>
-                        <input type="text" id="veureDesM" name="veureDesM" class="from required"/>
+                        <div class="inputdata">
+                            <label for="dataInici">Des de</label>
+                            <span><input type="text" id="veureDesM" name="veureDesM" class="from required"/></span>
+                        </div>
 
-                        <label for="dataFi">Fins a</label>
-                        <input type="text" id="veureFinsM" name="veureFinsM" class="to required"/>
+                        <div class="inputdata">
+                            <label for="dataFi">Fins a</label>
+                            <span><input type="text" id="veureFinsM" name="veureFinsM" class="to required"/></span>
+                        </div>
+                    
+                        <div class="boto">
+                            <input type="submit" value="Modifica">
+                            <input type="button"  class="tornar" name="tornar" value="Tornar"/></span>
+                        </div>
                     </div>
-                    <input type="submit" value="Modifica">
-                    <input type="button"  class="tornar" name="tornar" value="Tornar"/>
                     <h2>Preguntes:</h2>
-                    <input type="button" name="afegir" value="Afegir pregunta" id="bAfegirPreguntes"/>
+                    <div class="boto">
+                        <input type="button" name="afegir" value="Afegir pregunta" id="bAfegirPreguntes"/>
+                    </div>
                 </form>
             </div>
             <!-- FI VEURE ENQUESTA -->
