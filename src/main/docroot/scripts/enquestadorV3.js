@@ -320,8 +320,8 @@ var configuraSeccio = function(data){
                         var result = "<div class='divFilaPregunta'>";
                           result += "<div class='divTitolFilaPregunta'>";
                             result += "<p>Pregunta "+(num+1)+"</p>";
-                            result += "<p>"+pregunta.id+"</p>";
-                            result += "<p>"+pregunta.tipus+"</p>";                            
+                            //result += "<p>"+pregunta.id+"</p>";
+                            result += "<p>Tipus: "+pregunta.tipus+"</p>";
                           result += "</div>";
                           result += "<div class='divBotoPregunta'>";
                             result += "<input type='button' id='bDeletePregunta"+(num+1)+"' name='deletePreg"+(num+1)+"' value='Delete Pregunta'/>";
@@ -329,8 +329,6 @@ var configuraSeccio = function(data){
                           result += "<div class='divContingutPregunta'>";
                             result += "<p>"+pregunta.text+"</p>";
                           result += "</div>";
-
-                          
                         result += "</div>";
                         return result;
                     });
