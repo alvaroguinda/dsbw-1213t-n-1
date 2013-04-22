@@ -249,9 +249,9 @@ var Events = {
           var novaResposta = "<div class='inputdata'><label for='respostaPregunta" + numRespostes + "'>Resposta "+ numRespostes +"</label>";
           novaResposta += "<span><input type=\"text\" id=\"respostaPregunta"+ numRespostes +"\" name=\"respostaPregunta"+ numRespostes +"\" class=\"required\"/></span>";
           novaResposta += "</div>";
-          $("#preguntaTest").append(novaResposta);
+          $("#divAfegirResposta").append(novaResposta);
           //$("#preguntaTest").append("<input type=\"text\" name=\"respostaPregunta\" id=\"respostaPregunta\"/> <br>");
-          $("#preguntaTest").append($("#preguntaTest input#bAfegirResposta"));
+          //$("#preguntaTest").append($("#preguntaTest input#bAfegirResposta"));
 
        });
 
