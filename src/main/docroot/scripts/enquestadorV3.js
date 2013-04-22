@@ -320,7 +320,7 @@ var configuraSeccio = function(data){
                         var result = "<div class='divFilaPregunta'>";
                           result += "<div class='divTitolFilaPregunta'>";
                             result += "<p>Pregunta "+(num+1)+"</p>";
-                            //result += "<p>"+pregunta.id+"</p>";
+                            result += "<p class='template'>"+pregunta.id+"</p>";
                             result += "<p>Tipus: "+pregunta.tipus+"</p>";
                           result += "</div>";
                           result += "<div class='divBotoPregunta'>";

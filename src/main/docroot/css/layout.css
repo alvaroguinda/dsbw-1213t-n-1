@@ -323,6 +323,10 @@ div.inputdata input[type="radio"]{
     padding:5px;
 }
 
+#divPreguntes p.template{
+    display:none;
+}
+
 #divPreguntes input[type="button"]{
     float:right;
 }
