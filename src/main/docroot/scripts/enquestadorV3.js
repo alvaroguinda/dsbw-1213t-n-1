@@ -253,7 +253,8 @@ var Events = {
                 data: JSON.stringify(enquesta),
                 success: function(data) {
                   //window.location = "http://localhost:8080/";
-                  history.pushState({page:"Inici"}, "Inici", domini+"Inici/");
+                  //history.pushState({page:"Inici"}, "Inici", domini+"Inici/");
+                  $.alert("Enquesta modificada satisfactoriament.");
                 },
                 error: function(data) {
                   alert("FAIL!!");
