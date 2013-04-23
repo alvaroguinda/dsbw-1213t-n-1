@@ -101,6 +101,8 @@ var Events = {
            carregaSeccio();
        };
 
+       initLogin();
+
         /*** HOME ***/
         $("#bCrearEnquesta").click(function(e) {
             e.preventDefault();
