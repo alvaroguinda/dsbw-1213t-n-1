@@ -316,7 +316,12 @@ var Events = {
               });
             }
         });
-   }
+  },
+  botonsPreguntes: function(){      
+    $("#divPreguntes input").click(function(event){
+            alert("aaaa");
+        });
+    }
 };
 
 //Funció de configuració dels diversos elements de la web segons la secció en que ens trobem
