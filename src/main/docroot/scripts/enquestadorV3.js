@@ -95,6 +95,21 @@ function getEnquestaURL(id){
     });
 }
 
+// Retorna la enquesta amb ID id en format JSON:
+function deletePregunta(idEnq,idPreg){
+    $.ajax({
+        type: "DELETE",
+        url: "/api/enquestes/admin0/enq"+idEnq+"/preg"+idPreg,
+        success: function() {
+            location.reload();
+        },
+        dataType: "json",
+        error: function() {
+            console.log("Error!");
+        }
+    });
+}
+
 var Events = {
    init: function() {
         //Event que s'executa quan entrem per primer cop a la web o premem les fletxes d'historial de navegació:
@@ -288,7 +303,7 @@ var Events = {
               enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
 
               var respostesP = new Array();
-              $("#preguntaTest input#respostaPregunta").each(function(index){
+              $("#divAfegirResposta input").each(function(index){
                 respostesP[index] = $(this).val();
               });
 
@@ -316,12 +331,17 @@ var Events = {
               });
             }
         });
-  },
-  botonsPreguntes: function(){      
-    $("#divPreguntes input").click(function(event){
-            alert("aaaa");
+   },
+   botonsPreguntes: function(){
+        var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
+        var botonsDelete = $("#divPreguntes input");
+        $.each(botonsDelete, function(num,boto) {
+            $(boto).click(function(event){
+                //alert(boto.id);
+                deletePregunta(idEnq,boto.id);
+            });
         });
-    }
+   }
 };
 
 //Funció de configuració dels diversos elements de la web segons la secció en que ens trobem
@@ -341,10 +361,6 @@ var configuraSeccio = function(data){
                     $("#divPreguntes").append(function(index,html){
                         console.log(pregunta);
 
-                        //$.each(pregunta, function(num2,value){
-                        //    result += value+" ";
-                        //});
-
                         var result = "<div class='divFilaPregunta'>";
                           result += "<div class='divTitolFilaPregunta'>";
                             result += "<p>Pregunta "+(num+1)+"</p>";
@@ -352,10 +368,16 @@ var configuraSeccio = function(data){
                             result += "<p>Tipus: "+pregunta.tipus+"</p>";
                           result += "</div>";
                           result += "<div class='divBotoPregunta'>";
-                            result += "<input type='button' id='bDeletePregunta"+(num+1)+"' name='deletePreg"+(num+1)+"' value='Delete Pregunta'/>";
+                            result += "<input type='button' id='"+pregunta.id+"' name='deletePreg"+(num+1)+"' value='Delete Pregunta'/>";
                           result += "</div>";
                           result += "<div class='divContingutPregunta'>";
                             result += "<p>"+pregunta.text+"</p>";
+                        if(pregunta.possiblesRespostes.length > 0) {
+                            result += "<br><p><b>Respostes</b></p>";
+                            $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
+                                result += "<br><p>"+(indexResposta+1)+".- "+resposta+"</p>";
+                            });
+                          }
                           result += "</div>";
                         result += "</div>";
                         return result;
@@ -363,17 +385,8 @@ var configuraSeccio = function(data){
                 });
 
                 $(".divFilaPregunta:even").addClass("filaEven"); 
-                $(".divFilaPregunta:odd").addClass("filaOdd"); 
-                /*
-                $.each(data.preguntes, function(num,pregunta) {
-                    $("#divPreguntes").append("<p>", num+1, " ");
-                    $.each(pregunta, function(num2,value){
-                        $("#formVeureEnquesta").append(value, " ");
-                    });
-                    $("#formVeureEnquesta").append("<input type=\"button\" name=\"deletePreg\" value=\"Delete Pregunta\" id=\"bDeletePregunta\"/> </p>");
-                });
-                $("#formVeureEnquesta").append($("#formVeureEnquesta input#bAfegirPreguntes"))
-                */
+                $(".divFilaPregunta:odd").addClass("filaOdd");
+                Events.botonsPreguntes();
             }
             break;
         default:
