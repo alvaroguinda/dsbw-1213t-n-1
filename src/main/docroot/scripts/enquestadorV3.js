@@ -357,6 +357,7 @@ var configuraSeccio = function(data){
             $("#veureTitol").val(data["titol"]);
             $("#veureDesM").val(data["inici"]);
             $("#veureFinsM").val(data["fi"]);
+            $("#divPreguntes").empty();
             if(data.preguntes){
                 $.each(data.preguntes, function(num,pregunta) {
                     $("#divPreguntes").append(function(index,html){
