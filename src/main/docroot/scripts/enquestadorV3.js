@@ -114,6 +114,17 @@ var Events = {
         });
         */
 
+        /*** MENU ***/
+        $("#mInici").click(function(e){
+            e.preventDefault();
+            carregaSeccio("Inici");
+        });
+        $("#mCrearEnq").click(function(e) {
+            e.preventDefault();
+            carregaSeccio("CrearEnquesta");
+        });
+
+
         /*** CREAR ENQUESTA ***/
         initDatePicker();
         $("#crearEnquesta .tornar").click(function(e) {
