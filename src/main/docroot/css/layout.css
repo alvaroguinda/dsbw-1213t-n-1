@@ -39,16 +39,16 @@ ul {
 	font: bold 12px/18px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	text-transform: uppercase;
 	color: #444;
-background: #FFF;
-  border-radius: 0 0 5px 5px;
-  -moz-border-radius: 0 0 5px 5px;
-margin: 0 0 10px;
-padding: 0 0 10px;
+    background: #FFF;
+    border-radius: 0 0 5px 5px;
+    -moz-border-radius: 0 0 5px 5px;
+    margin: 0 0 10px;
+    padding: 0 0 10px;
 }
 
 #navigation > div {
     display:block;
-width: 44.5%;
+    width: 50%;
     margin: 0 auto;
 }
 
@@ -61,9 +61,9 @@ width: 44.5%;
 }
 
 #navigation ul {
-	border-radius: 100px;
+	/*border-radius: 100px;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.07);
-	-webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.07);
+	-webkit-box-shadow: 0 2px 2px rgba(0, 0, 0, 0.07); */
     overflow: hidden;
 }
 
@@ -104,6 +104,7 @@ width: 44.5%;
 	color: #444;
 	text-decoration: none;
 	text-shadow: 0 1px #FFF;
+    cursor: pointer;
 }
 
 #navigation a:hover, #navigation li.current a {
@@ -492,7 +493,8 @@ div.inputdata input[type="radio"]{
     text-shadow:1px 1px #fff;
     padding:7px 29px 9px 10px;
     background:url(../img/loginArrow.png) no-repeat 53px 7px;
-    display:block
+    display:block;
+    line-height: 16px;
 }
 
 #loginButton:hover {

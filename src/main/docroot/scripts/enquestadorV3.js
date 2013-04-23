@@ -3,7 +3,9 @@ var secc = {
     Inici : "inici",
     CrearEnquesta : "crearEnquesta",
     ObtindreEnquesta : "getEnquesta",
-    Enquestes : "veureEnquesta"
+    Enquestes : "veureEnquesta",
+    Registre : "registre",
+    Contacte : "contactar"
 };
 
 var domini = "http://" + location.host + "/";
@@ -124,6 +126,14 @@ var Events = {
         $("#mCrearEnq").click(function(e) {
             e.preventDefault();
             carregaSeccio("CrearEnquesta");
+        });
+        $("#mRegistre").click(function(e){
+            e.preventDefault();
+            carregaSeccio("Registre");
+        });
+        $("#mContacta").click(function(e) {
+            e.preventDefault();
+            carregaSeccio("Contacte");
         });
 
 
