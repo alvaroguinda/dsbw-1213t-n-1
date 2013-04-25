@@ -16,6 +16,10 @@
     margin: 0 auto;
 }
 
+#navigation > div.privAdmin {
+    width: 70%;
+}
+
 #navigation:after {
 	clear: both;
     content: ".";

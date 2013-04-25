@@ -3,31 +3,71 @@ package dsbw.enquestes
 import org.bson.types.ObjectId
 import java.util.Date
 import com.mongodb.casbah.commons.MongoDBList
+import javax.servlet.http.HttpSession
 
 case class Resposta(idEnquestat:String, resposta:String)
 case class Pregunta(id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[Resposta])
 case class Enquesta(id:String, idResp:String, titol: String, inici: String, fi: String, preguntes:List[Pregunta])
 case class EnquestaID(id:String)
+case class Enquestes(enquestes: Set[EnquestaRecord])
 
-class EnquestesService(enquestesRepository: EnquestesRepository) {
+class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository: UsersRepository) {
+
+  def validaUser( parameters: Map[String, List[String]], session: HttpSession): Boolean = {
+      val userName = parameters("user")(0)
+      val pass = parameters("pass")(0)
+      println("UserName: "+userName+" , Pass: "+pass)
+      // Consultar a la BD si request.user & request.pass existeixen:
+      val userRecord = usersRepository.findUserByName(userName)
+      println("user: "+userRecord)
+      if (userRecord != None){ //existeix l'usuari userName
+        val user = userRecord.get.copy()
+        if (user.pass == pass){ //la contrasenya es correspon
+          session.setAttribute("autenticat",true)
+          session.setAttribute("userID", user._id.toString())
+          session.setAttribute("userName",user.nom)
+          session.setAttribute("admin",user.admin)
+        }
+      }
+      println("autenticat? "+session.getAttribute("autenticat"))
+      println("admin? "+session.getAttribute("admin"))
+      session.getAttribute("autenticat").asInstanceOf[Boolean]
+  }
+
+  def tancaSessio(session: HttpSession): Boolean = {
+    session.invalidate()
+    true
+  }
 
   //private def getEnquestaById(id:ObjectId) = enquestesRepository.findById(id).map(ar=>Author(ar.name,ar.username,ar.avatar))
-
   //def listEnquestes = enquestesRepository.findAll.map(cr => Enquesta(getEnquestaById(cr.author).get,cr.date,cr.message))
 
-  	def getEnquesta(idAdmin:String, idEnquesta:String):Enquesta= {
-		// Comprobem qui està realitzant la petició
-		//val loggedUserId = sessionsRepository.findById(new ObjectId(session_token)).getOrElse(throw new HttpException(401, "Authorization required")).user_id
-		// Obtenim els dos usuaris existeixin
-		//val enquesta = enquestesRepository.findById(new ObjectId(idAdmin)).getOrElse(throw new HttpException(404, "User not found"))
-		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
-        new Enquesta(enquesta._id.toString(),enquesta.idResp.toString(),enquesta.titol,enquesta.inici,enquesta.fi,enquesta.preguntes)
-		// Comprobem que l'usuari autenticat es el follower
-		//if (loggedUserId.compareTo(user._id) != 0) throw new HttpException(403, "Forbidden")
-		//if (!follower.followees.exists(followee_id => true)) throw new HttpException (404, "Relation non exists")
+  def getListEnquestes(session: HttpSession):Enquestes = {
+    var enquestes: Set[EnquestaRecord] = null
+    if (session.getAttribute("autenticat").asInstanceOf[Boolean]){ //comprovem si l'usuari te permís per obtindre el llistat d'enq.
+      if (session.getAttribute("admin").asInstanceOf[Boolean]){ //si l'user es admin retornem totes les enq. existents
+        enquestes = enquestesRepository.findAll
+      }
+      else{ //sinó, nomes les enq. que ha creat ell mateix
+        //enquestes = enquestesRepository.findAll
+      }
+    }
+    new Enquestes(enquestes)
+  }
 
-	//	enquestesRepository.findById(enquesta_id)
-	}
+  def getEnquesta(idAdmin:String, idEnquesta:String):Enquesta= {
+      // Comprobem qui està realitzant la petició
+      //val loggedUserId = sessionsRepository.findById(new ObjectId(session_token)).getOrElse(throw new HttpException(401, "Authorization required")).user_id
+      // Obtenim els dos usuaris existeixin
+      //val enquesta = enquestesRepository.findById(new ObjectId(idAdmin)).getOrElse(throw new HttpException(404, "User not found"))
+      val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+          new Enquesta(enquesta._id.toString(),enquesta.idResp.toString(),enquesta.titol,enquesta.inici,enquesta.fi,enquesta.preguntes)
+      // Comprobem que l'usuari autenticat es el follower
+      //if (loggedUserId.compareTo(user._id) != 0) throw new HttpException(403, "Forbidden")
+      //if (!follower.followees.exists(followee_id => true)) throw new HttpException (404, "Relation non exists")
+
+      //	enquestesRepository.findById(enquesta_id)
+	 }
 
 	 def getEnquestaResp(idUser:String, idEnquesta:String):Enquesta= {
 		val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
@@ -68,8 +108,8 @@ class EnquestesService(enquestesRepository: EnquestesRepository) {
 	}
 
 	def postPregunta(idAdmin:String, idEnquesta:String, pregunta: NovaPregunta):Enquesta= {
-		var enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
-		var enquestaR = new EnquestaRecord (
+		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
 			idResp = enquesta.idResp,
 			titol = enquesta.titol,

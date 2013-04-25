@@ -34,8 +34,9 @@ class MongoDao[ObjectType <: AnyRef](collection: MongoCollection)(implicit mot: 
   /** Find a document using a query and return it or None if it wasn't found */
   def findOne[T<: AnyRef](query:Map[String,T]): Option[ObjectType] = salatDao.findOne(query)
 
-
- // def find[T<: AnyRef](value: String, param: String): Set[ObjectType] = salatDao.find(MongoDBObject(value -> (".*"+param+".*").r )).toSet
+  /** Cerca una colecció de documents que continguin el Map "query" */
+  def find[T<: AnyRef](query:Map[String,T]): Set[ObjectType] = salatDao.find(query).toSet
+      //find(MongoDBObject(value -> (".*"+param+".*").r )).toSet
 
   /** Find a document by id and return it or None if it wasn't found */
   def findOneByID(id:ObjectId): Option[ObjectType] = salatDao.findOneById(id)

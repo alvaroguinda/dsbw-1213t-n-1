@@ -92,10 +92,68 @@ var initLogin = (function() {
     form.mouseup(function() {
         return false;
     });
+    form.submit(function(e){
+        e.preventDefault();
+        if($("#login").hasClass("logout")){
+            $.ajax({
+                type: "GET",
+                url: "/api/logout",
+                contentType: "application/json",
+                success: function(logoutSucces){
+                    console.log("Logout: "+logoutSucces);
+                    if(logoutSucces){
+                        $("#login").val("Sign in");
+                        $("#email").removeAttr("disabled");
+                        $("#password").removeAttr("disabled");
+                        $("#login").removeClass("logout");
+                        $("#navigation > div").removeClass("privAdmin");
+                        $("#navigation li.admin").addClass("template");
+                        console.log("Logout OK");
+                        //tancar contingut restringit
+                    }else{
+                        console.log("Logout Failed");
+                    }
+                },
+                error: function(){
+                  console.log("Error");
+                }
+            });
+        }
+        else{
+            var email = $("#email").val();
+            var pass = $("#password").val();
+            $.ajax({
+                type: "GET",
+                url: "/api/login?user="+email+"&pass="+pass,
+                contentType: "application/json",
+                success: function(loginSucces){
+                    console.log("Login: "+loginSucces);
+                    if(loginSucces){
+                        if(!$("#loginFailed").hasClass("template")) $("#loginFailed").addClass("template");
+                        $("#login").val("Sign out");
+                        $("#email").attr("disabled","disabled");
+                        $("#password").attr("disabled","disabled");
+                        $("#login").addClass("logout");
+                        $("#navigation > div").addClass("privAdmin");
+                        $("#navigation li.admin").removeClass("template");
+                        console.log("Login OK");
+                        //obrir contingut restringit
+                    }else{
+                        $("#loginFailed").removeClass("template");
+                        console.log("Login Failed");
+                    }
+                },
+                error: function(){
+                  console.log("Error");
+                }
+            });
+        }
+    });
     $(this).mouseup(function(login) {
         if(!($(login.target).parent('#loginButton').length > 0)) {
             button.removeClass('active');
             box.hide();
         }
     });
+
 });

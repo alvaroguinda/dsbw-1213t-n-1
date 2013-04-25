@@ -23,8 +23,13 @@ class EnquestesRepository(dao: EnquestesDao) {
   def findByIdResp(id:ObjectId) = dao.findOne(Map("idResp" -> id))
 
   def save (e:EnquestaRecord) = dao.save(e)
-
   //dao.save(EnquestaRecord(username="agile_jordi", name="Jordi Pradel", avatar="/img/avatar4.png"))
+
+  //Cerca totes les enquestes amb el mateix userID:
+  def findByUserID(userID: ObjectId) = dao.find(Map("userID" -> userID))
+
+  //Cerca totes les enquestes:
+  def findAll = dao.findAll.toSet
 
 }
 

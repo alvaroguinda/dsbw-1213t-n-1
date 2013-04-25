@@ -95,6 +95,15 @@
     padding:0;
 }
 
+#loginForm fieldset.template {
+    display:none;
+}
+
+#loginForm #loginFailed span{
+    color: #FF0000;
+    text-align: left;
+}
+
 fieldset#body {
     background:#fff;
     border-radius:3px;

@@ -9,6 +9,7 @@ class DB(hostName: String, port: Int, dbName: String, username: String, pwd: Str
   val db = MongoConnection(hostName, port)(dbName)
   db.authenticate(username, pwd)
   val enquestes = db("enquestes")
+  val users = db("users")
 
   /** Initialize the DB here, mostly, ensure indexes */
   def init() {

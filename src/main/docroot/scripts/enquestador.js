@@ -5,7 +5,8 @@ var secc = {
     ObtindreEnquesta : "getEnquesta",
     Enquestes : "veureEnquesta",
     Registre : "registre",
-    Contacte : "contactar"
+    Contacte : "contactar",
+    LlistatEnquestes : "llistatEnq"
 };
 
 var domini = "http://" + location.host + "/";
@@ -27,6 +28,9 @@ var carregaSeccio = function(nomSeccio,data){
                 getEnquestaURL(id);
             }
         }
+        if(path == "LlistatEnquestes"){
+            getLlistatEnquestes();
+        }
         $("#"+secc[path]).removeClass("template"); //mostrem la secció segons el path
         validaSeccio();
     }
@@ -35,7 +39,9 @@ var carregaSeccio = function(nomSeccio,data){
         history.pushState({page:nomSeccio}, nomSeccio, domini+nomSeccio+"/"+id); //modifiquem la url de la web + l'historic associat del navegador
         $("#"+secc[nomSeccio]).removeClass("template"); //mostrem la secció nomSeccio
 
-        configuraSeccio(data); //configurem els handlers d'aquesta secció
+        var path = location.pathname.substring(1).split("/")[0]; //capturem el path contingut a la url
+        if(path == "LlistatEnquestes") getLlistatEnquestes();
+        else configuraSeccio(data); //configurem els handlers d'aquesta secció
     }
 };
 
@@ -81,7 +87,6 @@ function getUrlVars(){
 
 // Retorna la enquesta amb ID id en format JSON:
 function getEnquestaURL(id){
-    var result = null;
     $.ajax({
         type: "GET",
         url: "/api/enquestes/admin0/enq"+id,
@@ -105,6 +110,20 @@ function deletePregunta(idEnq,idPreg){
         },
         dataType: "json",
         error: function() {
+            console.log("Error!");
+        }
+    });
+}
+
+function getLlistatEnquestes(){
+    $.ajax({
+        type: "GET",
+        url: "/api/enquestes",
+        success: function(enquestes) {
+            configuraSeccio(enquestes); //configurem els handlers d'aquesta secció
+        },
+        dataType: "json",
+        error: function(enquesta) {
             console.log("Error!");
         }
     });
@@ -137,6 +156,10 @@ var Events = {
         $("#mInici").click(function(e){
             e.preventDefault();
             carregaSeccio("Inici");
+        });
+        $("#mllistatEnq").click(function(e){
+            e.preventDefault();
+            carregaSeccio("LlistatEnquestes");
         });
         $("#mCrearEnq").click(function(e) {
             e.preventDefault();
@@ -390,6 +413,10 @@ var configuraSeccio = function(data){
                 $(".divFilaPregunta:odd").addClass("filaOdd");
                 Events.botonsPreguntes();
             }
+            break;
+        case "LlistatEnquestes":
+            console.log(data.enquestes);
+            $("#llistatEnq p").text(JSON.stringify(data.enquestes));
             break;
         default:
             ;

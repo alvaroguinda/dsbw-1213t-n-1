@@ -5,6 +5,7 @@ import dsbw.json.JSON
 import Config.{dbHostName, dbPort, dbName, username, pwd, webServerPort}
 import java.util.Date
 import com.mongodb.casbah.commons.MongoDBList
+import javax.servlet.http.HttpSession
 
 case class NovaEnquesta(titol: String, inici: String, fi: String, preguntes: List[List[String]])
 case class NovaPregunta(tipus: String, enunciat: String, respostes: List[String])
@@ -17,10 +18,12 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
   val postPreguntaAdmin = "POST /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
   val deletePreguntaAdmin = "DELETE /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
   val putPreguntaAdmin = "PUT /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
-  def service(method: String, uri: String, parameters: Map[String, List[String]] = Map(), headers: Map[String, String] = Map(), body: Option[JSON] = None): Response = {
+  def service(method: String, uri: String, parameters: Map[String, List[String]] = Map(), headers: Map[String, String] = Map(), body: Option[JSON] = None, session: HttpSession): Response = {
     try {
       (method + " " + uri) match {
-        //case "GET /api/enquestes" => Response(HttpStatusCode.Ok, enquestesService.listEnquestes)
+        case "GET /api/login" => Response(HttpStatusCode.Ok, enquestesService.validaUser(parameters,session))
+        case "GET /api/logout" => Response(HttpStatusCode.Ok, enquestesService.tancaSessio(session))
+        case "GET /api/enquestes" => Response(HttpStatusCode.Ok, enquestesService.getListEnquestes(session))
         case "POST /api/enquesta" => Response(HttpStatusCode.Created, enquestesService.creaEnquesta(JSON.fromJSON[NovaEnquesta](body.getOrElse(throw new Exception("Bad Request")))))
         case getEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.getEnquesta(idAdmin,idEnquesta))
         case getEnquestaResp(idUser,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.getEnquestaResp(idUser,idEnquesta))
@@ -42,7 +45,8 @@ object EnquestesApp extends App {
 
   val db = new DB(dbHostName, dbPort, dbName, username, pwd)
   val enquestesRepository = new EnquestesRepository(new EnquestesDao(db))
-  val enquestesService = new EnquestesService(enquestesRepository)
+  val usersRepository = new UsersRepository(new UsersDao(db))
+  val enquestesService = new EnquestesService(enquestesRepository,usersRepository)
 
   val server = new Server(new EnquestesApi(enquestesService), webServerPort)
   server.start()
