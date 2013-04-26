@@ -39,6 +39,10 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
     true
   }
 
+  def authUser(session: HttpSession): Boolean = {
+    session.getAttribute("autenticat").asInstanceOf[Boolean]
+  }
+
   //private def getEnquestaById(id:ObjectId) = enquestesRepository.findById(id).map(ar=>Author(ar.name,ar.username,ar.avatar))
   //def listEnquestes = enquestesRepository.findAll.map(cr => Enquesta(getEnquestaById(cr.author).get,cr.date,cr.message))
 

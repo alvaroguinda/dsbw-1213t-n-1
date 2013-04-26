@@ -79,12 +79,36 @@ var validaFormulari = function ( form ) {
 
 };
 
-// Login Form
+// Login
 var initLogin = (function() {
     var button = $('#loginButton');
     var box = $('#loginBox');
     var form = $('#loginForm');
     button.removeAttr('href');
+
+    //Consultem al servidor si el client tenia una sessio activa i hi figura com autenticat:
+    $.ajax({
+        type: "GET",
+        url: "/api/auth",
+        contentType: "application/json",
+        success: function(autUser){
+            if(autUser){
+                $("#login").val("Sign out");
+                $("#email").attr("disabled","disabled");
+                $("#password").attr("disabled","disabled");
+                $("#login").addClass("logout");
+                $("#navigation > div").addClass("privAdmin");
+                $("#navigation li.admin").removeClass("template");
+                console.log("Usuari Autenticat");
+            }else{
+                console.log("Usuari No Autenticat");
+            }
+        },
+        error: function(){
+          console.log("Error");
+        }
+    });
+
     button.mouseup(function(login) {
         box.toggle();
         button.toggleClass('active');
@@ -109,7 +133,6 @@ var initLogin = (function() {
                         $("#navigation > div").removeClass("privAdmin");
                         $("#navigation li.admin").addClass("template");
                         console.log("Logout OK");
-                        //tancar contingut restringit
                     }else{
                         console.log("Logout Failed");
                     }
@@ -137,7 +160,6 @@ var initLogin = (function() {
                         $("#navigation > div").addClass("privAdmin");
                         $("#navigation li.admin").removeClass("template");
                         console.log("Login OK");
-                        //obrir contingut restringit
                     }else{
                         $("#loginFailed").removeClass("template");
                         console.log("Login Failed");

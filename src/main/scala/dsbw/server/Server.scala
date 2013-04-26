@@ -78,36 +78,12 @@ class Servlet(api:Api) extends HttpServlet {
 
       /*** TRACTAMENT DE HTTP SESSIONS ***/
       val session:HttpSession = request.getSession(true)
-      //println("sessionID: "+session.getId)
-
       if (session.isNew){
         session.setAttribute("autenticat",false)
       }
-      /*
-      if (request.getRequestURI.split("/")(1) == "login"){
-          val hashes = request.getQueryString.split("&")
-          val user = hashes(0).split("=")(1)
-          val pass = hashes(1).split("=")(1)
-          println("User: "+user+" , Pass: "+pass)
-          // Consultar a la BD si request.user & request.pass existeixen
-          val existeix = true
-          if (existeix){
-              session.setAttribute("autenticat",true)
-              session.setAttribute("user",user)
-              writeResponse(Response(HttpStatusCode.Ok,true),out)
-          }
-          else{
-              session.setAttribute("autenticat",false)
-              writeResponse(Response(HttpStatusCode.Ok,false),out)
-          }
-          println("autenticat? "+session.getAttribute("autenticat"))
-          return
-      }
-      */
+
       /*** AFEGIT PER FER LA REDIRECCIÓ CAP A INDEX.HTML ***/
-      //println("requestURI: "+request.getRequestURI)
       if (request.getRequestURI.split("/")(1) != "api"){
-        // Com avisar al client si la sessio segueix activa despres d'un "refresh"??
         getServletContext.getRequestDispatcher( "/index.html" ).forward( request, response)
         return
       }

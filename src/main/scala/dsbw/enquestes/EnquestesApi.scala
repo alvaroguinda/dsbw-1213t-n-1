@@ -23,6 +23,7 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
       (method + " " + uri) match {
         case "GET /api/login" => Response(HttpStatusCode.Ok, enquestesService.validaUser(parameters,session))
         case "GET /api/logout" => Response(HttpStatusCode.Ok, enquestesService.tancaSessio(session))
+        case "GET /api/auth" => Response(HttpStatusCode.Ok, enquestesService.authUser(session))
         case "GET /api/enquestes" => Response(HttpStatusCode.Ok, enquestesService.getListEnquestes(session))
         case "POST /api/enquesta" => Response(HttpStatusCode.Created, enquestesService.creaEnquesta(JSON.fromJSON[NovaEnquesta](body.getOrElse(throw new Exception("Bad Request")))))
         case getEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.getEnquesta(idAdmin,idEnquesta))
