@@ -6,7 +6,8 @@ var secc = {
     Enquestes : "veureEnquesta",
     Registre : "registre",
     Contacte : "contactar",
-    LlistatEnquestes : "llistatEnq"
+    LlistatEnquestes : "llistatEnq",
+    Respondre: "respondEnq"
 };
 
 var domini = "http://" + location.host + "/";
@@ -30,6 +31,12 @@ var carregaSeccio = function(nomSeccio,data){
         }
         if(path == "LlistatEnquestes"){
             getLlistatEnquestes();
+        }
+        if(path == "Respondre"){
+          id = location.pathname.substring(1).split("/")[1].substring(3);
+          if(id != ""){
+                getEnquestaRespondre(id);
+          }
         }
         $("#"+secc[path]).removeClass("template"); //mostrem la secció segons el path
         validaSeccio();
@@ -90,6 +97,21 @@ function getEnquestaURL(id){
     $.ajax({
         type: "GET",
         url: "/api/enquestes/admin0/enq"+id,
+        success: function(enquesta) {
+            configuraSeccio(enquesta); //configurem els handlers d'aquesta secció
+        },
+        dataType: "json",
+        error: function(enquesta) {
+            console.log("Error!");
+        }
+    });
+}
+
+// Retorna la enquetsa amb idResp id en format JSON:
+function getEnquestaRespondre(id){
+    $.ajax({
+        type: "GET",
+        url: "/api/enquestes/user0/enq"+id,
         success: function(enquesta) {
             configuraSeccio(enquesta); //configurem els handlers d'aquesta secció
         },
@@ -413,6 +435,61 @@ var configuraSeccio = function(data){
                 $(".divFilaPregunta:odd").addClass("filaOdd");
                 Events.botonsPreguntes();
             }
+            break;
+        case "Respondre":
+            $("#veureTitolResp").text(data["titol"]);
+            $("#veureDesMResp").text(data["inici"]);
+            $("#veureFinsMResp").text(data["fi"]);
+            if(data.preguntes){
+                $.each(data.preguntes, function(num,pregunta) {
+                    $("#divPreguntesResp").append(function(index,html){
+                        console.log(pregunta);
+                          var result = "<div class='divFilaPregunta'>";
+                          result += "<div class='divTitolFilaPregunta'>";
+                            result += "<p>Pregunta "+(num+1)+"</p>";
+                            result += "<p>Tipus: "+pregunta.tipus+"</p>";
+                          result += "</div>";
+                          result += "<div class='divContingutPregunta'>";
+                            result += "<p>Pregunta: "+pregunta.text+"</p>";
+                        if(pregunta.tipus == "Text"){
+                            result += "<span><input type='text' name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'></span>";
+                          result += "</div>";
+                        result += "</div>";
+                        return result;
+                        }
+                        if(pregunta.tipus == "Test"){
+                             if(pregunta.possiblesRespostes.length > 0) {
+                            result += "<br><p><b>Respostes</b></p>";
+
+                              result += "<div class='inputdata'>";
+                            $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
+                                result += "<span><input name='resposta"+num+"' type='radio'>"+resposta+"</span>";
+                                
+                            });
+                            result += "</div>";
+                          }
+                          result += "</div>";
+                        result += "</div>";
+                        return result;
+                        }
+                        if(pregunta.tipus == "Test"){
+                             if(pregunta.possiblesRespostes.length > 0) {
+                            result += "<br><p><b>Respostes</b></p>";
+
+                              result += "<div class='inputdata'>";
+                            $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
+                                result += "<span><input  type='radio'>"+resposta+"</span>";
+                                
+                            });
+                            result += "</div>";
+                          }
+                          result += "</div>";
+                        result += "</div>";
+                        return result;
+                        }
+                    });
+                  })
+                }
             break;
         case "LlistatEnquestes":
             llEnq = ""
