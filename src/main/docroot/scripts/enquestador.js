@@ -415,8 +415,13 @@ var configuraSeccio = function(data){
             }
             break;
         case "LlistatEnquestes":
-            console.log(data.enquestes);
-            $("#llistatEnq p").text(JSON.stringify(data.enquestes));
+            llEnq = ""
+            for (i = 0; i < data.enquestes.length; i++)
+            {
+                console.log(data.enquestes[i])
+                llEnq = llEnq + data.enquestes[i]["titol"] + " ------- ";
+            }
+            $("#llistatEnq p").text(JSON.stringify(llEnq));
             break;
         default:
             ;

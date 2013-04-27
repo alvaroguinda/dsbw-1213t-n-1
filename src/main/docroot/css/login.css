@@ -5,6 +5,7 @@
     position:relative;
     float:right;
     font-size:12px;
+    z-index: 1;
 }
 
 /* Login Button */

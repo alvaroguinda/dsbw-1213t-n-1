@@ -130,11 +130,13 @@ header, menu.main, section{
 }
 
 header {
+position: relative;
 padding: 10px 10px 0;
-margin: 15px 0 0;
+margin: 15px auto 0 ;
 border-radius: 5px 5px 0 0;
 border: 1px solid #EEE;
 border-bottom: 0;
+z-index: 0;
 }
 
 header:after, section:after, #content ul li:after {
