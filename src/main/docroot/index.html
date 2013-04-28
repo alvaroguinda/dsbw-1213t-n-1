@@ -133,10 +133,13 @@
                             <label for="veureFinsM">Fins a</label>
                             <span><input type="text" id="veureFinsM" name="veureFinsM" class="to required" placeholder="dd-mm-aaaa" maxlength="10"/></span>
                         </div>
-                    
                         <div class="boto">
-                            <input type="submit" value="Modifica">
+                            <input type="submit" class="modifica" name="modifica" value="Modifica">
                             <span><input type="button" class="tornar" name="tornar" value="Tornar"/></span>
+                            <span><input type="submit" class="publicar" name="publicar" value="Publicar"/></span>
+                        </div>
+                        <div>
+                            <h3 id ="estatEnq">Estat de l'enquesta</h3>
                         </div>
                     </div>
                     <h2>Preguntes</h2>
@@ -245,7 +248,6 @@
             <!-- FI CONTACTAR -->
             <!-- LLISTAT D'ENQUESTES -->
             <div id = "llistatEnq" class="template">
-                <p></p>
             </div>
             <!-- FI LLISTAT D'ENQUESTES -->
             <!-- RESPONDRE ENQUESTA -->

@@ -275,6 +275,40 @@ var Events = {
             carregaSeccio("Inici");
         });
 
+        $("#veureEnquesta .publicar").click(function(e) {
+            e.preventDefault();
+            enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
+            var estatEnquesta = {
+              ident: 1
+            }
+            $.ajax({
+              type: "PATCH",
+              url: "/api/enquestes/admin0/enq"+enquestaId,
+              contentType: "application/json",
+              data: JSON.stringify(estatEnquesta),
+              success: function(data) {
+                //window.location = "http://localhost:8080/";
+                //history.pushState({page:"Inici"}, "Inici", domini+"Inici/");
+                $.alert("A partir d'aquest moment, per a respondre a l'enquesta es pot accedir per el link que apareix a sota de les dades de l'enquesta.<br><br>Pots tornar a modificar les dades de l'enqueste sempre que ningú l'hagi contestat, però es perdrà l'enllaç per a respondre.", {
+                  title:'Enquesta publicada amb èxit.',
+                  icon:'',
+                  buttons:[
+                    {
+                      title:'Tanca',
+                      callback:function() { 
+                        $(this).dialog("close");
+                        window.location = window.location;
+                      }
+                    }
+                  ]
+                });
+              },
+              error: function(data) {
+                alert("FAIL!!");
+              }
+            });
+        });
+
         $("#formVeureEnquesta").submit(function(e) {
             e.preventDefault();
 
@@ -451,54 +485,51 @@ var configuraSeccio = function(data){
                           result += "</div>";
                           result += "<div class='divContingutPregunta'>";
                             result += "<p>Pregunta: "+pregunta.text+"</p>";
-                        if(pregunta.tipus == "Text"){
-                            result += "<span><input type='text' name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'></span>";
-                          result += "</div>";
-                        result += "</div>";
-                        return result;
-                        }
-                        if(pregunta.tipus == "Test"){
-                             if(pregunta.possiblesRespostes.length > 0) {
-                            result += "<br><p><b>Respostes</b></p>";
+                        switch (pregunta.tipus){
+                            case "Text":
+                                    result += "<span><input type='text' name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'></span>";
+                                  result += "</div>";
+                                result += "</div>";
+                                break;
+                            case "Test":
+                                if(pregunta.possiblesRespostes.length > 0) {
+                                    result += "<br><p><b>Respostes</b></p>";
 
-                              result += "<div class='inputdata'>";
-                            $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                result += "<span><input name='resposta"+num+"' type='radio'>"+resposta+"</span>";
-                                
-                            });
-                            result += "</div>";
-                          }
-                          result += "</div>";
-                        result += "</div>";
-                        return result;
-                        }
-                        if(pregunta.tipus == "Test"){
-                             if(pregunta.possiblesRespostes.length > 0) {
-                            result += "<br><p><b>Respostes</b></p>";
+                                      result += "<div class='inputdata'>";
+                                    $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
+                                        result += "<span><input name='resposta"+num+"' type='radio'>"+resposta+"</span>";
 
-                              result += "<div class='inputdata'>";
-                            $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                result += "<span><input  type='radio'>"+resposta+"</span>";
-                                
-                            });
-                            result += "</div>";
-                          }
-                          result += "</div>";
-                        result += "</div>";
-                        return result;
+                                    });
+                                    result += "</div>";
+                                }
+                                  result += "</div>";
+                                result += "</div>";
+                                break;
+                            case "Test":
+                                if(pregunta.possiblesRespostes.length > 0) {
+                                    result += "<br><p><b>Respostes</b></p>";
+
+                                      result += "<div class='inputdata'>";
+                                    $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
+                                        result += "<span><input  type='radio'>"+resposta+"</span>";
+
+                                    });
+                                    result += "</div>";
+                                }
+                                  result += "</div>";
+                                result += "</div>";
+                            break;
                         }
+                        return result;
                     });
                   })
                 }
             break;
         case "LlistatEnquestes":
-            llEnq = ""
-            for (i = 0; i < data.enquestes.length; i++)
-            {
-                console.log(data.enquestes[i])
-                llEnq = llEnq + data.enquestes[i]["titol"] + " ------- ";
-            }
-            $("#llistatEnq p").text(JSON.stringify(llEnq));
+            $.each(data.enquestes, function(numEnq,enquesta){
+                console.log(enquesta);
+                $("#llistatEnq").append("<p>"+enquesta.titol+"</p>");
+            });
             break;
         default:
             ;
