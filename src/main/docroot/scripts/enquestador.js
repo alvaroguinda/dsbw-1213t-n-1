@@ -151,6 +151,17 @@ function getLlistatEnquestes(){
     });
 }
 
+function messageContainer(missatge) {
+  var idMissatge = "#message"+missatge;
+
+  $(idMissatge).fadeIn("slow");
+  setTimeout(function(){
+    $(idMissatge).fadeOut("slow", function () {
+      $(idMissatge).addClass("template");
+    });
+  }, 3000);
+}
+
 var Events = {
    init: function() {
         //Event que s'executa quan entrem per primer cop a la web o premem les fletxes d'historial de navegació:
@@ -331,12 +342,10 @@ var Events = {
                 contentType: "application/json",
                 data: JSON.stringify(enquesta),
                 success: function(data) {
-                  //window.location = "http://localhost:8080/";
-                  //history.pushState({page:"Inici"}, "Inici", domini+"Inici/");
-                  $.alert("Enquesta modificada satisfactoriament.");
+                  messageContainer("Success");
                 },
                 error: function(data) {
-                  alert("FAIL!!");
+                  messageContainer("Fail");
                 }
               });
             }
