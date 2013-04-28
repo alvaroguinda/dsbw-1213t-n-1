@@ -536,9 +536,20 @@ var configuraSeccio = function(data){
                 $.each(enquesta.preguntes, function(indexResposta,pregunta){
                     result += "<div class='preguntas'>";
                     result += "<h3>"+pregunta.text+"</h3>";
+                    if (pregunta.tipus == "Text"){
+                        result += "<textarea cols='90' rows='5'></textarea>"
+                    } else if (pregunta.tipus == "Test") {
+                        $.each(pregunta.possiblesRespostes, function(indexResposta,resposta){
+                            result += "<input type='radio'>"+resposta+"<br/>"
+                        });
+                    } else if (pregunta.tipus == "Multi") {
+                        $.each(pregunta.possiblesRespostes, function(indexResposta,resposta){
+                            result += "<input type='checkbox'>"+resposta+"<br/>"
+                        });
+                    }
                     result += "</div>";
                 });
-                result += "</div>";
+                result += "</div><br/>";
                 $("#llistatEnq").append(result);
             });
             break;
