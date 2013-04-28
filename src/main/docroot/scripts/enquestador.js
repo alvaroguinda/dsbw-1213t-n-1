@@ -526,6 +526,7 @@ var configuraSeccio = function(data){
                 }
             break;
         case "LlistatEnquestes":
+            $("#llistatEnq").html("")
             $.each(data.enquestes, function(numEnq,enquesta){
                 console.log(enquesta);
                 $("#llistatEnq").append("<p>"+enquesta.titol+"</p>");
