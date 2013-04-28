@@ -127,12 +127,16 @@ function deletePregunta(idEnq,idPreg){
     $.ajax({
         type: "DELETE",
         url: "/api/enquestes/admin0/enq"+idEnq+"/preg"+idPreg,
-        success: function() {
-            location.reload();
+        success: function(enquesta) {
+            //location.reload();
+            //console.log(enquesta);
+            messageContainer("Success");
+            pintaPreguntes(enquesta);
         },
         dataType: "json",
         error: function() {
-            console.log("Error!");
+            messageContainer("Fail");
+            //console.log("Error!");
         }
     });
 }
@@ -315,7 +319,7 @@ var Events = {
                 });
               },
               error: function(data) {
-                alert("FAIL!!");
+                messageContainer("Fail");
               }
             });
         });
@@ -411,11 +415,15 @@ var Events = {
                   contentType: "application/json",
                   data: JSON.stringify(pregunta),
                   success: function(enquesta){
-                      window.location = domini+"Enquestes/Enq"+enquestaId+"/";
+                      //console.log(enquesta.preguntes);
+                      messageContainer("Success");
+                      $("#afegirPreguntes").addClass("template");
+                      pintaPreguntes(enquesta);
+                      //window.location = domini+"Enquestes/Enq"+enquestaId+"/";
                       //history.pushState({page:"Enquesta"}, "Enquesta", domini+"Enquesta/"+enquestaId+"/");
                   },
                   error: function(){
-                      console.log("Error");
+                      messageContainer("Fail");
                   }
               });
             }
@@ -433,6 +441,42 @@ var Events = {
    }
 };
 
+var pintaPreguntes = function(data){
+  $("#divPreguntes").empty();
+  if(data.preguntes){
+      $.each(data.preguntes, function(num,pregunta) {
+          $("#divPreguntes").append(function(index,html){
+              console.log(pregunta);
+
+              var result = "<div class='divFilaPregunta'>";
+                result += "<div class='divTitolFilaPregunta'>";
+                  result += "<p>Pregunta "+(num+1)+"</p>";
+                  result += "<p class='template'>"+pregunta.id+"</p>";
+                  result += "<p>Tipus: "+pregunta.tipus+"</p>";
+                result += "</div>";
+                result += "<div class='divBotoPregunta'>";
+                  result += "<input type='button' id='"+pregunta.id+"' name='deletePreg"+(num+1)+"' value='Delete Pregunta'/>";
+                result += "</div>";
+                result += "<div class='divContingutPregunta'>";
+                  result += "<p>"+pregunta.text+"</p>";
+              if(pregunta.possiblesRespostes.length > 0) {
+                  result += "<br><p><b>Respostes</b></p>";
+                  $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
+                      result += "<br><p>"+(indexResposta+1)+".- "+resposta+"</p>";
+                  });
+                }
+                result += "</div>";
+              result += "</div>";
+              return result;
+          });
+      });
+
+      $(".divFilaPregunta:even").addClass("filaEven"); 
+      $(".divFilaPregunta:odd").addClass("filaOdd");
+      Events.botonsPreguntes();
+  }
+}
+
 //Funció de configuració dels diversos elements de la web segons la secció en que ens trobem
 var configuraSeccio = function(data){
     //Si el formulari te validacions les fara automaticament
@@ -445,39 +489,7 @@ var configuraSeccio = function(data){
             $("#veureTitol").val(data["titol"]);
             $("#veureDesM").val(data["inici"]);
             $("#veureFinsM").val(data["fi"]);
-            $("#divPreguntes").empty();
-            if(data.preguntes){
-                $.each(data.preguntes, function(num,pregunta) {
-                    $("#divPreguntes").append(function(index,html){
-                        console.log(pregunta);
-
-                        var result = "<div class='divFilaPregunta'>";
-                          result += "<div class='divTitolFilaPregunta'>";
-                            result += "<p>Pregunta "+(num+1)+"</p>";
-                            result += "<p class='template'>"+pregunta.id+"</p>";
-                            result += "<p>Tipus: "+pregunta.tipus+"</p>";
-                          result += "</div>";
-                          result += "<div class='divBotoPregunta'>";
-                            result += "<input type='button' id='"+pregunta.id+"' name='deletePreg"+(num+1)+"' value='Delete Pregunta'/>";
-                          result += "</div>";
-                          result += "<div class='divContingutPregunta'>";
-                            result += "<p>"+pregunta.text+"</p>";
-                        if(pregunta.possiblesRespostes.length > 0) {
-                            result += "<br><p><b>Respostes</b></p>";
-                            $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                result += "<br><p>"+(indexResposta+1)+".- "+resposta+"</p>";
-                            });
-                          }
-                          result += "</div>";
-                        result += "</div>";
-                        return result;
-                    });
-                });
-
-                $(".divFilaPregunta:even").addClass("filaEven"); 
-                $(".divFilaPregunta:odd").addClass("filaOdd");
-                Events.botonsPreguntes();
-            }
+            pintaPreguntes(data);
             break;
         case "Respondre":
             $("#veureTitolResp").text(data["titol"]);

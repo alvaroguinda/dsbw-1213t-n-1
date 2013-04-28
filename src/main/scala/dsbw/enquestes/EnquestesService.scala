@@ -134,7 +134,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 		new Enquesta(enquestaNew._id.toString(),enquestaNew.idResp.toString(),enquestaNew.estat,enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.preguntes)
 	}
 
-	def deletePregunta(idAdmin:String, idEnquesta:String, idPregunta:String){
+	def deletePregunta(idAdmin:String, idEnquesta:String, idPregunta:String):Enquesta={
 		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
 		val preguntesn = enquesta.preguntes.filter(_.id != idPregunta)
 		val enquestaR = new EnquestaRecord (
@@ -147,6 +147,9 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 			preguntes =  preguntesn
 		)
 		enquestesRepository.save(enquestaR)
+
+    val enquestaNew = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+    new Enquesta(enquestaNew._id.toString(),enquestaNew.idResp.toString(),enquestaNew.estat,enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.preguntes)
 	}
 
 	def putPregunta(idAdmin:String, idEnquesta:String, idPregunta:String, pregunta:NovaPregunta){
