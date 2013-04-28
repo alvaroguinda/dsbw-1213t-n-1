@@ -419,7 +419,7 @@ var Events = {
                       messageContainer("Success");
                       $("#afegirPreguntes").addClass("template");
                       $("#afegirPreguntes input[type=text]").each(function() {$(this).val("")});
-                      $("rbTipusText").prop('checked', true);
+                      $("#rbTipusText").attr('checked', 'checked');
                       $("#preguntaTest").addClass("template");
                       pintaPreguntes(enquesta);
                       //window.location = domini+"Enquestes/Enq"+enquestaId+"/";
