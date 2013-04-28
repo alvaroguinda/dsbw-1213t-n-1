@@ -27,16 +27,16 @@
     <header>
         <!-- Login Starts Here -->
         <div id="loginContainer">
-            <a href="#" id="loginButton"><span>Login</span><em></em></a>
+            <a href="#" id="loginButton"><span id="spanLogin">Login</span><em></em></a>
             <div style="clear:both"></div>
             <div id="loginBox">
                 <form id="loginForm">
                     <fieldset id="body">
-                        <fieldset>
+                        <fieldset id="femail">
                             <label for="email">Email Address</label>
                             <input type="text" name="email" id="email" />
                         </fieldset>
-                        <fieldset>
+                        <fieldset id="fpass">
                             <label for="password">Password</label>
                             <input type="password" name="password" id="password" />
                         </fieldset>
@@ -44,9 +44,13 @@
                             <span>Usuari o contrasenya incorrectes!</span>
                         </fieldset>
                         <input type="submit" id="login" value="Sign in" />
-                        <label for="checkbox"><input type="checkbox" id="checkbox" />Remember me</label>
+                        <fieldset id="fcheckbox">
+                            <label for="checkbox"><input type="checkbox" id="checkbox" />Remember me</label>
+                        </fieldset>
                     </fieldset>
-                    <span><a href="#">Forgot your password?</a></span>
+                    <fieldset id="forgot">
+                        <span><a href="#">Forgot your password?</a></span>
+                    </fieldset>
                 </form>
             </div>
         </div>

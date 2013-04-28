@@ -526,10 +526,20 @@ var configuraSeccio = function(data){
                 }
             break;
         case "LlistatEnquestes":
-            $("#llistatEnq").html("")
+            $("#llistatEnq").html("");
             $.each(data.enquestes, function(numEnq,enquesta){
                 console.log(enquesta);
-                $("#llistatEnq").append("<p>"+enquesta.titol+"</p>");
+                result =  "<div class='enquesta'>";
+                result += "<h2>"+enquesta.titol+"</h2>";
+                result += "<p><b>Data Inici:</b> "+enquesta.inici+"</p>";
+                result += "<p><b>Data Fi:</b> "+enquesta.fi+"</p>";
+                $.each(enquesta.preguntes, function(indexResposta,pregunta){
+                    result += "<div class='preguntas'>";
+                    result += "<h3>"+pregunta.text+"</h3>";
+                    result += "</div>";
+                });
+                result += "</div>";
+                $("#llistatEnq").append(result);
             });
             break;
         default:

@@ -97,8 +97,13 @@ var initLogin = (function() {
                 $("#email").attr("disabled","disabled");
                 $("#password").attr("disabled","disabled");
                 $("#login").addClass("logout");
+                $("#femail").addClass("template");
+                $("#fpass").addClass("template");
+                $("#fcheckbox").addClass("template");
+                $("#forgot").addClass("template");
                 $("#navigation > div").addClass("privAdmin");
                 $("#navigation li.admin").removeClass("template");
+                $("#spanLogin").html(email)
                 console.log("Usuari Autenticat");
             }else{
                 console.log("Usuari No Autenticat");
@@ -130,8 +135,13 @@ var initLogin = (function() {
                         $("#email").removeAttr("disabled");
                         $("#password").removeAttr("disabled");
                         $("#login").removeClass("logout");
+                        $("#femail").removeClass("template");
+                        $("#fpass").removeClass("template");
+                        $("#fcheckbox").removeClass("template");
+                        $("#forgot").removeClass("template");
                         $("#navigation > div").removeClass("privAdmin");
                         $("#navigation li.admin").addClass("template");
+                        $("#spanLogin").html("Login")
                         console.log("Logout OK");
                     }else{
                         console.log("Logout Failed");
@@ -157,8 +167,13 @@ var initLogin = (function() {
                         $("#email").attr("disabled","disabled");
                         $("#password").attr("disabled","disabled");
                         $("#login").addClass("logout");
+                        $("#femail").addClass("template");
+                        $("#fpass").addClass("template");
+                        $("#fcheckbox").addClass("template");
+                        $("#forgot").addClass("template");
                         $("#navigation > div").addClass("privAdmin");
                         $("#navigation li.admin").removeClass("template");
+                        $("#spanLogin").html(email)
                         console.log("Login OK");
                     }else{
                         $("#loginFailed").removeClass("template");
