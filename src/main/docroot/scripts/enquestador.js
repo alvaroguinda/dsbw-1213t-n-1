@@ -418,6 +418,9 @@ var Events = {
                       //console.log(enquesta.preguntes);
                       messageContainer("Success");
                       $("#afegirPreguntes").addClass("template");
+                      $("#afegirPreguntes input[type=text]").each(function() {$(this).val("")});
+                      $("rbTipusText").prop('checked', true);
+                      $("#preguntaTest").addClass("template");
                       pintaPreguntes(enquesta);
                       //window.location = domini+"Enquestes/Enq"+enquestaId+"/";
                       //history.pushState({page:"Enquesta"}, "Enquesta", domini+"Enquesta/"+enquestaId+"/");
