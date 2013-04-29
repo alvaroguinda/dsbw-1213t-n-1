@@ -428,11 +428,12 @@ var Events = {
                   success: function(enquesta){
                       messageContainer("Success");
                       $("#afegirPreguntes input[type=text]").each(function() {$(this).val("")});
-                      $("#rbTipusText").attr('checked', 'checked');
-                      $("#preguntaTest").addClass("template");
+                      //$("#rbTipusText").attr('checked', 'checked');
+                      //$("#preguntaTest").addClass("template");
                       $("#divAfegirNovaResposta").empty();
                       $('#numResposta').val('1');
                       pintaPreguntes(enquesta);
+                      $("html, body").animate({ scrollTop: $(document).height() }, "slow");
                       //window.location = domini+"Enquestes/Enq"+enquestaId+"/";
                       //history.pushState({page:"Enquesta"}, "Enquesta", domini+"Enquesta/"+enquestaId+"/");
                   },
