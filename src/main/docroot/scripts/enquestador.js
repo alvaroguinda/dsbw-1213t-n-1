@@ -400,6 +400,8 @@ var Events = {
                 respostesP[index] = $(this).val();
               });
 
+              if(respostesP[0] == "") respostesP = null;
+
               var pregunta = {
                   tipus: $('#formAfegirPreguntes input[name=tipusPregunta]:checked').val(),
                   enunciat: $("#formAfegirPreguntes input#titolPregunta").val(),
@@ -458,7 +460,7 @@ var pintaPreguntes = function(data){
                   result += "<p>Tipus: "+pregunta.tipus+"</p>";
                 result += "</div>";
                 result += "<div class='divBotoPregunta'>";
-                  result += "<input type='button' id='"+pregunta.id+"' name='deletePreg"+(num+1)+"' value='Delete Pregunta'/>";
+                  result += "<input type='button' id='"+pregunta.id+"' name='deletePreg"+(num+1)+"' value='Elimina Pregunta'/>";
                 result += "</div>";
                 result += "<div class='divContingutPregunta'>";
                   result += "<p>"+pregunta.text+"</p>";
@@ -492,6 +494,11 @@ var configuraSeccio = function(data){
             $("#veureTitol").val(data["titol"]);
             $("#veureDesM").val(data["inici"]);
             $("#veureFinsM").val(data["fi"]);
+            if(data.estat == 0) $("#estatEnquesta").append("<h5 id ='estatEnq'>L'enquesta encara no és publica. No pot ser resposta.</h5>");
+            else{
+              $("#estatEnquesta").append("<h5 id ='estatEnq'>Enquesta publicada. L'enllaç per a repondre-la és el següent:</h5>");
+              $("#estatEnquesta").append("<h6 id ='estatEnq'>http://localhost:8080/Respondre/Enq"+data.idResp+"</h6>");
+            }  
             pintaPreguntes(data);
             break;
         case "Respondre":
