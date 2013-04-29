@@ -494,10 +494,16 @@ var configuraSeccio = function(data){
             $("#veureTitol").val(data["titol"]);
             $("#veureDesM").val(data["inici"]);
             $("#veureFinsM").val(data["fi"]);
-            if(data.estat == 0) $("#estatEnquesta").append("<h5 id ='estatEnq'>L'enquesta encara no és publica. No pot ser resposta.</h5>");
-            else{
-              $("#estatEnquesta").append("<h5 id ='estatEnq'>Enquesta publicada. L'enllaç per a repondre-la és el següent:</h5>");
+            if(data.estat == 0){
+              $("#estatEnquesta").append("<h4 id ='estatEnq'>En construcció</h4>");
+              $("#estatEnquesta").append("<h5 id ='estatEnq'>L'enquesta està en estat de construcció. Pot ser modificada, i es poden afegir i treure preguntes. Per a finalitzar-la prèmer el botó de Publicar.</h5>");
+              $("#veureEnquesta .publicar").removeClass("template");
+            }
+            else if(data.estat == 1){
+              $("#estatEnquesta").append("<h4 id ='estatEnq'>Publicada.</h4>");
+              $("#estatEnquesta").append("<h5 id ='estatEnq'>L'enquesta pot ser resposta per qualsevol persona que accedeixi a l'enllaç que apareix a continuació.</h5>");
               $("#estatEnquesta").append("<h6 id ='estatEnq'>http://localhost:8080/Respondre/Enq"+data.idResp+"</h6>");
+              $("#veureEnquesta .publicar").addClass("template");
             }  
             pintaPreguntes(data);
             break;
