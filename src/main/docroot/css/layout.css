@@ -409,6 +409,7 @@ div.inputdata input[type="radio"]{
 
 #divPreguntes input[type="button"]{
     float:right;
+    margin-top: -20px;
 }
 
 .divTitolFilaPregunta {
@@ -437,6 +438,24 @@ div.inputdata input[type="radio"]{
     -moz-border-radius: 4px;
 }
 
-.divFilaPregunta:hover{
+.divFilaPregunta:hover {
    background-color:#E0EEEE;
+}
+
+/*.deleteResposta {
+    width:9%;
+    text-align:right;
+    margin-right:10px;
+    padding:5px 0;
+    color:gray;
+}*/
+
+.deleteResposta {
+    position: relative;
+    top: 5px;
+    left: -220px;
+    text-align: left;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
 }

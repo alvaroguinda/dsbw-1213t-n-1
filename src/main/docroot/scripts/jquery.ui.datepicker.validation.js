@@ -13,12 +13,12 @@ if ($.fn.validate) {
 	$.datepicker._selectDate2 = $.datepicker._selectDate;
 	
 	$.extend($.datepicker.regional[''], {
-		validateDate: 'Enter a valid date',
-		validateDateMin: 'Date on or after {0}',
-		validateDateMax: 'Date on or before {0}',
-		validateDateMinMax: 'Date between {0} and {1}',
-		validateDateCompare: 'Date {0} {1}',
-		validateDateToday: 'today',
+		validateDate: 'Data incorrecte.',
+		validateDateMin: 'Data >= {0}',
+		validateDateMax: 'Date <= {0}',
+		validateDateMinMax: 'Date entre {0} i {1}',
+		validateDateCompare: 'Data {0} {1}',
+		validateDateToday: 'avui',
 		validateDateOther: 'the other date',
 		validateDateEQ: 'equal to',
 		validateDateNE: 'not equal to',

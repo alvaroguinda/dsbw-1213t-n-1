@@ -361,6 +361,8 @@ var Events = {
 
         $("#rbTipusText").click(function() {
           $("#preguntaTest").addClass("template");
+          $("#divAfegirNovaResposta").empty();
+          $("#respostaPregunta1").val("");
         });
 
         $("#rbTipusTest").click(function() {
@@ -369,18 +371,23 @@ var Events = {
 
         $("#rbTipusMulti").click(function() {
           $("#preguntaTest").removeClass("template");
-        });
+        });        
 
         $("#bAfegirResposta").click(function() {
           //Cada cop que afegim una pregunta incrementem el seu identificador
-          var numRespostes = 1;
+          var numRespostes = $('#numResposta').val();
           $("#preguntaTest").find("input[type=text]").each(function() {
             numRespostes++;
           });
-          var novaResposta = "<div class='inputdata'><label for='respostaPregunta" + numRespostes + "'>Resposta "+ numRespostes +"</label>";
-          novaResposta += "<span><input type=\"text\" id=\"respostaPregunta"+ numRespostes +"\" name=\"respostaPregunta"+ numRespostes +"\" class=\"required\"/></span>";
-          novaResposta += "</div>";
-          $("#divAfegirResposta").append(novaResposta);
+          $('#numResposta').val(numRespostes);
+          var novaResposta = "<div class='inputdata'><label for='respostaPregunta" + numRespostes + "'>Resposta</label>";
+          novaResposta += "<span><input type=\"text\" id=\"respostaPregunta"+ numRespostes +"\" class=\"required\" name=\"respostaPregunta"+ numRespostes +"\" /></span>";
+          novaResposta += "<img src='/img/delete.png' id='eliminaResposta" + numRespostes + "' class='deleteResposta' alt='Elimina resposta' title='Elimina Resposta' /></div>";
+          
+          $("#divAfegirNovaResposta").append(novaResposta);
+
+          Events.botonsDeleteRespostes();
+          
           //$("#preguntaTest").append("<input type=\"text\" name=\"respostaPregunta\" id=\"respostaPregunta\"/> <br>");
           //$("#preguntaTest").append($("#preguntaTest input#bAfegirResposta"));
 
@@ -396,8 +403,10 @@ var Events = {
               enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
 
               var respostesP = new Array();
-              $("#divAfegirResposta input").each(function(index){
-                respostesP[index] = $(this).val();
+              $("#divAfegirResposta input[type=text]").each(function(index){
+                if($(this).val() != "") {
+                  respostesP[index] = $(this).val();
+                }
               });
 
               if(respostesP[0] == "") respostesP = null;
@@ -408,8 +417,8 @@ var Events = {
                   respostes: respostesP
               }
 
-              console.log(enquestaId);
-              console.log(pregunta);
+              //console.log(enquestaId);
+              //console.log(pregunta);
 
               $.ajax({
                   type: "POST",
@@ -417,12 +426,12 @@ var Events = {
                   contentType: "application/json",
                   data: JSON.stringify(pregunta),
                   success: function(enquesta){
-                      //console.log(enquesta.preguntes);
                       messageContainer("Success");
-                      $("#afegirPreguntes").addClass("template");
                       $("#afegirPreguntes input[type=text]").each(function() {$(this).val("")});
                       $("#rbTipusText").attr('checked', 'checked');
                       $("#preguntaTest").addClass("template");
+                      $("#divAfegirNovaResposta").empty();
+                      $('#numResposta').val('1');
                       pintaPreguntes(enquesta);
                       //window.location = domini+"Enquestes/Enq"+enquestaId+"/";
                       //history.pushState({page:"Enquesta"}, "Enquesta", domini+"Enquesta/"+enquestaId+"/");
@@ -441,6 +450,15 @@ var Events = {
             $(boto).click(function(event){
                 //alert(boto.id);
                 deletePregunta(idEnq,boto.id);
+            });
+        });
+   },
+   botonsDeleteRespostes: function(){
+        var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
+        var botonsDeleteRespostes = $("#divAfegirResposta img");
+        $.each(botonsDeleteRespostes, function(num,boto) {
+            $(boto).click(function(event){
+                $(event.target).closest('.inputdata').remove();                
             });
         });
    }
@@ -478,6 +496,7 @@ var pintaPreguntes = function(data){
 
       $(".divFilaPregunta:even").addClass("filaEven"); 
       $(".divFilaPregunta:odd").addClass("filaOdd");
+
       Events.botonsPreguntes();
   }
 }
