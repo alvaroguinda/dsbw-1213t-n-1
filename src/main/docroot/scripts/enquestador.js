@@ -131,6 +131,7 @@ function deletePregunta(idEnq,idPreg){
             //location.reload();
             //console.log(enquesta);
             messageContainer("Success");
+            configuraEstat(0, 0);
             pintaPreguntes(enquesta);
         },
         dataType: "json",
@@ -347,6 +348,7 @@ var Events = {
                 data: JSON.stringify(enquesta),
                 success: function(data) {
                   messageContainer("Success");
+                  configuraEstat(0, 0);
                 },
                 error: function(data) {
                   messageContainer("Fail");
@@ -432,6 +434,7 @@ var Events = {
                       //$("#preguntaTest").addClass("template");
                       $("#divAfegirNovaResposta").empty();
                       $('#numResposta').val('1');
+                      configuraEstat(0, 0);
                       pintaPreguntes(enquesta);
                       $("html, body").animate({ scrollTop: $(document).height() }, "slow");
                       //window.location = domini+"Enquestes/Enq"+enquestaId+"/";
@@ -502,6 +505,22 @@ var pintaPreguntes = function(data){
   }
 }
 
+//Funció per a pintar l'estat de l'enquesta, cal cridar-la cada vegada que es faci una crida al server si no fem refresh.
+var configuraEstat = function(estat, id){
+  $("#estatEnquesta").html("<h2 id ='estatEnq'>Estat de l'enquesta</h2>");
+  if(estat == 0){
+    $("#estatEnquesta").append("<h4 id ='estatEnq'>En construcció</h4>");
+    $("#estatEnquesta").append("<h5 id ='estatEnq'>L'enquesta està en estat de construcció. Pot ser modificada, i es poden afegir i treure preguntes. Per a finalitzar-la prèmer el botó de Publicar.</h5>");
+    $("#veureEnquesta .publicar").removeClass("template");
+  }
+  else if(estat == 1){
+    $("#estatEnquesta").append("<h4 id ='estatEnq'>Publicada.</h4>");
+    $("#estatEnquesta").append("<h5 id ='estatEnq'>L'enquesta pot ser resposta per qualsevol persona que accedeixi a l'enllaç que apareix a continuació.</h5>");
+    $("#estatEnquesta").append("<h6 id ='estatEnq'>http://localhost:8080/Respondre/Enq"+id+"</h6>");
+    $("#veureEnquesta .publicar").addClass("template");
+  }  
+}
+
 //Funció de configuració dels diversos elements de la web segons la secció en que ens trobem
 var configuraSeccio = function(data){
     //Si el formulari te validacions les fara automaticament
@@ -514,17 +533,7 @@ var configuraSeccio = function(data){
             $("#veureTitol").val(data["titol"]);
             $("#veureDesM").val(data["inici"]);
             $("#veureFinsM").val(data["fi"]);
-            if(data.estat == 0){
-              $("#estatEnquesta").append("<h4 id ='estatEnq'>En construcció</h4>");
-              $("#estatEnquesta").append("<h5 id ='estatEnq'>L'enquesta està en estat de construcció. Pot ser modificada, i es poden afegir i treure preguntes. Per a finalitzar-la prèmer el botó de Publicar.</h5>");
-              $("#veureEnquesta .publicar").removeClass("template");
-            }
-            else if(data.estat == 1){
-              $("#estatEnquesta").append("<h4 id ='estatEnq'>Publicada.</h4>");
-              $("#estatEnquesta").append("<h5 id ='estatEnq'>L'enquesta pot ser resposta per qualsevol persona que accedeixi a l'enllaç que apareix a continuació.</h5>");
-              $("#estatEnquesta").append("<h6 id ='estatEnq'>http://localhost:8080/Respondre/Enq"+data.idResp+"</h6>");
-              $("#veureEnquesta .publicar").addClass("template");
-            }  
+            configuraEstat(data.estat, data.idResp);
             pintaPreguntes(data);
             break;
         case "Respondre":
