@@ -11,6 +11,7 @@ case class Pregunta(id:String, text:String, tipus:String, possiblesRespostes:Lis
 case class Enquesta(id:String, idResp:String, estat:Integer, titol: String, inici: String, fi: String, preguntes:List[Pregunta])
 case class EnquestaID(id:String)
 case class Enquestes(enquestes: Set[EnquestaRecord])
+case class User (nom: String, logged: Boolean)
 
 class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository: UsersRepository) {
 
@@ -40,8 +41,13 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
     true
   }
 
-  def authUser(session: HttpSession): Boolean = {
-    session.getAttribute("autenticat").asInstanceOf[Boolean]
+  def authUser(session: HttpSession): User = {
+    val logged: Boolean = session.getAttribute("autenticat").asInstanceOf[Boolean]
+    var nom: String = ""
+    if (logged){
+      nom = session.getAttribute("userName").toString
+    }
+    new User(nom,logged)
   }
 
   //private def getEnquestaById(id:ObjectId) = enquestesRepository.findById(id).map(ar=>Author(ar.name,ar.username,ar.avatar))

@@ -18,25 +18,22 @@ var carregaSeccio = function(nomSeccio,data){
     $("#sectionContainer > div").addClass("template"); //Ocultem totes les seccions
     if(!nomSeccio){ //si no hem rebut arguments per carregar una determinada secció...
         var path = location.pathname.substring(1).split("/")[0]; //capturem el path contingut a la url
-        if(!secc[path]){ //si aquet path no existeix al nostre Map es que estem entrant per primer cop a la web i la url té el path en blanc o és "index.html"
-            path = "Inici";
-            configuraSeccio(data); //configurem els handlers d'aquesta secció
-            history.pushState({page:path}, path, domini+path+"/"); //modifiquem la url de la web + l'historic associat del navegador
-        }
-        else if(path == "Enquestes"){
-            id = location.pathname.substring(1).split("/")[1].substring(3);
-            if(id != ""){
-                getEnquestaURL(id);
-            }
-        }
-        if(path == "LlistatEnquestes"){
-            getLlistatEnquestes();
-        }
-        if(path == "Respondre"){
-          id = location.pathname.substring(1).split("/")[1].substring(3);
-          if(id != ""){
-                getEnquestaRespondre(id);
-          }
+        switch (path){
+            case "Enquestes":
+                id = location.pathname.substring(1).split("/")[1].substring(3);
+                if(id != "") getEnquestaURL(id);
+                break;
+            case "LlistatEnquestes":
+                getLlistatEnquestes();
+                break;
+            case "Respondre":
+                id = location.pathname.substring(1).split("/")[1].substring(3);
+                if(id != "") getEnquestaRespondre(id);
+                break;
+            default: //si aquet path no existeix al nostre Map es que estem entrant per primer cop a la web i la url té el path en blanc o és "index.html"
+                path = "Inici";
+                configuraSeccio(data); //configurem els handlers d'aquesta secció
+                history.pushState({page:path}, path, domini+path+"/"); //modifiquem la url de la web + l'historic associat del navegador
         }
         $("#"+secc[path]).removeClass("template"); //mostrem la secció segons el path
         validaSeccio();
@@ -388,7 +385,7 @@ var Events = {
           
           $("#divAfegirNovaResposta").append(novaResposta);
 
-          Events.botonsDeleteRespostes();
+          Events.botonsDeleteRespostes(numRespostes);
           
           //$("#preguntaTest").append("<input type=\"text\" name=\"respostaPregunta\" id=\"respostaPregunta\"/> <br>");
           //$("#preguntaTest").append($("#preguntaTest input#bAfegirResposta"));
@@ -457,13 +454,18 @@ var Events = {
             });
         });
    },
-   botonsDeleteRespostes: function(){
+   botonsDeleteRespostes: function(num){
+        /*
         var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
         var botonsDeleteRespostes = $("#divAfegirResposta img");
         $.each(botonsDeleteRespostes, function(num,boto) {
             $(boto).click(function(event){
-                $(event.target).closest('.inputdata').remove();                
+                $(event.target).closest('.inputdata').remove();
             });
+        });
+        */
+        $("#eliminaResposta" + num).click(function(event){
+            $(event.target).closest('.inputdata').remove();
         });
    }
 };
@@ -516,7 +518,7 @@ var configuraEstat = function(estat, id){
   else if(estat == 1){
     $("#estatEnquesta").append("<h4 id ='estatEnq'>Publicada.</h4>");
     $("#estatEnquesta").append("<h5 id ='estatEnq'>L'enquesta pot ser resposta per qualsevol persona que accedeixi a l'enllaç que apareix a continuació.</h5>");
-    $("#estatEnquesta").append("<h6 id ='estatEnq'>http://localhost:8080/Respondre/Enq"+id+"</h6>");
+    $("#estatEnquesta").append("<h6 id ='estatEnq'>"+domini+"Respondre/Enq"+id+"</h6>");
     $("#veureEnquesta .publicar").addClass("template");
   }  
 }

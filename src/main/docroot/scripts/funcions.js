@@ -112,11 +112,10 @@ var initLogin = (function() {
         type: "GET",
         url: "/api/auth",
         contentType: "application/json",
-        success: function(autUser){
-            if(autUser){
+        success: function(authUser){
+            console.log(authUser);
+            if(authUser.logged){
                 $("#login").val("Sign out");
-                $("#email").attr("disabled","disabled");
-                $("#password").attr("disabled","disabled");
                 $("#login").addClass("logout");
                 $("#femail").addClass("template");
                 $("#fpass").addClass("template");
@@ -124,7 +123,7 @@ var initLogin = (function() {
                 $("#forgot").addClass("template");
                 $("#navigation > div").addClass("privAdmin");
                 $("#navigation li.admin").removeClass("template");
-                $("#spanLogin").html(email)
+                $("#spanLogin").html(authUser.nom);
                 console.log("Usuari Autenticat");
             }else{
                 console.log("Usuari No Autenticat");
@@ -153,8 +152,6 @@ var initLogin = (function() {
                     console.log("Logout: "+logoutSucces);
                     if(logoutSucces){
                         $("#login").val("Sign in");
-                        $("#email").removeAttr("disabled");
-                        $("#password").removeAttr("disabled");
                         $("#login").removeClass("logout");
                         $("#femail").removeClass("template");
                         $("#fpass").removeClass("template");
@@ -185,8 +182,6 @@ var initLogin = (function() {
                     if(loginSucces){
                         if(!$("#loginFailed").hasClass("template")) $("#loginFailed").addClass("template");
                         $("#login").val("Sign out");
-                        $("#email").attr("disabled","disabled");
-                        $("#password").attr("disabled","disabled");
                         $("#login").addClass("logout");
                         $("#femail").addClass("template");
                         $("#fpass").addClass("template");
@@ -207,11 +202,18 @@ var initLogin = (function() {
             });
         }
     });
+
     $(this).mouseup(function(login) {
+        if(login.target != $("#loginBox")[0] && login.target != $("#spanLogin")[0]){
+            button.removeClass('active');
+            box.hide();
+        }
+        /*
         if(!($(login.target).parent('#loginButton').length > 0)) {
             button.removeClass('active');
             box.hide();
         }
+        */
     });
 
 });
