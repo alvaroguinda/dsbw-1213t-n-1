@@ -164,6 +164,10 @@ function messageContainer(missatge) {
   }, 3000);
 }
 
+function enviarResposta(){
+ //POR REALIZAR
+}
+
 var Events = {
    init: function() {
         //Event que s'executa quan entrem per primer cop a la web o premem les fletxes d'historial de navegació:
@@ -417,6 +421,7 @@ var Events = {
 
        });
 
+       
         $("#formAfegirPreguntes").submit(function(){
             event.preventDefault();
 
@@ -491,6 +496,13 @@ var Events = {
         */
         $("#eliminaResposta" + num).click(function(event){
             $(event.target).closest('.inputdata').remove();
+        });
+   },
+
+   botoEnviarResposta: function(){
+        var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
+        $("#enviarResp").click(function(event){
+            enviarResposta();
         });
    }
 };
@@ -590,7 +602,7 @@ var configuraSeccio = function(data){
 
                                       result += "<div class='inputdata'>";
                                     $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                        result += "<span><input name='resposta"+num+"' type='radio'>"+resposta+"</span>";
+                                        result += "<span><input name='respostaPregunta' type='radio'>"+resposta+"</span>";
 
                                     });
                                     result += "</div>";
@@ -604,7 +616,7 @@ var configuraSeccio = function(data){
 
                                       result += "<div class='inputdata'>";
                                     $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                        result += "<span><input  type='radio'>"+resposta+"</span>";
+                                        result += "<span><input  name='respostaPregunta' type='radio'>"+resposta+"</span>";
 
                                     });
                                     result += "</div>";
@@ -616,6 +628,9 @@ var configuraSeccio = function(data){
                         return result;
                     });
                   })
+
+                   $("#divPreguntesResp").append("<input type='button' class='enviarResp' id='enviarResp' name='enviarResp' value='Enviar Resposta'/>");
+                   Events.botoEnviarResposta();
                 }
             break;
         case "LlistatEnquestes":

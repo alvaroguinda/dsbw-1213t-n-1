@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession
 case class NovaEnquesta(titol: String, inici: String, fi: String, preguntes: List[List[String]])
 case class NovaPregunta(tipus: String, enunciat: String, respostes: List[String])
 case class EstatEnquesta(ident: Integer)
+case class Respostes(respostes:List[List[String]])
 
 /** Enquestes API */
 class EnquestesApi(enquestesService:EnquestesService) extends Api {
@@ -20,6 +21,7 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
   val deletePreguntaAdmin = "DELETE /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
   val putPreguntaAdmin = "PUT /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
   val patchEnquestaAdmin = "PATCH /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
+  val respondreEnquestaUser = "POST /api/enquestes/user([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
   def service(method: String, uri: String, parameters: Map[String, List[String]] = Map(), headers: Map[String, String] = Map(), body: Option[JSON] = None, session: HttpSession): Response = {
     try {
       (method + " " + uri) match {
@@ -35,6 +37,7 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
         case deletePreguntaAdmin(idAdmin,idEnquesta,idPregunta) => Response(HttpStatusCode.Ok, enquestesService.deletePregunta(idAdmin,idEnquesta,idPregunta))
         case putPreguntaAdmin(idAdmin,idEnquesta,idPregunta) => Response(HttpStatusCode.Ok, enquestesService.putPregunta(idAdmin,idEnquesta,idPregunta,JSON.fromJSON[NovaPregunta](body.getOrElse(throw new Exception("Bad Request")))))
         case patchEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.patchEnquesta(idAdmin,idEnquesta,JSON.fromJSON[EstatEnquesta](body.getOrElse(throw new Exception("Bad Request")))))
+        case respondreEnquestaUser(idUser,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.respondreEnquesta(idUser,idEnquesta,JSON.fromJSON[Respostes](body.getOrElse(throw new Exception("Bad Request")))))
         case _ => Response(HttpStatusCode.Ok, "Hello world!")
       }
     } catch {

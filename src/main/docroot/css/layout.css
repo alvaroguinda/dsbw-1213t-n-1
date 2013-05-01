@@ -442,6 +442,10 @@ div.inputdata input[type="radio"]{
    background-color:#E0EEEE;
 }
 
+.divFormulariResp div {
+    text-align: justify;
+}
+
 /*.deleteResposta {
     width:9%;
     text-align:right;

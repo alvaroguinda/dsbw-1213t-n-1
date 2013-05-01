@@ -92,9 +92,9 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 		//println(enquesta.titol)
 		//println(enquesta.inici)
 		//println(enquesta.fi)
-		//if(enquesta.titol == "") throw new Exception("El titol no pot estar en blanc")
-		//if(user.inici == "") throw new HttpException(400, "La data inici no pot estar en blanc")
-		//if(user.fi == "") throw new HttpException(400, "La data fi no pot estar en blanc")
+		if(enquesta.titol == "") throw new HttpException(400, "El titol no pot estar en blanc")
+		if(enquesta.inici == "") throw new HttpException(400, "La data inici no pot estar en blanc")
+		if(enquesta.fi == "") throw new HttpException(400, "La data fi no pot estar en blanc")
 		//if(enquestesRepository.findByTitol(enquesta.titol).isDefined) throw new HttpException(400,"El Titol ja existeix")
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(),
@@ -110,6 +110,12 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 	}
 
 	def putEnquesta(idAdmin:String, idEnquesta:String, enquesta: NovaEnquesta){
+		if(enquesta.titol == "") throw new HttpException(400, "El titol no pot estar en blanc")
+		if(enquesta.inici == "") throw new HttpException(400, "La data inici no pot estar en blanc")
+		if(enquesta.fi == "") throw new HttpException(400, "La data fi no pot estar en blanc")
+		if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
+		if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
+
 		val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
@@ -124,6 +130,11 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 	}
 
 	def postPregunta(idAdmin:String, idEnquesta:String, pregunta: NovaPregunta):Enquesta= {
+		if(pregunta.tipus == "") throw new HttpException(400, "El tipus no pot estar en blanc")
+		if(pregunta.tipus != "Text" && pregunta.tipus != "Test" && pregunta.tipus != "Multi") throw new HttpException(400, "El tipus ha de ser Text,Test o Multi")
+		if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
+		if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
+	//	if(preguntes.respostes == null) throw new HttpException(400, "El tipus ha de ser Text,Test o Multi")
 		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
@@ -141,6 +152,9 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 	}
 
 	def deletePregunta(idAdmin:String, idEnquesta:String, idPregunta:String):Enquesta={
+		if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
+		if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
+		if(idPregunta == "")  throw new HttpException(400, "El ID de la pregunta no pot estar en blanc")
 		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
 		val preguntesn = enquesta.preguntes.filter(_.id != idPregunta)
 		val enquestaR = new EnquestaRecord (
@@ -170,6 +184,8 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 		enquestesRepository.save(enquestaR)*/
 	}
 	def patchEnquesta(idAdmin:String, idEnquesta:String, estat:EstatEnquesta){
+		if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
+		if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
 		val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
 		var idr = new ObjectId()
 		if(estat.ident != 1) idr = null
@@ -183,5 +199,9 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 			preguntes = enquestaOrigin.preguntes
 		)
 		enquestesRepository.save(enquestaR)
+	}
+
+	def respondreEnquesta(idUser: String, idEnquesta: String, respostes: Respostes){
+	
 	}
 }
