@@ -472,7 +472,36 @@ var Events = {
                   }
               });
             }
-        });
+          });
+          $("#formRespEnq").submit(function(){
+            event.preventDefault();
+
+            var isValidate=$("#formRespEnq").valid();
+
+            if(isValidate) {
+              enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
+
+              var resposta = new Array();
+              $("#divPreguntesResp input[type=text]").each(function(index){
+                resposta[index] = $(this).val();
+              });
+
+              console.log(resposta);
+
+              $.ajax({
+                  type: "POST",
+                  url: "/api/enquestes/user0/enq"+enquestaId,
+                  contentType: "application/json",
+                  data: JSON.stringify(resposta),
+                  success: function(enquesta){
+                      messageContainer("Success");
+                  },
+                  error: function(){
+                      messageContainer("Fail");
+                  }
+              });
+            }
+          });
    },
    botonsPreguntes: function(){
         var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
@@ -629,7 +658,7 @@ var configuraSeccio = function(data){
                     });
                   })
 
-                   $("#divPreguntesResp").append("<input type='button' class='enviarResp' id='enviarResp' name='enviarResp' value='Enviar Resposta'/>");
+                   $("#divPreguntesResp").append("<input type='submit' class='enviarResp' id='enviarResp' name='enviarResp' value='Enviar Resposta'/>");
                    Events.botoEnviarResposta();
                 }
             break;

@@ -202,6 +202,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 	}
 
 	def respondreEnquesta(idUser: String, idEnquesta: String, respostes: Respostes){
-	
+		//val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
+        //new Enquesta(null,enquesta.idResp.toString(),enquesta.estat,enquesta.titol,enquesta.inici,enquesta.fi,enquesta.preguntes)
 	}
 }

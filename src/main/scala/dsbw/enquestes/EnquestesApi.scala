@@ -21,9 +21,9 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
   val deletePreguntaAdmin = "DELETE /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
   val putPreguntaAdmin = "PUT /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
   val patchEnquestaAdmin = "PATCH /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
-  val respondreEnquestaUser = "POST /api/enquestes/user([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
+  val respondreEnquestaUser = "POST /api/enquestes/user([0-9]+)/enq([a-zA-z0-9]+)".r
   def service(method: String, uri: String, parameters: Map[String, List[String]] = Map(), headers: Map[String, String] = Map(), body: Option[JSON] = None, session: HttpSession): Response = {
-    try {
+    try { 
       (method + " " + uri) match {
         case "GET /api/login" => Response(HttpStatusCode.Ok, enquestesService.validaUser(parameters,session))
         case "GET /api/logout" => Response(HttpStatusCode.Ok, enquestesService.tancaSessio(session))
