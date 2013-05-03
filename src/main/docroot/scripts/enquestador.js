@@ -165,7 +165,14 @@ function messageContainer(missatge) {
 }
 
 function enviarResposta(){
- //POR REALIZAR
+  var respostesR = new Array();
+  $("#divPreguntesResp").find("input[type=text]").each(function(index) {
+    
+    if($(this).val() != "") {
+      respostesR[index] = $(this).val();
+    }
+  });
+  //console.log(respostesR);
 }
 
 var Events = {
