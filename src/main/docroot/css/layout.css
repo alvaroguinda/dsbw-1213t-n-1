@@ -463,3 +463,14 @@ div.inputdata input[type="radio"]{
     width: 20px;
     cursor: pointer;
 }
+
+#estatEnquesta p {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+#estatEnquesta div {
+    text-align: center;
+    margin-bottom: 25px;
+}
+

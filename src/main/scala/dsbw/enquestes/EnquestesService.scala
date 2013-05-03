@@ -183,7 +183,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 		)
 		enquestesRepository.save(enquestaR)*/
 	}
-	def patchEnquesta(idAdmin:String, idEnquesta:String, estat:EstatEnquesta){
+	def patchEnquesta(idAdmin:String, idEnquesta:String, estat:EstatEnquesta):Enquesta= {
 		if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
 		if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
 		val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
@@ -199,6 +199,11 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 			preguntes = enquestaOrigin.preguntes
 		)
 		enquestesRepository.save(enquestaR)
+
+    //new Enquesta(idEnquesta, enquestaR.idResp.toString(), enquestaR.estat, enquestaR.titol, enquestaR.inici, enquestaR.fi, enquestaR.preguntes)
+
+    val enquestaNew = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+    new Enquesta(enquestaNew._id.toString(),enquestaNew.idResp.toString(),enquestaNew.estat,enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.preguntes)
 	}
 
 	def respondreEnquesta(idUser: String, idEnquesta: String, respostes: Respostes){

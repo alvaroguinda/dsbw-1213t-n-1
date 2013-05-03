@@ -329,9 +329,12 @@ var Events = {
               contentType: "application/json",
               data: JSON.stringify(estatEnquesta),
               success: function(data) {
+                messageContainer("Success");
+                configuraEstat(1, data.idResp);
+                //console.log(data)
                 //window.location = "http://localhost:8080/";
                 //history.pushState({page:"Inici"}, "Inici", domini+"Inici/");
-                $.alert("A partir d'aquest moment, per a respondre a l'enquesta es pot accedir per el link que apareix a sota de les dades de l'enquesta.<br><br>Pots tornar a modificar les dades de l'enqueste sempre que ningú l'hagi contestat, però es perdrà l'enllaç per a respondre.", {
+                /*$.alert("A partir d'aquest moment, per a respondre a l'enquesta es pot accedir per el link que apareix a sota de les dades de l'enquesta.<br><br>Pots tornar a modificar les dades de l'enqueste sempre que ningú l'hagi contestat, però es perdrà l'enllaç per a respondre.", {
                   title:'Enquesta publicada amb èxit.',
                   icon:'',
                   buttons:[
@@ -339,14 +342,16 @@ var Events = {
                       title:'Tanca',
                       callback:function() { 
                         $(this).dialog("close");
-                        window.location = window.location;
+                        configuraEstat(1, data.idResp);
+                        //window.location = window.location;
                       }
                     }
                   ]
-                });
+                });*/
               },
               error: function(data) {
                 messageContainer("Fail");
+                configuraEstat(0, 0);
               }
             });
         });
@@ -587,14 +592,14 @@ var pintaPreguntes = function(data){
 var configuraEstat = function(estat, id){
   $("#estatEnquesta").html("<h2 id ='estatEnq'>Estat de l'enquesta</h2>");
   if(estat == 0){
-    $("#estatEnquesta").append("<h4 id ='estatEnq'>En construcció</h4>");
-    $("#estatEnquesta").append("<h5 id ='estatEnq'>L'enquesta està en estat de construcció. Pot ser modificada, i es poden afegir i treure preguntes. Per a finalitzar-la prèmer el botó de Publicar.</h5>");
+    $("#estatEnquesta").append("<h3>En construcció</h3>");
+    $("#estatEnquesta").append("<p>L'enquesta està en estat de construcció. Pot ser modificada, i es poden afegir i treure preguntes. Per a finalitzar-la prèmer el botó de Publicar.</p>");
     $("#veureEnquesta .publicar").removeClass("template");
   }
   else if(estat == 1){
-    $("#estatEnquesta").append("<h4 id ='estatEnq'>Publicada.</h4>");
-    $("#estatEnquesta").append("<h5 id ='estatEnq'>L'enquesta pot ser resposta per qualsevol persona que accedeixi a l'enllaç que apareix a continuació.</h5>");
-    $("#estatEnquesta").append("<h6 id ='estatEnq'>"+domini+"Respondre/Enq"+id+"</h6>");
+    $("#estatEnquesta").append("<h3>Publicada</h3>");
+    $("#estatEnquesta").append("<p>L'enquesta pot ser resposta per qualsevol persona que accedeixi a l'enllaç que apareix a continuació.</p>");
+    $("#estatEnquesta").append("<div><a href='"+domini+"Respondre/Enq"+id+"' target='_blank'>"+domini+"Respondre/Enq"+id+"</a></div>");
     $("#veureEnquesta .publicar").addClass("template");
   }  
 }
