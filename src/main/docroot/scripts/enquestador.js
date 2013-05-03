@@ -481,11 +481,14 @@ var Events = {
             if(isValidate) {
               enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
 
-              var resposta = new Array();
+              var respostesR = new Array();
               $("#divPreguntesResp input[type=text]").each(function(index){
-                resposta[index] = $(this).val();
+                respostesR[index] = [$(this).attr('id'), $(this).val()];
               });
 
+              var resposta = {
+                respostes: respostesR
+              }
               console.log(resposta);
 
               $.ajax({

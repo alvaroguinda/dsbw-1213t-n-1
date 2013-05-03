@@ -11,8 +11,6 @@ import java.util.Date
 case class EnquestaRecord(_id:ObjectId = new ObjectId(), idResp: ObjectId= new ObjectId(),estat:Integer,titol:String, inici:String, fi:String, preguntes:List[Pregunta])
 
 
-
-
 class EnquestesDao(db:DB) extends MongoDao[EnquestaRecord](db.enquestes) {
 }
 

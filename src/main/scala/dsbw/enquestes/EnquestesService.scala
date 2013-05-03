@@ -202,7 +202,40 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 	}
 
 	def respondreEnquesta(idUser: String, idEnquesta: String, respostes: Respostes){
-		//val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
+		val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
         //new Enquesta(null,enquesta.idResp.toString(),enquesta.estat,enquesta.titol,enquesta.inici,enquesta.fi,enquesta.preguntes)
+        println(respostes.respostes)
+        //for (r <- respostes) println(r)
+        var preguntesE:List[Pregunta] = List()
+        var respostesP:List[Resposta] = List()
+        respostes.respostes.foreach(r => println(r))
+        enquesta.preguntes.view.zipWithIndex.foreach{case(p,i) =>
+        	//preguntesE = List(p) ::: preguntesE
+        	respostes.respostes.foreach{r => 
+        		if (p.id == r.apply(0)) {
+        			respostesP = p.respostes ::: List(new Resposta(idUser,r.apply(1)))
+        		}
+        	}
+        	var preguntaR = new Pregunta(
+        		id = p.id,
+        		text = p.text,
+        		tipus = p.tipus,
+        		possiblesRespostes = p.possiblesRespostes,
+        		respostes = respostesP
+        		)
+        	preguntesE = List(preguntaR) ::: preguntesE //preguntesE.patch(i,preguntaR
+        }
+        println(preguntesE)
+//case class EnquestaRecord(_id:ObjectId = new ObjectId(), idResp: ObjectId= new ObjectId(),estat:Integer,titol:String, inici:String, fi:String, preguntes:List[Pregunta])
+//case class Pregunta(id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[Resposta])
+        /* EnquestaRecord (
+        	_id = enquesta._id,
+        	idResp = enquesta.idr,
+        	estat = enquesta.estat,
+        	titol = enquesta.titol,
+        	inici = enquesta.inici,
+        	fi = enquesta.fi,
+        	preguntes = x
+        	)*/
 	}
 }
