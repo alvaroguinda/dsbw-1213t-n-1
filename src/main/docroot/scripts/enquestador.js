@@ -473,6 +473,8 @@ var Events = {
               });
             }
           });
+
+          /** Respondre Enquesta **/
           $("#formRespEnq").submit(function(){
             event.preventDefault();
 
@@ -481,13 +483,18 @@ var Events = {
             if(isValidate) {
               enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
 
-              var respostesR = new Array();
+              var respostesT = new Array();
               $("#divPreguntesResp input[type=text]").each(function(index){
-                respostesR[index] = [$(this).attr('id'), $(this).val()];
+                respostesT[index] = [$(this).attr('id'), $(this).val()];
+              });
+
+              var respostesR = new Array();
+              $("#divPreguntesResp input[type='radio']:checked").each(function(index){
+                respostesR[index] = [$(this).attr('id'), $(this).val()]
               });
 
               var resposta = {
-                respostes: respostesR
+                respostes: respostesT.concat(respostesR)
               }
               console.log(resposta);
 
@@ -634,7 +641,7 @@ var configuraSeccio = function(data){
 
                                       result += "<div class='inputdata'>";
                                     $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                        result += "<span><input name='respostaPregunta' type='radio'>"+resposta+"</span>";
+                                        result += "<span><input name='"+pregunta.text+"' type='radio' value='"+resposta+"' id='"+pregunta.id+"'>"+resposta+"</span>";
 
                                     });
                                     result += "</div>";
@@ -642,20 +649,22 @@ var configuraSeccio = function(data){
                                   result += "</div>";
                                 result += "</div>";
                                 break;
-                            case "Test":
+                            case "Multi":
                                 if(pregunta.possiblesRespostes.length > 0) {
                                     result += "<br><p><b>Respostes</b></p>";
-
-                                      result += "<div class='inputdata'>";
+                                    result += "<div class='inputdata'>";
                                     $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                        result += "<span><input  name='respostaPregunta' type='radio'>"+resposta+"</span>";
+                                        
+                                      
+                                      result += "<span><input name='"+pregunta.text+indexResposta+"' type='checkbox' value='"+resposta+"' id='"+pregunta.id+"'>"+resposta+"</span>";
 
+                                    
                                     });
                                     result += "</div>";
                                 }
                                   result += "</div>";
                                 result += "</div>";
-                            break;
+                                break;
                         }
                         return result;
                     });

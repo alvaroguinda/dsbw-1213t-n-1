@@ -208,14 +208,19 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         //for (r <- respostes) println(r)
         var preguntesE:List[Pregunta] = List()
         var respostesP:List[Resposta] = List()
+        var trobat = false
         respostes.respostes.foreach(r => println(r))
-        enquesta.preguntes.view.zipWithIndex.foreach{case(p,i) =>
+        enquesta.preguntes.foreach{p =>
         	//preguntesE = List(p) ::: preguntesE
         	respostes.respostes.foreach{r => 
         		if (p.id == r.apply(0)) {
         			respostesP = p.respostes ::: List(new Resposta(idUser,r.apply(1)))
-        		}
+        			println(respostesP)
+        			trobat = true
+        		} 
         	}
+        	if (trobat == false) respostesP = p.respostes
+        	trobat = false
         	var preguntaR = new Pregunta(
         		id = p.id,
         		text = p.text,
@@ -223,19 +228,22 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         		possiblesRespostes = p.possiblesRespostes,
         		respostes = respostesP
         		)
-        	preguntesE = List(preguntaR) ::: preguntesE //preguntesE.patch(i,preguntaR
+        	println(preguntaR)
+        	preguntesE =  preguntesE ::: List(preguntaR) //preguntesE.patch(i,preguntaR
         }
         println(preguntesE)
 //case class EnquestaRecord(_id:ObjectId = new ObjectId(), idResp: ObjectId= new ObjectId(),estat:Integer,titol:String, inici:String, fi:String, preguntes:List[Pregunta])
 //case class Pregunta(id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[Resposta])
-        /* EnquestaRecord (
+        val enquestaR = EnquestaRecord (
         	_id = enquesta._id,
-        	idResp = enquesta.idr,
+        	idResp = enquesta.idResp,
         	estat = enquesta.estat,
         	titol = enquesta.titol,
         	inici = enquesta.inici,
         	fi = enquesta.fi,
-        	preguntes = x
-        	)*/
+        	preguntes = preguntesE
+        	)
+        println(enquestaR)
+        enquestesRepository.save(enquestaR)
 	}
 }
