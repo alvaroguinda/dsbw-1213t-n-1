@@ -218,7 +218,8 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
           id_user = _idUser.toString()
         }
 
-        println(id_user)
+        //println(id_user)
+        //println(respostes)
 
         //for (r <- respostes) println(r)
         var preguntesE:List[Pregunta] = List()

@@ -523,13 +523,25 @@ var Events = {
               }
 
               var respostes = new Array();
-              $(event.target).find(".divContingutPregunta :input").each(function(index){
-                respostes[index] = [$(this).attr('id'), $(this).val()];
+              var posicioResposta = 0;
+              $(event.target).find(".divContingutPregunta :input").each(function(index) {
+                
+                if($(this).is(":radio") || $(this).is(":checkbox")) {
+                  if($(this).is(":checked")) {
+                    respostes[posicioResposta] = [$(this).closest('.inputdata').attr('id'), $(this).val()];
+                    posicioResposta++;
+                  }
+                }
+                else {
+                  respostes[posicioResposta] = [$(this).attr('id'), $(this).val()];
+                  posicioResposta++;
+                }                
               });
 
               var resposta = {
                 respostes: respostes
               }
+              console.log(resposta);
 
               $.ajax({
                   type: "POST",
@@ -719,22 +731,34 @@ var configuraSeccio = function(data){
                         switch (pregunta.tipus){
                             case "Text":
                                   //console.log(pregunta.respostes)
-                                  var resposteUsuari = "";
+                                  var respostaUsuari = "";
                                   $.each(pregunta.respostes, function(numR,r) {
                                     if(r.idEnquestat == idUser) {
-                                      resposteUsuari = r.resposta;
+                                      respostaUsuari = r.resposta;
                                     }
                                   });
                                   //result += "<span><input type='text' name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'></span>";
-                                  result += "<span><textarea name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'>"+resposteUsuari+"</textarea></span>";
+                                  result += "<span><textarea name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'>"+respostaUsuari+"</textarea></span>";
                                   result += "</div>";
                                 result += "</div>";
                                 break;
                             case "Test":
                                 if(pregunta.possiblesRespostes.length > 0) {
-                                  result += "<div class='inputdata'>";
+
+                                  var respostaUsuariTest = "";
+                                  $.each(pregunta.respostes, function(numR,r) {
+                                    if(r.idEnquestat == idUser) {
+                                      respostaUsuariTest = r.resposta;
+                                    }
+                                  });
+
+                                  result += "<div class='inputdata' id='"+pregunta.id+"'>";
                                     $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                        result += "<span><input name='"+pregunta.text+"' type='radio' value='"+resposta+"' id='"+pregunta.id+"'>"+resposta+"</span>";
+                                        var marcada = "";
+                                        if(resposta == respostaUsuariTest) {
+                                          marcada = "checked='true'";
+                                        }
+                                        result += "<span><input name='"+pregunta.text+"' type='radio' value='"+resposta+"' id='test"+pregunta.id+indexResposta+"' "+marcada+">"+resposta+"</span>";
                                     });
                                   result += "<div class='separadorBlanc'></div></div>";
                                 }
@@ -743,10 +767,21 @@ var configuraSeccio = function(data){
                                 break;
                             case "Multi":
                                 if(pregunta.possiblesRespostes.length > 0) {
-                                    result += "<div class='inputdata'>";
+
+                                    var respostaUsuariMulti = "";
+                                    $.each(pregunta.respostes, function(numR,r) {
+                                      if(r.idEnquestat == idUser) {
+                                        respostaUsuariTest = r.resposta;
+                                      }
+                                    });
+
+                                    result += "<div class='inputdata' id='"+pregunta.id+"'>";
                                     $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                      
-                                      result += "<span><input type='checkbox' name='"+pregunta.text+indexResposta+"' id='multi"+indexResposta+"' value='"+resposta+"' />"+resposta+"</span>"
+                                        var marcada = "";
+                                        if(resposta == respostaUsuariTest) {
+                                          marcada = "checked='true'";
+                                        }
+                                      result += "<span><input type='checkbox' name='"+pregunta.text+indexResposta+"' id='multi"+pregunta.id+indexResposta+"' value='"+resposta+"' "+marcada+"/>"+resposta+"</span>"
                                       //result += "<span><input name='"+pregunta.text+indexResposta+"' type='checkbox' value='"+resposta+"' id='"+pregunta.id+"'>"+resposta+"</span>";                                    
                                     });
                                     result += "<div class='separadorBlanc'></div></div>";
