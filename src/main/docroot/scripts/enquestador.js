@@ -128,7 +128,7 @@ function deletePregunta(idEnq,idPreg){
             //location.reload();
             //console.log(enquesta);
             messageContainer("Success");
-            configuraEstat(0, 0);
+            configuraEstat(0, 0, 0);
             pintaPreguntes(enquesta);
         },
         dataType: "json",
@@ -274,6 +274,7 @@ var Events = {
                    success: function(data) {
                        enquesta.id = data.id;
                        carregaSeccio("Enquestes",enquesta);
+                       configuraEstat(0,0,0);
 
                        $.alert("Per a accedir a la teva pàgina d'administració, copia el següent enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta.<br><br><p align='center'><b>"+domini+"Enquestes/Enq"+enquesta.id+"/</b></p>", {
                           title:'Enquesta creada amb èxit.',
@@ -337,7 +338,7 @@ var Events = {
               data: JSON.stringify(estatEnquesta),
               success: function(data) {
                 messageContainer("Success");
-                configuraEstat(1, data.idResp);
+                configuraEstat(1, data.idResp, 0);
                 //console.log(data)
                 //window.location = "http://localhost:8080/";
                 //history.pushState({page:"Inici"}, "Inici", domini+"Inici/");
@@ -358,7 +359,7 @@ var Events = {
               },
               error: function(data) {
                 messageContainer("Fail");
-                configuraEstat(0, 0);
+                configuraEstat(0, 0,0);
               }
             });
         });
@@ -386,7 +387,7 @@ var Events = {
                 data: JSON.stringify(enquesta),
                 success: function(data) {
                   messageContainer("Success");
-                  configuraEstat(0, 0);
+                  configuraEstat(0, 0, 0);
                 },
                 error: function(data) {
                   messageContainer("Fail");
@@ -473,7 +474,7 @@ var Events = {
                       //$("#preguntaTest").addClass("template");
                       $("#divAfegirNovaResposta").empty();
                       $('#numResposta').val('1');
-                      configuraEstat(0, 0);
+                      configuraEstat(0, 0, 0);
                       pintaPreguntes(enquesta);
                       $("html, body").animate({ scrollTop: $(document).height() }, "slow");
                       //window.location = domini+"Enquestes/Enq"+enquestaId+"/";
@@ -571,9 +572,11 @@ var pintaPreguntes = function(data){
                   result += "<p class='template'>"+pregunta.id+"</p>";
                   result += "<p>Tipus: "+pregunta.tipus+"</p>";
                 result += "</div>";
-                result += "<div class='divBotoPregunta'>";
+                if(data.estat < 2){
+                  result += "<div class='divBotoPregunta'>";
                   result += "<input type='button' id='"+pregunta.id+"' name='deletePreg"+(num+1)+"' value='Elimina Pregunta'/>";
-                result += "</div>";
+                  result += "</div>";
+                }
                 result += "<div class='divContingutPregunta'>";
                   result += "<p>"+pregunta.text+"</p>";
               if(pregunta.possiblesRespostes.length > 0) {
@@ -596,19 +599,26 @@ var pintaPreguntes = function(data){
 }
 
 //Funció per a pintar l'estat de l'enquesta, cal cridar-la cada vegada que es faci una crida al server si no fem refresh.
-var configuraEstat = function(estat, id){
+var configuraEstat = function(estat, id, resp){
   $("#estatEnquesta").html("<h2 id ='estatEnq'>Estat de l'enquesta</h2>");
   if(estat == 0){
-    $("#estatEnquesta").append("<h3>En construcció</h3>");
+    $("#estatEnquesta").append("<h4>En construcció</h4>");
     $("#estatEnquesta").append("<p>L'enquesta està en estat de construcció. Pot ser modificada, i es poden afegir i treure preguntes. Per a finalitzar-la prèmer el botó de Publicar.</p>");
     $("#veureEnquesta .publicar").removeClass("template");
   }
   else if(estat == 1){
-    $("#estatEnquesta").append("<h3>Publicada</h3>");
+    $("#estatEnquesta").append("<h4>Publicada</h4>");
     $("#estatEnquesta").append("<p>L'enquesta pot ser resposta per qualsevol persona que accedeixi a l'enllaç que apareix a continuació.</p>");
-    $("#estatEnquesta").append("<div><a href='"+domini+"Respondre/Enq"+id+"' target='_blank'>"+domini+"Respondre/Enq"+id+"</a></div>");
+    $("#estatEnquesta").append("<p>Si es modifica cap de les dades de l'enquesta, aquesta tornarà a l'estat de construcció, i l'enllaç quedarà invalidat</p>");
+    $("#estatEnquesta").append("<h6>"+domini+"Respondre/Enq"+id+"</h6>");
     $("#veureEnquesta .publicar").addClass("template");
-  }  
+  } 
+  else if(estat == 2){
+    $("#estatEnquesta").append("<h4>Resposta</h4>");
+    $("#estatEnquesta").append("<p>L'enquesta ha estat resposta per alguna persona. Ja no pot tornar a ser modificada.</p>");
+    $("#estatEnquesta").append("<h6>Respostes a l'enquesta: "+resp+"</h6>");
+    $("#veureEnquesta .publicar").addClass("template");
+  } 
 }
 
 //Funció de configuració dels diversos elements de la web segons la secció en que ens trobem
@@ -623,8 +633,17 @@ var configuraSeccio = function(data){
             $("#veureTitol").val(data["titol"]);
             $("#veureDesM").val(data["inici"]);
             $("#veureFinsM").val(data["fi"]);
-            configuraEstat(data.estat, data.idResp);
+            var r = data.preguntes[0].respostes.length;
+            configuraEstat(data.estat, data.idResp, r);
             pintaPreguntes(data);
+            if(data.estat < 2){
+              $("#afegirPreguntes").removeClass("template");
+              $("#veureEnquesta .modifica").removeClass("template");
+            }
+            else{
+              $("#afegirPreguntes").addClass("template");
+              $("#veureEnquesta .modifica").addClass("template");
+            }
             break;
         case "Respondre":
             $("#veureTitolResp").text(data["titol"]);

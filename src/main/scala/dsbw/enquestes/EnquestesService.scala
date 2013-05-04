@@ -242,7 +242,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         val enquestaR = EnquestaRecord (
         	_id = enquesta._id,
         	idResp = enquesta.idResp,
-        	estat = enquesta.estat,
+        	estat = 2,
         	titol = enquesta.titol,
         	inici = enquesta.inici,
         	fi = enquesta.fi,
