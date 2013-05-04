@@ -15,13 +15,13 @@ case class Respostes(respostes:List[List[String]])
 /** Enquestes API */
 class EnquestesApi(enquestesService:EnquestesService) extends Api {
   val getEnquestaAdmin = "GET /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
-  val getEnquestaResp = "GET /api/enquestes/user([0-9]+)/enq([a-zA-z0-9]+)".r
+  val getEnquestaResp = "GET /api/enquestes/user([a-zA-z0-9]+)/enq([a-zA-z0-9]+)".r
   val putEnquestaAdmin = "PUT /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
   val postPreguntaAdmin = "POST /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
   val deletePreguntaAdmin = "DELETE /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
   val putPreguntaAdmin = "PUT /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
   val patchEnquestaAdmin = "PATCH /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
-  val respondreEnquestaUser = "POST /api/enquestes/user([0-9]+)/enq([a-zA-z0-9]+)".r
+  val respondreEnquestaUser = "POST /api/enquestes/user([a-zA-z0-9]+)/enq([a-zA-z0-9]+)".r
   def service(method: String, uri: String, parameters: Map[String, List[String]] = Map(), headers: Map[String, String] = Map(), body: Option[JSON] = None, session: HttpSession): Response = {
     try { 
       (method + " " + uri) match {

@@ -12,6 +12,7 @@ case class Enquesta(id:String, idResp:String, estat:Integer, titol: String, inic
 case class EnquestaID(id:String)
 case class Enquestes(enquestes: Set[EnquestaRecord])
 case class User (nom: String, logged: Boolean)
+case class EnquestaUser(idResp:String, idUser:String)
 
 class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository: UsersRepository) {
 
@@ -206,25 +207,38 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
     new Enquesta(enquestaNew._id.toString(),enquestaNew.idResp.toString(),enquestaNew.estat,enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.preguntes)
 	}
 
-	def respondreEnquesta(idUser: String, idEnquesta: String, respostes: Respostes){
+	def respondreEnquesta(idUser: String, idEnquesta: String, respostes: Respostes):EnquestaUser={
 		val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
         //new Enquesta(null,enquesta.idResp.toString(),enquesta.estat,enquesta.titol,enquesta.inici,enquesta.fi,enquesta.preguntes)
-        println(idUser)
+
+
+        var id_user = idUser
+        if(idUser == "0") {
+          var _idUser = new ObjectId()
+          id_user = _idUser.toString()
+        }
+
+        println(id_user)
+
         //for (r <- respostes) println(r)
         var preguntesE:List[Pregunta] = List()
         var respostesP:List[Resposta] = List()
         var trobat = false
-        respostes.respostes.foreach(r => println(r))
+
+        //respostes.respostes.foreach(r => println(r))
+
         enquesta.preguntes.foreach{p =>
         	//preguntesE = List(p) ::: preguntesE
         	respostes.respostes.foreach{r => 
         		if (p.id == r.apply(0)) {
-        			respostesP = p.respostes ::: List(new Resposta(idUser,r.apply(1)))
+        			respostesP = p.respostes ::: List(new Resposta(id_user,r.apply(1)))
         			trobat = true
         		} 
         	}
+
         	if (trobat == false) respostesP = p.respostes
         	trobat = false
+
         	var preguntaR = new Pregunta(
         		id = p.id,
         		text = p.text,
@@ -247,5 +261,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         	)
         println(enquestaR)
         enquestesRepository.save(enquestaR)
+
+        new EnquestaUser(enquestaR.idResp.toString(),id_user)
 	}
 }

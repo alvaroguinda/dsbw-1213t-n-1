@@ -28,7 +28,13 @@ var carregaSeccio = function(nomSeccio,data){
                 break;
             case "Respondre":
                 id = location.pathname.substring(1).split("/")[1].substring(3);
-                if(id != "") getEnquestaRespondre(id);
+
+                var idUser = "0";
+                if(location.pathname.split("/")[3] != null) {
+                  idUser = location.pathname.substring(1).split("/")[2].substring(4);                  
+                }
+                //console.log(idUser);
+                if(id != "") getEnquestaRespondre(id, idUser);
                 break;
             default: //si aquet path no existeix al nostre Map es que estem entrant per primer cop a la web i la url té el path en blanc o és "index.html"
                 path = "Inici";
@@ -105,11 +111,11 @@ function getEnquestaURL(id){
 }
 
 // Retorna la enquetsa amb idResp id en format JSON:
-function getEnquestaRespondre(id){
+function getEnquestaRespondre(id, idUser){
     $.ajax({
         type: "GET",
-        url: "/api/enquestes/user0/enq"+id,
-        success: function(enquesta) {
+        url: "/api/enquestes/user"+idUser+"/enq"+id,
+        success: function(enquesta) {      
             configuraSeccio(enquesta); //configurem els handlers d'aquesta secció
         },
         dataType: "json",
@@ -511,6 +517,11 @@ var Events = {
             if(isValidate) {
               enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
 
+              var idUser = "0";
+              if(location.pathname.split("/")[3] != null) {
+                idUser = location.pathname.substring(1).split("/")[2].substring(4);                  
+              }
+
               var respostes = new Array();
               $(event.target).find(".divContingutPregunta :input").each(function(index){
                 respostes[index] = [$(this).attr('id'), $(this).val()];
@@ -519,15 +530,17 @@ var Events = {
               var resposta = {
                 respostes: respostes
               }
-              console.log(resposta);
 
               $.ajax({
                   type: "POST",
-                  url: "/api/enquestes/user0/enq"+enquestaId,
+                  url: "/api/enquestes/user"+idUser+"/enq"+enquestaId,
                   contentType: "application/json",
                   data: JSON.stringify(resposta),
-                  success: function(enquesta){
+                  success: function(enquestaUser){
                       messageContainer("Success");
+                      console.log(enquestaUser)
+                      $("#enquestaURLAnonim").empty();
+                      $("#enquestaURLAnonim").append("<p>Per modificar la seva enquesta accedeix a la següent URL:</p><h6>"+domini+"Respondre/Enq"+enquestaId+"/User"+enquestaUser.idUser+"</h6>");
                   },
                   error: function(){
                       messageContainer("Fail");
@@ -686,10 +699,11 @@ var configuraSeccio = function(data){
             $("#veureDesMResp").text(data["inici"]);
             $("#veureFinsMResp").text(data["fi"]);
 
-
-
-            
-
+            var idUser = "0";
+            if(location.pathname.split("/")[3] != null) {
+              idUser = location.pathname.substring(1).split("/")[2].substring(4);                  
+            }
+            //console.log(idUser)
 
             if(data.preguntes){
                 $.each(data.preguntes, function(num,pregunta) {
@@ -704,8 +718,15 @@ var configuraSeccio = function(data){
                             result += "<p class='template'>Pregunta: "+pregunta.text+"</p>";
                         switch (pregunta.tipus){
                             case "Text":
+                                  //console.log(pregunta.respostes)
+                                  var resposteUsuari = "";
+                                  $.each(pregunta.respostes, function(numR,r) {
+                                    if(r.idEnquestat == idUser) {
+                                      resposteUsuari = r.resposta;
+                                    }
+                                  });
                                   //result += "<span><input type='text' name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'></span>";
-                                  result += "<span><textarea name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'></textarea></span>";
+                                  result += "<span><textarea name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'>"+resposteUsuari+"</textarea></span>";
                                   result += "</div>";
                                 result += "</div>";
                                 break;
@@ -737,7 +758,13 @@ var configuraSeccio = function(data){
                         return result;
                     });
                   })
+                   
+                  $("#divPreguntesResp").append("<div id='enquestaURLAnonim'></div>");
 
+                  if(idUser != "0") {
+                    $("#enquestaURLAnonim").append("<p>Per modificar la seva enquesta accedeix a la següent URL:</p><h6>"+domini+"Respondre/Enq"+data.idResp+"/User"+idUser+"</h6>")
+                  }
+                   
                    $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='enviarResp' name='enviarResp' value='Enviar Respostes'/></div>");
                    //Events.botoEnviarResposta();
                 }
