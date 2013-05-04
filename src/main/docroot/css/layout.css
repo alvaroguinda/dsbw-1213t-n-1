@@ -412,6 +412,28 @@ div.inputdata input[type="radio"]{
     margin-top: -20px;
 }
 
+#veureRespostes div{
+    margin-left: 5px;
+    margin-right: 10px;   
+    line-height:20px;
+}
+
+#veureRespostes p{
+    display:inline;
+    padding:5px;
+}
+
+#veureRespostes p.template{
+    display:none;
+}
+
+#veureRespostes input[type="button"]{
+    float:right;
+    margin-top: -10px;
+}
+
+
+
 .divTitolFilaPregunta {
     /*border-bottom: 1px solid #DCDCDC;*/
 

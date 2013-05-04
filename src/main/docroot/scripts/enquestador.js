@@ -364,6 +364,19 @@ var Events = {
             });
         });
 
+        $("#veureEnquesta .veureR").click(function(e) {
+          e.preventDefault();
+          if($("#veureEnquesta .veureR").val() == "Veure Respostes"){
+            $("#veureRespostes").removeClass("template");
+            $("#veureEnquesta .veureR").val("Amagar Respostes");
+          }
+          else{
+            $("#veureRespostes").addClass("template");
+            $("#veureEnquesta .veureR").val("Veure Respostes");
+          }
+          
+        });
+
         $("#formVeureEnquesta").submit(function(e) {
             e.preventDefault();
 
@@ -605,6 +618,7 @@ var configuraEstat = function(estat, id, resp){
     $("#estatEnquesta").append("<h4>En construcció</h4>");
     $("#estatEnquesta").append("<p>L'enquesta està en estat de construcció. Pot ser modificada, i es poden afegir i treure preguntes. Per a finalitzar-la prèmer el botó de Publicar.</p>");
     $("#veureEnquesta .publicar").removeClass("template");
+    $("#veureEnquesta .veureR").addClass("template");
   }
   else if(estat == 1){
     $("#estatEnquesta").append("<h4>Publicada</h4>");
@@ -612,13 +626,37 @@ var configuraEstat = function(estat, id, resp){
     $("#estatEnquesta").append("<p>Si es modifica cap de les dades de l'enquesta, aquesta tornarà a l'estat de construcció, i l'enllaç quedarà invalidat</p>");
     $("#estatEnquesta").append("<h6>"+domini+"Respondre/Enq"+id+"</h6>");
     $("#veureEnquesta .publicar").addClass("template");
+    $("#veureEnquesta .veureR").addClass("template");
   } 
   else if(estat == 2){
     $("#estatEnquesta").append("<h4>Resposta</h4>");
     $("#estatEnquesta").append("<p>L'enquesta ha estat resposta per alguna persona. Ja no pot tornar a ser modificada.</p>");
     $("#estatEnquesta").append("<h6>Respostes a l'enquesta: "+resp+"</h6>");
     $("#veureEnquesta .publicar").addClass("template");
+    $("#veureEnquesta .veureR").removeClass("template");
   } 
+}
+
+var posaEnquestats = function(data){
+  $("#veureRespostes").empty();
+  $("#veureRespostes").append("<h2>Persones que han respost l'enquesta</h2>");
+    $.each(data.preguntes[0].respostes, function(num,resposta) {
+      $("#veureRespostes").append(function(index,html){
+        var result = "<div class='divFilaPregunta'>";
+        result += "<div class='divTitolFilaPregunta'>";
+        result += "<p>Enquestat "+(num+1)+"</p>";
+        result += "<p class='template'>"+resposta.idEnquestat+"</p>";
+        result += "</div>";
+        result += "<div class='divBotoEnquestat'>";
+        result += "<input type='button' id='"+resposta.idEnquestat+"' name='veureEnquestat"+(num+1)+"' value='Veure'/>";
+        result += "</div>";
+        result += "<div class='divContingutPregunta'>";
+        if(resposta.idEnquestat == "0") result += "<p>Anònim</p>";
+        result += "</div>";
+        result += "</div>";
+        return result;
+      });
+    });
 }
 
 //Funció de configuració dels diversos elements de la web segons la secció en que ens trobem
@@ -643,6 +681,7 @@ var configuraSeccio = function(data){
             else{
               $("#afegirPreguntes").addClass("template");
               $("#veureEnquesta .modifica").addClass("template");
+              posaEnquestats(data);
             }
             break;
         case "Respondre":
