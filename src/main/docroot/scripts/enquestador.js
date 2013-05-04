@@ -660,6 +660,8 @@ var configuraEstat = function(estat, id, resp){
 }
 
 var posaEnquestats = function(data){
+
+
   $("#veureRespostes").empty();
   $("#veureRespostes").append("<h2>Persones que han respost l'enquesta</h2>");
     $.each(data.preguntes[0].respostes, function(num,resposta) {
@@ -670,12 +672,13 @@ var posaEnquestats = function(data){
         result += "<p class='template'>"+resposta.idEnquestat+"</p>";
         result += "</div>";
         result += "<div class='divBotoEnquestat'>";
-        result += "<input type='button' id='"+resposta.idEnquestat+"' name='veureEnquestat"+(num+1)+"' value='Veure'/>";
+        result += "<input type='button' id='veureEnquestat"+resposta.idEnquestat+"' name='veureEnquestat"+(num+1)+"' value='Veure'/>";
         result += "</div>";
         result += "<div class='divContingutPregunta'>";
-        if(resposta.idEnquestat == "0") result += "<p>Anònim</p>";
+        result += "<p>Anònim</p>";
         result += "</div>";
         result += "</div>";
+        result += "<div class='separadorBlanc'></div></div>";
         return result;
       });
     });
