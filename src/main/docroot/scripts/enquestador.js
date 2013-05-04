@@ -272,20 +272,22 @@ var Events = {
                    contentType: "application/json",
                    data: JSON.stringify(enquesta),
                    success: function(data) {
-                       enquesta.id = data.id;
-                       carregaSeccio("Enquestes",enquesta);
-                       configuraEstat(0,0,0);
+                      enquesta.id = data.id; 
 
-                       $.alert("Per a accedir a la teva pàgina d'administració, copia el següent enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta.<br><br><p align='center'><b>"+domini+"Enquestes/Enq"+enquesta.id+"/</b></p>", {
-                          title:'Enquesta creada amb èxit.',
-                          icon:'',
-                          buttons:[
-                              {
-                                title:'Tanca',
-                                callback:function() { $(this).dialog("close");}
-                            }
-                          ]
+                      $.alert("Per a accedir a la teva pàgina d'administració, copia el següent enllaç i no el perdis, dons és la unica manera d'accedir a l'administració de l'enquesta.<br><br><p align='center'><b>"+domini+"Enquestes/Enq"+enquesta.id+"/</b></p>", {
+                        title:'Enquesta creada amb èxit.',
+                        icon:'',
+                        buttons:[
+                            {
+                              title:'Tanca',
+                              callback:function() { $(this).dialog("close");}
+                          }
+                        ]
                       });
+
+                      carregaSeccio("Enquestes",enquesta);
+                      configuraEstat(0,0,0);
+
                    },
                    error: function(data) {
                       $.alert("No s'ha pogut crear l'enquesta.");
@@ -688,49 +690,50 @@ var configuraSeccio = function(data){
             $("#veureTitolResp").text(data["titol"]);
             $("#veureDesMResp").text(data["inici"]);
             $("#veureFinsMResp").text(data["fi"]);
+
+
+
+            
+
+
             if(data.preguntes){
                 $.each(data.preguntes, function(num,pregunta) {
                     $("#divPreguntesResp").append(function(index,html){
                         console.log(pregunta);
                           var result = "<div class='divFilaPregunta'>";
                           result += "<div class='divTitolFilaPregunta'>";
-                            result += "<p>Pregunta "+(num+1)+"</p>";
-                            result += "<p>Tipus: "+pregunta.tipus+"</p>";
+                            result += "<p>"+(num+1)+". "+pregunta.text+"</p>";
+                            result += "<p class='template'>Tipus: "+pregunta.tipus+"</p>";
                           result += "</div>";
                           result += "<div class='divContingutPregunta'>";
-                            result += "<p>Pregunta: "+pregunta.text+"</p>";
+                            result += "<p class='template'>Pregunta: "+pregunta.text+"</p>";
                         switch (pregunta.tipus){
                             case "Text":
-                                    result += "<span><input type='text' name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'></span>";
+                                  //result += "<span><input type='text' name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'></span>";
+                                  result += "<span><textarea name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'></textarea></span>";
                                   result += "</div>";
                                 result += "</div>";
                                 break;
                             case "Test":
                                 if(pregunta.possiblesRespostes.length > 0) {
-                                    result += "<br><p><b>Respostes</b></p>";
-
-                                      result += "<div class='inputdata'>";
+                                  result += "<div class='inputdata'>";
                                     $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
                                         result += "<span><input name='"+pregunta.text+"' type='radio' value='"+resposta+"' id='"+pregunta.id+"'>"+resposta+"</span>";
-
                                     });
-                                    result += "</div>";
+                                  result += "<div class='separadorBlanc'></div></div>";
                                 }
-                                  result += "</div>";
+                                result += "</div>";
                                 result += "</div>";
                                 break;
                             case "Multi":
                                 if(pregunta.possiblesRespostes.length > 0) {
-                                    result += "<br><p><b>Respostes</b></p>";
                                     result += "<div class='inputdata'>";
                                     $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                        
                                       
-                                      result += "<span><input name='"+pregunta.text+indexResposta+"' type='checkbox' value='"+resposta+"' id='"+pregunta.id+"'>"+resposta+"</span>";
-
-                                    
+                                      result += "<span><input type='checkbox' name='"+pregunta.text+indexResposta+"' id='multi"+indexResposta+"' value='"+resposta+"' />"+resposta+"</span>"
+                                      //result += "<span><input name='"+pregunta.text+indexResposta+"' type='checkbox' value='"+resposta+"' id='"+pregunta.id+"'>"+resposta+"</span>";                                    
                                     });
-                                    result += "</div>";
+                                    result += "<div class='separadorBlanc'></div></div>";
                                 }
                                   result += "</div>";
                                 result += "</div>";
@@ -740,7 +743,7 @@ var configuraSeccio = function(data){
                     });
                   })
 
-                   $("#divPreguntesResp").append("<input type='submit' class='enviarResp' id='enviarResp' name='enviarResp' value='Enviar Resposta'/>");
+                   $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='enviarResp' name='enviarResp' value='Enviar Respostes'/></div>");
                    Events.botoEnviarResposta();
                 }
             break;

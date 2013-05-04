@@ -106,6 +106,10 @@ ul {
     border-bottom: 1px solid #DCDCDC;
 }
 
+.separadorBlanc {
+    margin-bottom: 20px;
+}
+
 #afegirPreguntes h4 {
     width:30%;
     text-align:right;
@@ -138,6 +142,11 @@ p.error{
 
 input.error {
     border-color: #FF9999;
+    background-color: #FF9999;
+}
+
+textarea.error {
+    border-color: gray;
     background-color: #FF9999;
 }
 
@@ -184,21 +193,21 @@ body {
 }
 
 header, menu.main, section{
-  background: #ffffff;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  border: 1px solid #EEE;
-  padding:10px;
+    background: #ffffff;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    border: 1px solid #EEE;
+    padding:10px;
 }
 
 header {
-position: relative;
-padding: 10px 10px 0;
-margin: 15px auto 0 ;
-border-radius: 5px 5px 0 0;
-border: 1px solid #EEE;
-border-bottom: 0;
-z-index: 0;
+    position: relative;
+    padding: 10px 10px 0;
+    margin: 15px auto 0 ;
+    border-radius: 5px 5px 0 0;
+    border: 1px solid #EEE;
+    border-bottom: 0;
+    z-index: 0;
 }
 
 header:after, section:after, #content ul li:after {
@@ -335,6 +344,28 @@ menu.main a:hover{
     padding: 0 5px;
 }
 
+.taula {
+    width:70%; 
+    margin-left:30%; 
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.taula td{
+    padding-bottom: 10px;
+}
+
+.tdEsquerra {
+    width: 20%;
+    color: gray;
+    text-align: right;    
+}
+
+.tdDreta {
+    padding-left: 15px;
+}
+
+
 .divFormulari {
     margin-bottom: 15px;
 }
@@ -377,10 +408,16 @@ div.inputdata input[type="radio"]{
     margin-bottom:5.5px;
 }
 
+div.inputdata input[type="checkbox"]{
+    width:5%;
+    margin-top:5.5px;
+    margin-bottom:5.5px;
+}
+
 .boto {
     clear: both;
     width:100%;
-    text-align:center;
+    text-align:center !important;
     margin-top:25px;
 }
 
@@ -436,8 +473,9 @@ div.inputdata input[type="radio"]{
 
 .divTitolFilaPregunta {
     /*border-bottom: 1px solid #DCDCDC;*/
-
+    margin-left: 15px;
     font-weight: bold;
+    padding-top: 5px;
 }
 
 .divContingutPregunta {
@@ -445,6 +483,14 @@ div.inputdata input[type="radio"]{
     text-align: justify;
     margin-left: 5% !important;
     margin-right: 20% !important;
+}
+
+.divContingutPregunta textarea {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width:100%;
+    height:100px;
+    resize: none;
 }
 
 .filaEven {

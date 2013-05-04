@@ -285,20 +285,22 @@
             <div id = "respondEnq" class="template">
                 <form id = "formRespEnq" action="#" class="formRespEnq">
                     <h2>Informacio Enquesta</h2>
-                    <div class="inputdata">
-                            <label>Títol de l'enquesta: </label>
-                            <label for="veureTitolResp" id="veureTitolResp">Títol</label><br></br>
-                        </div>
-                     <div class="inputdata">
-                            <label>Data Inici: </label>
-                            <label for="veureDesMResp" id="veureDesMResp">Títol</label>
-                            <br></br>
-                        </div>
-                     <div class="inputdata">
-                            <label>Data de tancament: </label>
-                            <label for="veureFinsMResp" id="veureFinsMResp">Títol</label><br></br>
-                            <span></span>
-                        </div>
+                    
+                    <table class="taula">
+                        <tr>
+                            <td class="tdEsquerra">Títol</td>
+                            <td class="tdDreta" id="veureTitolResp"></td>
+                        </tr>
+                        <tr>
+                            <td class="tdEsquerra">Desde</td>
+                            <td class="tdDreta" id="veureDesMResp"></td>
+                        </tr>
+                        <tr>
+                            <td class="tdEsquerra">Fins a</td>
+                            <td class="tdDreta" id="veureFinsMResp"></td>
+                        </tr>
+                    </table>
+
                     <h2>Preguntes Enquesta</h2>
                     <div class="divFormulariResp" id="divPreguntesResp">
                      
