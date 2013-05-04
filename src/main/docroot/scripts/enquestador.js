@@ -503,7 +503,7 @@ var Events = {
           });
 
           /** Respondre Enquesta **/
-          $("#formRespEnq").submit(function(){
+          $("#formRespEnq").submit(function(event){
             event.preventDefault();
 
             var isValidate=$("#formRespEnq").valid();
@@ -511,18 +511,13 @@ var Events = {
             if(isValidate) {
               enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
 
-              var respostesT = new Array();
-              $("#divPreguntesResp input[type=text]").each(function(index){
-                respostesT[index] = [$(this).attr('id'), $(this).val()];
-              });
-
-              var respostesR = new Array();
-              $("#divPreguntesResp input[type='radio']:checked").each(function(index){
-                respostesR[index] = [$(this).attr('id'), $(this).val()]
+              var respostes = new Array();
+              $(event.target).find(".divContingutPregunta :input").each(function(index){
+                respostes[index] = [$(this).attr('id'), $(this).val()];
               });
 
               var resposta = {
-                respostes: respostesT.concat(respostesR)
+                respostes: respostes
               }
               console.log(resposta);
 
@@ -744,7 +739,7 @@ var configuraSeccio = function(data){
                   })
 
                    $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='enviarResp' name='enviarResp' value='Enviar Respostes'/></div>");
-                   Events.botoEnviarResposta();
+                   //Events.botoEnviarResposta();
                 }
             break;
         case "LlistatEnquestes":
