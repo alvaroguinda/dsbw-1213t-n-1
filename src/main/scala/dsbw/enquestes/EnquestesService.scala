@@ -120,6 +120,8 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 		if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
 
 		val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+
+    if(enquestaOrigin.estat > 1) throw new HttpException(400, "La enquesta ja no pot ser modificada")
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
 			idResp = null,

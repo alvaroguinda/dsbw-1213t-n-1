@@ -396,6 +396,7 @@ var Events = {
             $("#veureEnquesta .veureR").val("Amagar Respostes");
           }
           else{
+            $("#veureRespostesUser").addClass("template");
             $("#veureRespostes").addClass("template");
             $("#veureEnquesta .veureR").val("Veure Respostes");
           }
@@ -570,6 +571,7 @@ var Events = {
                       console.log(enquestaUser)
                       $("#enquestaURLAnonim").empty();
                       $("#enquestaURLAnonim").append("<p>Per modificar la seva enquesta accedeix a la següent URL:</p><h6>"+domini+"Respondre/Enq"+enquestaId+"/User"+enquestaUser.idUser+"</h6>");
+                      carregaSeccio("Inici");
                   },
                   error: function(){
                       messageContainer("Fail");
@@ -681,6 +683,7 @@ var configuraEstat = function(estat, id, resp){
   else if(estat == 2){
     $("#estatEnquesta").append("<h4>Resposta</h4>");
     $("#estatEnquesta").append("<p>L'enquesta ha estat resposta per alguna persona. Ja no pot tornar a ser modificada.</p>");
+    $("#estatEnquesta").append("<p>L'enquesta pot ser resposta per qualsevol persona que accedeixi a l'enllaç que apareix a continuació.</p>");
     $("#estatEnquesta").append("<h6>"+domini+"Respondre/Enq"+id+"</h6>");
     $("#estatEnquesta").append("<h6>Respostes a l'enquesta: "+resp+"</h6>");
     $("#veureEnquesta .publicar").addClass("template");
@@ -750,6 +753,8 @@ var configuraSeccio = function(data){
             if(data.estat > 1) r = data.preguntes[0].respostes.length;
             configuraEstat(data.estat, data.idResp, r);
             pintaPreguntes(data);
+            $("#veureRespostesUser").addClass("template");
+            $("#veureRespostes").addClass("template");
             if(data.estat < 2){
               $("#afegirPreguntes").removeClass("template");
               $("#veureEnquesta .modifica").removeClass("template");
@@ -812,7 +817,7 @@ var configuraSeccio = function(data){
                                         if(resposta == respostaUsuariTest) {
                                           marcada = "checked='true'";
                                         }
-                                        result += "<span><input name='"+pregunta.text+"' type='radio' value='"+resposta+"' id='test"+pregunta.id+indexResposta+"' "+marcada+">"+resposta+"</span>";
+                                        result += "<span><input name='"+pregunta.text+"' type='radio' value='"+resposta+"' id='test"+pregunta.id+indexResposta+"' "+marcada+" required>"+resposta+"</span>";
                                     });
                                   result += "<div class='separadorBlanc'></div></div>";
                                 }
