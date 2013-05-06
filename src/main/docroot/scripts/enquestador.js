@@ -568,13 +568,21 @@ var Events = {
                   data: JSON.stringify(resposta),
                   success: function(enquestaUser){
                       messageContainer("Success");
-                      console.log(enquestaUser)
-                      $("#enquestaURLAnonim").empty();
-                      $("#enquestaURLAnonim").append("<p>Per modificar la seva enquesta accedeix a la següent URL:</p><h6>"+domini+"Respondre/Enq"+enquestaId+"/User"+enquestaUser.idUser+"</h6>");
-                      carregaSeccio("Inici");
+                      $("#respondEnq").empty();
+                      resultat="<div class='missatgeCentral'>";
+                      resultat+="<p>Les respostes s'han enviat correctament. Pot consultar o modificar la seva enquesta accedint al següent enllaç.</p>";
+                      resultat+="<a href='"+domini+"Respondre/Enq"+enquestaId+"/User"+enquestaUser.idUser+"'>"+domini+"Respondre/Enq"+enquestaId+"/User"+enquestaUser.idUser+"</a>";
+                      resultat+="</div>";
+                      $("#respondEnq").append(resultat);
                   },
                   error: function(){
                       messageContainer("Fail");
+                      $("#respondEnq").empty();
+                      resultat="<div class='missatgeCentral'>";
+                      resultat+="<p>S'ha produït un error al enviar les respostes. Torni a provar-ho de nou, disculpi les molèsties.</p>";
+                      resultat+="<a href='"+domini+"Respondre/Enq"+enquestaId+"'>"+domini+"Respondre/Enq"+enquestaId+"</a>";
+                      resultat+="</div>";
+                      $("#respondEnq").append(resultat);
                   }
               });
             }
@@ -853,12 +861,6 @@ var configuraSeccio = function(data){
                     });
                   })
                    
-                  $("#divPreguntesResp").append("<div id='enquestaURLAnonim'></div>");
-
-                  if(idUser != "0") {
-                    $("#enquestaURLAnonim").append("<p>Per modificar la seva enquesta accedeix a la següent URL:</p><h6>"+domini+"Respondre/Enq"+data.idResp+"/User"+idUser+"</h6>")
-                  }
-                   
                    $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='enviarResp' name='enviarResp' value='Enviar Respostes'/></div>");
                    //Events.botoEnviarResposta();
                 }
@@ -877,6 +879,7 @@ var configuraSeccio = function(data){
                 result += "<p><b>Data Fi:</b> "+enquesta.fi+"</p>";
                 $.each(enquesta.preguntes, function(indexResposta,pregunta){
                     result += "<div class='preguntas'>";
+                    result += "<h3>"+pregunta.text+"<p class='tipus'>Num de respostes: "+pregunta.respostes.length+"</p></h3>";
                     result += "<h3 onhover='$(#"+indexResposta+").removeClass('template')'>"+pregunta.text+"<p class='tipus'>Num de respostes: "+pregunta.respostes.length+"</p></h3>";
                     result += "<div id='"+indexResposta+"' class='template'>"
                     $.each(pregunta.respostes, function(indexResposta, resposta) {

@@ -571,3 +571,15 @@ div.inputdata input[type="checkbox"]{
 .correctPass {
     border: 2px solid green;
 }
+
+.missatgeCentral {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 25px;
+    margin-right: 25px;
+    text-align: center;
+}
+
+.missatgeCentral p{
+    margin-bottom: 25px;
+}
