@@ -551,3 +551,15 @@ div.inputdata input[type="checkbox"]{
     margin-left: 25px;
     margin-top: 20px;
 }
+
+.enquesta {
+    display: block;
+}
+
+.estat {
+    float: right;
+}
+
+.tipus {
+    float: right;
+}

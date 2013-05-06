@@ -863,20 +863,24 @@ var configuraSeccio = function(data){
                 console.log(enquesta);
                 result =  "<div class='enquesta'>";
                 result += "<h2>"+enquesta.titol+"</h2>";
+                if (enquesta.estat == 0) estat = "En construcció";
+                else if (enquesta.estat == 1) estat = "Publicada";
+                else if (enquesta.estat == 2) estat = "Resposta";
+                result += "<b><p class='estat'>"+estat+"</p></b>";
                 result += "<p><b>Data Inici:</b> "+enquesta.inici+"</p>";
                 result += "<p><b>Data Fi:</b> "+enquesta.fi+"</p>";
                 $.each(enquesta.preguntes, function(indexResposta,pregunta){
                     result += "<div class='preguntas'>";
-                    result += "<h3>"+pregunta.text+"</h3>";
+                    result += "<h3>"+pregunta.text+"<p class='tipus'>Num de respostes: "+pregunta.respostes.length+"</p></h3>";
                     if (pregunta.tipus == "Text"){
-                        result += "<textarea cols='90' rows='5'></textarea>"
+                        //result += "<textarea cols='90' rows='5'></textarea>"
                     } else if (pregunta.tipus == "Test") {
                         $.each(pregunta.possiblesRespostes, function(indexResposta,resposta){
-                            result += "<input type='radio'>"+resposta+"<br/>"
+                            //result += "<input type='radio'>"+resposta+"<br/>"
                         });
                     } else if (pregunta.tipus == "Multi") {
                         $.each(pregunta.possiblesRespostes, function(indexResposta,resposta){
-                            result += "<input type='checkbox'>"+resposta+"<br/>"
+                            //result += "<input type='checkbox'>"+resposta+"<br/>"
                         });
                     }
                     result += "</div>";
