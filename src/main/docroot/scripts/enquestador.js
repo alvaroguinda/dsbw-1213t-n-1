@@ -285,7 +285,8 @@ var Events = {
                var enquesta = {
                    titol: $("#titol").val(),
                    inici: $("#dataInici").val(),
-                   fi: $("#dataFi").val()
+                   fi: $("#dataFi").val(),
+                   estat: 0
                };
 
                $.ajax({
@@ -744,7 +745,8 @@ var configuraSeccio = function(data){
             $("#veureTitol").val(data["titol"]);
             $("#veureDesM").val(data["inici"]);
             $("#veureFinsM").val(data["fi"]);
-            var r = data.preguntes[0].respostes.length;
+            var r = 0;
+            if(data.estat > 1) r = data.preguntes[0].respostes.length;
             configuraEstat(data.estat, data.idResp, r);
             pintaPreguntes(data);
             if(data.estat < 2){
