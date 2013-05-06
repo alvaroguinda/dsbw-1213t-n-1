@@ -866,12 +866,15 @@ var configuraSeccio = function(data){
                 if (enquesta.estat == 0) estat = "En construcció";
                 else if (enquesta.estat == 1) estat = "Publicada";
                 else if (enquesta.estat == 2) estat = "Resposta";
-                result += "<b><p class='estat'>"+estat+"</p></b>";
+                result += "<b><p class='estat'>Estat de l'enquesta: </b>"+estat+"</p>";
                 result += "<p><b>Data Inici:</b> "+enquesta.inici+"</p>";
                 result += "<p><b>Data Fi:</b> "+enquesta.fi+"</p>";
                 $.each(enquesta.preguntes, function(indexResposta,pregunta){
                     result += "<div class='preguntas'>";
                     result += "<h3>"+pregunta.text+"<p class='tipus'>Num de respostes: "+pregunta.respostes.length+"</p></h3>";
+                    $.each(pregunta.respostes, function(indexResposta, resposta) {
+                       result += "<p>"+resposta.resposta+"</p>";
+                    });
                     if (pregunta.tipus == "Text"){
                         //result += "<textarea cols='90' rows='5'></textarea>"
                     } else if (pregunta.tipus == "Test") {
