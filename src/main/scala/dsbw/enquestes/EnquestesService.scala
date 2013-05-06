@@ -226,21 +226,17 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         //for (r <- respostes) println(r)
         var preguntesE:List[Pregunta] = List()
         var respostesP:List[Resposta] = List()
-        var trobat = false
 
         //respostes.respostes.foreach(r => println(r))
 
         enquesta.preguntes.foreach{p =>
         	//preguntesE = List(p) ::: preguntesE
-        	respostes.respostes.foreach{r => 
+        	respostesP = p.respostes
+          respostes.respostes.foreach{r => 
         		if (p.id == r.apply(0)) {
-        			respostesP = p.respostes ::: List(new Resposta(id_user,r.apply(1)))
-        			trobat = true
+        			respostesP = respostesP ::: List(new Resposta(id_user,r.apply(1)))
         		} 
         	}
-
-        	if (trobat == false) respostesP = p.respostes
-        	trobat = false
 
         	var preguntaR = new Pregunta(
         		id = p.id,

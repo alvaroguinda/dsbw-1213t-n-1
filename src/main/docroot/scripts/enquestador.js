@@ -681,6 +681,7 @@ var configuraEstat = function(estat, id, resp){
   else if(estat == 2){
     $("#estatEnquesta").append("<h4>Resposta</h4>");
     $("#estatEnquesta").append("<p>L'enquesta ha estat resposta per alguna persona. Ja no pot tornar a ser modificada.</p>");
+    $("#estatEnquesta").append("<h6>"+domini+"Respondre/Enq"+id+"</h6>");
     $("#estatEnquesta").append("<h6>Respostes a l'enquesta: "+resp+"</h6>");
     $("#veureEnquesta .publicar").addClass("template");
     $("#veureEnquesta .veureR").removeClass("template");
