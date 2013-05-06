@@ -101,6 +101,7 @@ function getEnquestaURL(id){
         type: "GET",
         url: "/api/enquestes/admin0/enq"+id,
         success: function(enquesta) {
+           // alert(enquesta);
             configuraSeccio(enquesta); //configurem els handlers d'aquesta secció
         },
         dataType: "json",
@@ -141,6 +142,21 @@ function deletePregunta(idEnq,idPreg){
         error: function() {
             messageContainer("Fail");
             //console.log("Error!");
+        }
+    });
+}
+
+function veureRespostes(idEnq,idUser){
+   $.ajax({
+        type: "GET",
+        url: "/api/enquestes/user"+idUser+"/enq"+idEnq+"/respostes",
+        success: function(enquesta) {      
+            posaRespostesUser(enquesta);
+            //configuraSeccio(enquesta); //configurem els handlers d'aquesta secció
+        },
+        dataType: "json",
+        error: function(enquesta) {
+            console.log("Error!");
         }
     });
 }
@@ -571,6 +587,17 @@ var Events = {
             });
         });
    },
+   botonsVeureRespostes: function(){
+        var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
+        var botonsVeure = $("#veureRespostes input");
+        $.each(botonsVeure, function(num,boto) {
+            $(boto).click(function(event){
+                //alert(boto.id);
+                var idRe = boto.id.substring(14);
+                veureRespostes(idEnq,idRe);
+            });
+        });
+   },
    botonsDeleteRespostes: function(num){
         /*
         var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
@@ -661,7 +688,6 @@ var configuraEstat = function(estat, id, resp){
 
 var posaEnquestats = function(data){
 
-
   $("#veureRespostes").empty();
   $("#veureRespostes").append("<h2>Persones que han respost l'enquesta</h2>");
     $.each(data.preguntes[0].respostes, function(num,resposta) {
@@ -676,6 +702,28 @@ var posaEnquestats = function(data){
         result += "</div>";
         result += "<div class='divContingutPregunta'>";
         result += "<p>Anònim</p>";
+        result += "</div>";
+        result += "</div>";
+        result += "<div class='separadorBlanc'></div></div>";
+        return result;
+      });
+    });
+    Events.botonsVeureRespostes();
+}
+
+var posaRespostesUser = function(data){
+
+  $("#veureRespostesUser").empty();
+  $("#veureRespostesUser").removeClass("template");
+  $("#veureRespostesUser").append("<h2>Respostes de l'usuari</h2>");
+    $.each(data.respostes, function(num,resposta) {
+      $("#veureRespostesUser").append(function(index,html){
+        var result = "<div class='divFilaPregunta'>";
+        result += "<div class='divTitolFilaPregunta'>";
+        result += "<p>Pregunta "+(num+1)+" : </p>";
+        result += "<p>"+resposta.pregunta+"</p>";
+        result += "<div class='divContingutPregunta'>";
+        result += "<p>Respostes: "+resposta.respostes+"</p>";
         result += "</div>";
         result += "</div>";
         result += "<div class='separadorBlanc'></div></div>";

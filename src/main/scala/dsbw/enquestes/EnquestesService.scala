@@ -13,6 +13,8 @@ case class EnquestaID(id:String)
 case class Enquestes(enquestes: Set[EnquestaRecord])
 case class User (nom: String, logged: Boolean)
 case class EnquestaUser(idResp:String, idUser:String)
+case class RespostaPregunta(pregunta:String, respostes:List[String])
+case class RespostaUser(respostes:List[RespostaPregunta])
 
 class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository: UsersRepository) {
 
@@ -265,4 +267,29 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 
         new EnquestaUser(enquestaR.idResp.toString(),id_user)
 	}
+
+	def respostesUser(idUser: String, idEnquesta: String):RespostaUser={
+		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+        var respostes1:List[RespostaPregunta] = List()
+        enquesta.preguntes.foreach{p =>
+        	//preguntesE = List(p) ::: preguntesE
+        	var resposta1:List[String] = List()
+        	p.respostes.foreach{r => 
+        		if (r.idEnquestat == idUser) {
+        			resposta1 = resposta1 ::: List(r.resposta)
+        		} 
+        	}
+        	val respostaR1 = RespostaPregunta(
+        		pregunta = p.text,
+        		respostes = resposta1
+        	)
+        	respostes1 = respostes1 ::: List(respostaR1)
+        }
+//case class EnquestaRecord(_id:ObjectId = new ObjectId(), idResp: ObjectId= new ObjectId(),estat:Integer,titol:String, inici:String, fi:String, preguntes:List[Pregunta])
+//case class Pregunta(id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[Resposta])
+        
+        
+        new RespostaUser(respostes1)
+	}
+	
 }
