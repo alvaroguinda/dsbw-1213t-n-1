@@ -11,7 +11,6 @@
         "Ago", "Set", "Oct", "Nov", "Dec"]
 });*/
 
-
 //Inicialitzem l'api del calendari
 var initDatePicker = function() {
 
@@ -123,6 +122,7 @@ var initLogin = (function() {
                 $("#forgot").addClass("template");
                 $("#navigation > div").addClass("privAdmin");
                 $("#navigation li.admin").removeClass("template");
+                $("#lRegistre").addClass("template");
                 $("#spanLogin").html(authUser.nom);
                 console.log("Usuari Autenticat");
             }else{
@@ -141,7 +141,7 @@ var initLogin = (function() {
     form.mouseup(function() {
         return false;
     });
-    form.submit(function(e){
+    $("#loginForm").submit(function(e){
         e.preventDefault();
         if($("#login").hasClass("logout")){
             $.ajax({
@@ -159,7 +159,9 @@ var initLogin = (function() {
                         $("#forgot").removeClass("template");
                         $("#navigation > div").removeClass("privAdmin");
                         $("#navigation li.admin").addClass("template");
-                        $("#spanLogin").html("Login")
+                        $("#lRegistre").removeClass("template");
+                        $("#spanLogin").html("Login");
+                        window.location="/Inici";
                         console.log("Logout OK");
                     }else{
                         console.log("Logout Failed");
@@ -189,6 +191,7 @@ var initLogin = (function() {
                         $("#forgot").addClass("template");
                         $("#navigation > div").addClass("privAdmin");
                         $("#navigation li.admin").removeClass("template");
+                        $("#lRegistre").addClass("template");
                         $("#spanLogin").html(email)
                         console.log("Login OK");
                     }else{
@@ -217,3 +220,37 @@ var initLogin = (function() {
     });
 
 });
+
+function checkpass() {
+    if ($("#passReg1").val() != $("#passReg2").val() || $("#passReg1").val() == "" || $("#passReg2").val() == "")
+    {
+        $("#passReg1").addClass('errorPass')
+        $("#passReg2").addClass('errorPass')
+        $("#passReg1").removeClass('correctPass')
+        $("#passReg2").removeClass('correctPass')
+        return false;
+    }
+    else {
+        $("#passReg1").addClass('correctPass')
+        $("#passReg2").addClass('correctPass')
+        $("#passReg1").removeClass('errorPass')
+        $("#passReg2").removeClass('errorPass')
+        return true;
+    }
+};
+
+$(document).ready( function() {
+   $("#formReg").submit( function () {
+           if (checkpass()) {
+               console.log("pass correct")
+               return true;
+             }
+             console.log("error no pass correct")
+             return false;
+      });
+});
+
+/*$("#formReg").submit(function() {
+    alert("heheheheheh")
+
+});*/

@@ -563,3 +563,11 @@ div.inputdata input[type="checkbox"]{
 .tipus {
     float: right;
 }
+
+.errorPass {
+    border: 2px solid red;
+}
+
+.correctPass {
+    border: 2px solid green;
+}
