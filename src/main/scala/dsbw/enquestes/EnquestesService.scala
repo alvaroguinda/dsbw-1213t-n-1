@@ -141,6 +141,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 		if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
 	//	if(preguntes.respostes == null) throw new HttpException(400, "El tipus ha de ser Text,Test o Multi")
 		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+    if(enquesta.estat > 1) throw new HttpException(400, "La enquesta ja no pot ser modificada")
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
 			idResp = null,
@@ -161,6 +162,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 		if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
 		if(idPregunta == "")  throw new HttpException(400, "El ID de la pregunta no pot estar en blanc")
 		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+    if(enquesta.estat > 1) throw new HttpException(400, "La enquesta ja no pot ser modificada")
 		val preguntesn = enquesta.preguntes.filter(_.id != idPregunta)
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
