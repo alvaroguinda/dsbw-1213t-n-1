@@ -95,6 +95,7 @@ function getUrlVars(){
     return vars;
 }
 
+
 // Retorna la enquesta amb ID id en format JSON:
 function getEnquestaURL(id){
     $.ajax({
@@ -128,22 +129,38 @@ function getEnquestaRespondre(id, idUser){
 
 // Retorna la enquesta amb ID id en format JSON:
 function deletePregunta(idEnq,idPreg){
-    $.ajax({
-        type: "DELETE",
-        url: "/api/enquestes/admin0/enq"+idEnq+"/preg"+idPreg,
-        success: function(enquesta) {
-            //location.reload();
-            //console.log(enquesta);
-            messageContainer("Success");
-            configuraEstat(0, 0, 0);
-            pintaPreguntes(enquesta);
-        },
-        dataType: "json",
-        error: function() {
-            messageContainer("Fail");
-            //console.log("Error!");
-        }
-    });
+   $.alert("Estas segur que vols eliminar aquesta pregunta?", {
+    title:'Eliminar pregunta.',
+    icon:'',
+    buttons:[
+      {
+        title:'Si',
+        callback:function() { 
+          $(this).dialog("close");
+          $.ajax({
+            type: "DELETE",
+            url: "/api/enquestes/admin0/enq"+idEnq+"/preg"+idPreg,
+            success: function(enquesta) {
+                //location.reload();
+                //console.log(enquesta);
+                messageContainer("Success");
+                configuraEstat(0, 0, 0);
+                pintaPreguntes(enquesta);
+            },
+            dataType: "json",
+            error: function() {
+                messageContainer("Fail");
+                //console.log("Error!");
+            }
+          });
+        ;}
+      },
+      {
+        title:'No',
+        callback:function(){$(this).dialog("close");}
+      }
+    ]
+  });
 }
 
 function veureRespostes(idEnq,idUser){
