@@ -20,6 +20,15 @@ var initDatePicker = function() {
     //datapicker per fer interval de dates
     $( ".from" ).datepicker({
         dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        dayNamesMin: ["Dg", "Dl", "Dt", "Dc", "Dj", "Dv", "Ds"],
+        dayNamesShort: ["Dg", "Dl", "Dt", "Dc", "Dj", "Dv", "Ds"],
+        monthNames:
+            ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol",
+            "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+        monthNamesShort:
+            ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul",
+            "Ago", "Set", "Oct", "Nov", "Dec"],
         defaultDate: "+1w",
         minDate: new Date(),
         changeMonth: true,
@@ -30,6 +39,15 @@ var initDatePicker = function() {
     
     $( ".to" ).datepicker({
         dateFormat: 'dd-mm-yy',
+        firstDay: 1,
+        dayNamesMin: ["Dg", "Dl", "Dt", "Dc", "Dj", "Dv", "Ds"],
+        dayNamesShort: ["Dg", "Dl", "Dt", "Dc", "Dj", "Dv", "Ds"],
+        monthNames:
+            ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol",
+            "Agost", "Setembre", "Octubre", "Novembre", "Desembre"],
+        monthNamesShort:
+            ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul",
+            "Ago", "Set", "Oct", "Nov", "Dec"],
         defaultDate: "+1w",
         minDate: new Date(),
         changeMonth: true,
@@ -50,9 +68,9 @@ var validaFormulari = function ( form ) {
         remote: "Please fix this field.",
         email: "Email incorrecte.",
         url: "Please enter a valid URL.",
-        date: "Please enter a valid date.",
-        dateISO: "Please enter a valid date (ISO).",
-        number: "Please enter a valid number.",
+        date: "Data incorrecte.",
+        dateISO: "Format data incorrecte.",
+        number: "Número incorrecte.",
         digits: "Please enter only digits.",
         creditcard: "Please enter a valid credit card number.",
         equalTo: "Please enter the same value again.",

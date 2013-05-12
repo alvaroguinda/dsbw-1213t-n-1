@@ -113,7 +113,7 @@ if ($.fn.validate) {
 	    "catalanDate",
 	    function(value, element) {
 	        // put your own logic here, this is just a (crappy) example
-	        return value.match(/^\d\d?\-\d\d?\-\d\d\d\d$/);
+	        return value.match(/^\d\d\-\d\d\-\d\d\d\d$/);
 	    },
 	    "Format dd-mm-aaaa."
 	);
