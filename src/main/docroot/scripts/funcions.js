@@ -256,19 +256,3 @@ function checkpass() {
         return true;
     }
 };
-
-$(document).ready( function() {
-   $("#formReg").submit( function () {
-           if (checkpass()) {
-               console.log("pass correct")
-               return true;
-             }
-             console.log("error no pass correct")
-             return false;
-      });
-});
-
-/*$("#formReg").submit(function() {
-    alert("heheheheheh")
-
-});*/

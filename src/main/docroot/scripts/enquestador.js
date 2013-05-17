@@ -488,7 +488,7 @@ var Events = {
           //$("#preguntaTest").append("<input type=\"text\" name=\"respostaPregunta\" id=\"respostaPregunta\"/> <br>");
           //$("#preguntaTest").append($("#preguntaTest input#bAfegirResposta"));
 
-       });
+        });
 
        
         $("#formAfegirPreguntes").submit(function(){
@@ -541,10 +541,10 @@ var Events = {
                   }
               });
             }
-          });
+        });
 
-          /** Respondre Enquesta **/
-          $("#formRespEnq").submit(function(event){
+        /** RESPONDRE ENQUESTA **/
+        $("#formRespEnq").submit(function(event){
             event.preventDefault();
 
             var isValidate=$("#formRespEnq").valid();
@@ -603,7 +603,17 @@ var Events = {
                   }
               });
             }
-          });
+        });
+
+        /** REGISTRAR USUARIS **/
+        $("#formReg").submit( function () {
+            if (checkpass()) {
+                console.log("pass correct")
+                return true;
+            }
+            console.log("error no pass correct")
+            return false;
+        });
    },
    botonsPreguntes: function(){
         var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
