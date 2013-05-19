@@ -193,9 +193,9 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
       respostes = List()
     )
     var preguntesN = enquestaOrigin.preguntes
-    if(posPreg == 0){ preguntesN = List(novaPreg):::enquestaOrigin.preguntes.slice(1,enquestaOrigin.preguntes.length-1) }
-    else if(posPreg == enquestaOrigin.preguntes.length-1){ preguntesN = enquestaOrigin.preguntes.slice(0,posPreg-1):::List(novaPreg) }
-    else{ preguntesN = enquestaOrigin.preguntes.slice(0,posPreg-1):::List(novaPreg):::enquestaOrigin.preguntes.slice(posPreg+1,enquestaOrigin.preguntes.length-1) }
+    if(posPreg == 0){ preguntesN = List(novaPreg):::enquestaOrigin.preguntes.slice(1,enquestaOrigin.preguntes.length) }
+    else if(posPreg == enquestaOrigin.preguntes.length-1){ preguntesN = enquestaOrigin.preguntes.slice(0,posPreg):::List(novaPreg) }
+    else{ preguntesN = enquestaOrigin.preguntes.slice(0,posPreg):::List(novaPreg):::enquestaOrigin.preguntes.slice(posPreg+1,enquestaOrigin.preguntes.length) }
     val enquestaR = new EnquestaRecord (
       _id = new ObjectId(idEnquesta),
       idResp = null,
