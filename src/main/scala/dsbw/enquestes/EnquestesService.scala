@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession
 case class Resposta(idEnquestat:String, resposta:String)
 case class Pregunta(id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[Resposta])
 // estat de l'enquesta: 0 = en creació, 1 = acabada i publicada
-case class Enquesta(id:String, idResp:String, estat:Integer, titol: String, inici: String, fi: String, preguntes:List[Pregunta])
+case class Enquesta(id:String, idResp:String, estat:Int, titol: String, inici: String, fi: String, preguntes:List[Pregunta])
 case class EnquestaID(id:String)
 case class Enquestes(enquestes: Set[EnquestaRecord])
 case class User (nom: String, logged: Boolean)
@@ -180,16 +180,34 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 	}
 
 	def putPregunta(idAdmin:String, idEnquesta:String, idPregunta:String, pregunta:NovaPregunta){
-		/*val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
-		val enquestaR = new EnquestaRecord (
-			_id = new ObjectId(idEnquesta),
-			titol = enquesta.titol,
-			inici = enquesta.inici,
-			fi = enquesta.fi,
-			preguntes = enquestaOrigin.preguntes
-		)
-		enquestesRepository.save(enquestaR)*/
+    if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
+    if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
+    val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+    if(enquestaOrigin.estat > 1) throw new HttpException(400, "La enquesta ja no pot ser modificada")
+    val posPreg = enquestaOrigin.preguntes.indexWhere(_.id == idPregunta)
+    val novaPreg = new Pregunta(
+      id = idPregunta,
+      text = pregunta.enunciat,
+      tipus = pregunta.tipus,
+      possiblesRespostes = pregunta.respostes,
+      respostes = List()
+    )
+    var preguntesN = enquestaOrigin.preguntes
+    if(posPreg == 0){ preguntesN = List(novaPreg):::enquestaOrigin.preguntes.slice(1,enquestaOrigin.preguntes.length-1) }
+    else if(posPreg == enquestaOrigin.preguntes.length-1){ preguntesN = enquestaOrigin.preguntes.slice(0,posPreg-1):::List(novaPreg) }
+    else{ preguntesN = enquestaOrigin.preguntes.slice(0,posPreg-1):::List(novaPreg):::enquestaOrigin.preguntes.slice(posPreg+1,enquestaOrigin.preguntes.length-1) }
+    val enquestaR = new EnquestaRecord (
+      _id = new ObjectId(idEnquesta),
+      idResp = null,
+      estat = 0,
+      titol = enquestaOrigin.titol,
+      inici = enquestaOrigin.inici,
+      fi = enquestaOrigin.fi,
+      preguntes = preguntesN
+    )
+    enquestesRepository.save(enquestaR)
 	}
+
 	def patchEnquesta(idAdmin:String, idEnquesta:String, estat:EstatEnquesta):Enquesta= {
 		if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
 		if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
