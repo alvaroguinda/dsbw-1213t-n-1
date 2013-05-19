@@ -689,6 +689,9 @@ var Events = {
 
 var pintaPreguntes = function(data){
   $("#divPreguntes").empty();
+  $("#divPreguntes").addClass("sortable");
+  initSortable();
+
   if(data.preguntes){
       $.each(data.preguntes, function(num,pregunta) {
           $("#divPreguntes").append(function(index,html){
@@ -720,7 +723,7 @@ var pintaPreguntes = function(data){
       });
 
       $(".divFilaPregunta:even").addClass("filaEven"); 
-      $(".divFilaPregunta:odd").addClass("filaOdd");
+      $(".divFilaPregunta:odd").addClass("filaOdd");      
 
       Events.botonsPreguntes();
   }

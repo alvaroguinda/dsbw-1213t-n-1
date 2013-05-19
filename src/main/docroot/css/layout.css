@@ -583,3 +583,9 @@ div.inputdata input[type="checkbox"]{
 .missatgeCentral p{
     margin-bottom: 25px;
 }
+
+
+
+.ui-state-highlight {
+    height: 5em; line-height: 5em;
+}
