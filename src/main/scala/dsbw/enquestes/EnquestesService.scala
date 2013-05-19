@@ -305,7 +305,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 
         enquesta.preguntes.foreach{p =>
           //preguntesE = List(p) ::: preguntesE
-          respostesP = p.respostes
+          respostesP = p.respostes.filter(_.idEnquestat != id_user)
           respostes.respostes.foreach{r => 
             if (p.id == r.apply(0)) {
               respostesP = respostesP ::: List(new Resposta(id_user,r.apply(1)))
