@@ -578,7 +578,8 @@ var Events = {
               }
               console.log(resposta);
 
-              $.ajax({
+              if(idUser == "0"){
+                $.ajax({
                   type: "POST",
                   url: "/api/enquestes/user"+idUser+"/enq"+enquestaId,
                   contentType: "application/json",
@@ -601,7 +602,34 @@ var Events = {
                       resultat+="</div>";
                       $("#respondEnq").append(resultat);
                   }
-              });
+                });
+              }
+              else{
+                $.ajax({
+                  type: "PUT",
+                  url: "/api/enquestes/user"+idUser+"/enq"+enquestaId,
+                  contentType: "application/json",
+                  data: JSON.stringify(resposta),
+                  success: function(enquestaUser){
+                      messageContainer("Success");
+                      $("#respondEnq").empty();
+                      resultat="<div class='missatgeCentral'>";
+                      resultat+="<p>Les respostes s'han enviat correctament. Pot consultar o modificar la seva enquesta accedint al següent enllaç.</p>";
+                      resultat+="<a href='"+domini+"Respondre/Enq"+enquestaId+"/User"+enquestaUser.idUser+"'>"+domini+"Respondre/Enq"+enquestaId+"/User"+enquestaUser.idUser+"</a>";
+                      resultat+="</div>";
+                      $("#respondEnq").append(resultat);
+                  },
+                  error: function(){
+                      messageContainer("Fail");
+                      $("#respondEnq").empty();
+                      resultat="<div class='missatgeCentral'>";
+                      resultat+="<p>S'ha produït un error al enviar les respostes. Torni a provar-ho de nou, disculpi les molèsties.</p>";
+                      resultat+="<a href='"+domini+"Respondre/Enq"+enquestaId+"'>"+domini+"Respondre/Enq"+enquestaId+"</a>";
+                      resultat+="</div>";
+                      $("#respondEnq").append(resultat);
+                  }
+                });
+              } 
             }
         });
 
