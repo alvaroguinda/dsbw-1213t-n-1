@@ -241,46 +241,31 @@ var Events = {
         $("#mInici").click(function(e){
             e.preventDefault();
             carregaSeccio("Inici");
+            $("#navigation li").removeClass("current");
             $("#lInici").addClass("current");
-            $("#lLlista").removeClass("current");
-            $("#lNova").removeClass("current");
-            $("#lRegistre").removeClass("current");
-            $("#lContacte").removeClass("current");
         });
         $("#mllistatEnq").click(function(e){
             e.preventDefault();
             carregaSeccio("LlistatEnquestes");
-            $("#lInici").removeClass("current");
+            $("#navigation li").removeClass("current");
             $("#lLlista").addClass("current");
-            $("#lNova").removeClass("current");
-            $("#lRegistre").removeClass("current");
-            $("#lContacte").removeClass("current");
         });
         $("#mCrearEnq").click(function(e) {
             e.preventDefault();
             carregaSeccio("CrearEnquesta");
-            $("#lInici").removeClass("current");
-            $("#lLlista").removeClass("current");
+            $("#navigation li").removeClass("current");
             $("#lNova").addClass("current");
-            $("#lRegistre").removeClass("current");
-            $("#lContacte").removeClass("current");
         });
         $("#mRegistre").click(function(e){
             e.preventDefault();
             carregaSeccio("Registre");
-            $("#lInici").removeClass("current");
-            $("#lLlista").removeClass("current");
-            $("#lNova").removeClass("current");
+            $("#navigation li").removeClass("current");
             $("#lRegistre").addClass("current");
-            $("#lContacte").removeClass("current");
         });
         $("#mContacta").click(function(e) {
             e.preventDefault();
             carregaSeccio("Contacte");
-            $("#lInici").removeClass("current");
-            $("#lLlista").removeClass("current");
-            $("#lNova").removeClass("current");
-            $("#lRegistre").removeClass("current");
+            $("#navigation li").removeClass("current");
             $("#lContacte").addClass("current");
         });
 
