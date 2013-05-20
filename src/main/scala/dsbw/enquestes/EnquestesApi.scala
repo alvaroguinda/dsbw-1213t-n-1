@@ -11,6 +11,7 @@ case class NovaEnquesta(titol: String, inici: String, fi: String, preguntes: Lis
 case class NovaPregunta(tipus: String, enunciat: String, respostes: List[String])
 case class EstatEnquesta(ident: Integer)
 case class Respostes(respostes:List[List[String]])
+case class NouUser(userName: String, passWord: String)
 
 /** Enquestes API */
 class EnquestesApi(enquestesService:EnquestesService) extends Api {
@@ -24,14 +25,16 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
   val respondreEnquestaUserPrimera = "POST /api/enquestes/user([a-zA-z0-9]+)/enq([a-zA-z0-9]+)".r
   val respondreEnquestaUser = "PUT /api/enquestes/user([a-zA-z0-9]+)/enq([a-zA-z0-9]+)".r
   val respostesUser = "GET /api/enquestes/user([a-zA-z0-9]+)/enq([a-zA-z0-9]+)/respostes".r
+
   def service(method: String, uri: String, parameters: Map[String, List[String]] = Map(), headers: Map[String, String] = Map(), body: Option[JSON] = None, session: HttpSession): Response = {
-    try { 
+    try {
       (method + " " + uri) match {
         case "GET /api/login" => Response(HttpStatusCode.Ok, enquestesService.validaUser(parameters,session))
         case "GET /api/logout" => Response(HttpStatusCode.Ok, enquestesService.tancaSessio(session))
         case "GET /api/auth" => Response(HttpStatusCode.Ok, enquestesService.authUser(session))
         case "GET /api/enquestes" => Response(HttpStatusCode.Ok, enquestesService.getListEnquestes(session))
         case "POST /api/enquesta" => Response(HttpStatusCode.Created, enquestesService.creaEnquesta(JSON.fromJSON[NovaEnquesta](body.getOrElse(throw new Exception("Bad Request")))))
+        case "GET /api/registre" => Response(HttpStatusCode.Created, enquestesService.registreUser(parameters))
         case getEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.getEnquesta(idAdmin,idEnquesta))
         case getEnquestaResp(idUser,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.getEnquestaResp(idUser,idEnquesta))
         case putEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.putEnquesta(idAdmin,idEnquesta,JSON.fromJSON[NovaEnquesta](body.getOrElse(throw new Exception("Bad Request")))))

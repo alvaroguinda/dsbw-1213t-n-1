@@ -619,13 +619,35 @@ var Events = {
         });
 
         /** REGISTRAR USUARIS **/
-        $("#formReg").submit( function () {
+        $("#formReg").submit( function (event){
+            event.preventDefault();
             if (checkpass()) {
+                user = $("#emailReg").val(),
+                pass = $("#passReg1").val()
                 console.log("pass correct")
+                $.ajax({
+                  type: "GET",
+                  url: "/api/registre?user="+user+"&pass="+pass,
+                  contentType: "application/json",
+                  success: function(data){
+                      messageContainer("Success");
+                      $("#registre").empty();
+                      resultat="<div><p>El usuari ha estat registrat correctament. Ja pots iniciar sessió amb el username y el password.</p></div>";
+                      $("#registre").append(resultat);
+                  },
+                  error: function(data){
+                      messageContainer("Fail");
+                      $("#registre").empty();
+                      resultat="<div><p>Ha succeït un error en el proces de registre. Torna a realitzar el registre.</p></div>";
+                      $("#registre").append(resultat);
+                  }
+                });
                 return true;
             }
-            console.log("error no pass correct")
-            return false;
+            else {
+                console.log("error no pass correct")
+                return false;
+            }
         });
    },
    botonsPreguntes: function(){
