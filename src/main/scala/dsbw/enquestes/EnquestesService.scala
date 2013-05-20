@@ -8,7 +8,7 @@ import javax.servlet.http.HttpSession
 case class Resposta(idEnquestat:String, resposta:String)
 case class Pregunta(id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[Resposta])
 // estat de l'enquesta: 0 = en creació, 1 = acabada i publicada
-case class Enquesta(id:String, idResp:String, estat:Int, titol: String, inici: String, fi: String, preguntes:List[Pregunta])
+case class Enquesta(id:String, idResp:String, estat:Int, titol: String, inici: String, fi: String,finalitzades:List[String], preguntes:List[Pregunta])
 case class EnquestaID(id:String)
 case class Enquestes(enquestes: Set[EnquestaRecord])
 case class User (nom: String, logged: Boolean)
@@ -93,9 +93,9 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
       //val enquesta = enquestesRepository.findById(new ObjectId(idAdmin)).getOrElse(throw new HttpException(404, "User not found"))
       val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
       if(enquesta.estat == 0){
-      	new Enquesta(enquesta._id.toString(),null, enquesta.estat, enquesta.titol,enquesta.inici,enquesta.fi,enquesta.preguntes)
+      	new Enquesta(enquesta._id.toString(),null, enquesta.estat, enquesta.titol,enquesta.inici,enquesta.fi,enquesta.finalitzades,enquesta.preguntes)
       }
-      else new Enquesta(enquesta._id.toString(),enquesta.idResp.toString(), enquesta.estat, enquesta.titol,enquesta.inici,enquesta.fi,enquesta.preguntes)
+      else new Enquesta(enquesta._id.toString(),enquesta.idResp.toString(), enquesta.estat, enquesta.titol,enquesta.inici,enquesta.fi,enquesta.finalitzades,enquesta.preguntes)
       // Comprobem que l'usuari autenticat es el follower
       //if (loggedUserId.compareTo(user._id) != 0) throw new HttpException(403, "Forbidden")
       //if (!follower.followees.exists(followee_id => true)) throw new HttpException (404, "Relation non exists")
@@ -105,7 +105,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 
 	 def getEnquestaResp(idUser:String, idEnquesta:String):Enquesta= {
 		val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
-        new Enquesta(null,enquesta.idResp.toString(),enquesta.estat,enquesta.titol,enquesta.inici,enquesta.fi,enquesta.preguntes)
+        new Enquesta(null,enquesta.idResp.toString(),enquesta.estat,enquesta.titol,enquesta.inici,enquesta.fi,enquesta.finalitzades,enquesta.preguntes)
 	}
 
 	def creaEnquesta(enquesta: NovaEnquesta):EnquestaID= {
@@ -123,6 +123,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 			titol = enquesta.titol,
 			inici = enquesta.inici,
 			fi = enquesta.fi,
+      finalitzades = List(),
 			preguntes = List()
 		)
 		enquestesRepository.save(enquestaR)
@@ -146,6 +147,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 			titol = enquesta.titol,
 			inici = enquesta.inici,
 			fi = enquesta.fi,
+      finalitzades = enquestaOrigin.finalitzades,
 			preguntes = enquestaOrigin.preguntes
 		)
 		enquestesRepository.save(enquestaR)
@@ -166,12 +168,13 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 			titol = enquesta.titol,
 			inici = enquesta.inici,
 			fi = enquesta.fi,
+      finalitzades = enquesta.finalitzades,
 			preguntes = enquesta.preguntes ::: List(new Pregunta(new ObjectId().toString,pregunta.enunciat, pregunta.tipus, pregunta.respostes, List()))
 		)
 		enquestesRepository.save(enquestaR)
 
 		val enquestaNew = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
-		new Enquesta(enquestaNew._id.toString(),enquestaNew.idResp.toString(),enquestaNew.estat,enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.preguntes)
+		new Enquesta(enquestaNew._id.toString(),enquestaNew.idResp.toString(),enquestaNew.estat,enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.finalitzades,enquestaNew.preguntes)
 	}
 
 	def deletePregunta(idAdmin:String, idEnquesta:String, idPregunta:String):Enquesta={
@@ -188,12 +191,13 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 			titol = enquesta.titol,
 			inici = enquesta.inici,
 			fi = enquesta.fi,
-			preguntes =  preguntesn
+			preguntes =  preguntesn,
+      finalitzades = enquesta.finalitzades
 		)
 		enquestesRepository.save(enquestaR)
 
     val enquestaNew = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
-    new Enquesta(enquestaNew._id.toString(),enquestaNew.idResp.toString(),enquestaNew.estat,enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.preguntes)
+    new Enquesta(enquestaNew._id.toString(),enquestaNew.idResp.toString(),enquestaNew.estat,enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.finalitzades,enquestaNew.preguntes)
 	}
 
 	def putPregunta(idAdmin:String, idEnquesta:String, idPregunta:String, pregunta:NovaPregunta){
@@ -220,6 +224,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
       titol = enquestaOrigin.titol,
       inici = enquestaOrigin.inici,
       fi = enquestaOrigin.fi,
+      finalitzades = enquestaOrigin.finalitzades,
       preguntes = preguntesN
     )
     enquestesRepository.save(enquestaR)
@@ -238,14 +243,15 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 			titol = enquestaOrigin.titol,
 			inici = enquestaOrigin.inici,
 			fi = enquestaOrigin.fi,
-			preguntes = enquestaOrigin.preguntes
+			preguntes = enquestaOrigin.preguntes,
+      finalitzades = enquestaOrigin.finalitzades
 		)
 		enquestesRepository.save(enquestaR)
 
     //new Enquesta(idEnquesta, enquestaR.idResp.toString(), enquestaR.estat, enquestaR.titol, enquestaR.inici, enquestaR.fi, enquestaR.preguntes)
 
     val enquestaNew = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
-    new Enquesta(enquestaNew._id.toString(),enquestaNew.idResp.toString(),enquestaNew.estat,enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.preguntes)
+    new Enquesta(enquestaNew._id.toString(),enquestaNew.idResp.toString(),enquestaNew.estat,enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.finalitzades,enquestaNew.preguntes)
 	}
 
 	def postRespondreEnquesta(idUser: String, idEnquesta: String, respostes: Respostes):EnquestaUser={
@@ -295,7 +301,8 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         	titol = enquesta.titol,
         	inici = enquesta.inici,
         	fi = enquesta.fi,
-        	preguntes = preguntesE
+        	preguntes = preguntesE,
+          finalitzades = enquesta.finalitzades
         	)
         println(enquestaR)
         enquestesRepository.save(enquestaR)
@@ -313,7 +320,6 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 
         //println(id_user)
         //println(respostes)
-
         //for (r <- respostes) println(r)
         var preguntesE:List[Pregunta] = List()
         var respostesP:List[Resposta] = List()
@@ -347,7 +353,58 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
           titol = enquesta.titol,
           inici = enquesta.inici,
           fi = enquesta.fi,
-          preguntes = preguntesE
+          preguntes = preguntesE,
+          finalitzades = enquesta.finalitzades
+          )
+        enquestesRepository.save(enquestaR)
+
+        new EnquestaUser(enquestaR.idResp.toString(),id_user)
+  }
+
+  def putRespondreEnquestaFinal(idUser: String, idEnquesta: String, respostes: Respostes):EnquestaUser={
+    val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
+        var id_user = idUser
+        if(idUser == "0") {
+          var _idUser = new ObjectId()
+          id_user = _idUser.toString()
+        }
+
+        //println(id_user)
+        //for (r <- respostes) println(r)
+        var preguntesE:List[Pregunta] = List()
+        var respostesP:List[Resposta] = List()
+
+        //respostes.respostes.foreach(r => println(r))
+
+        enquesta.preguntes.foreach{p =>
+          //preguntesE = List(p) ::: preguntesE
+          respostesP = p.respostes.filter(_.idEnquestat != id_user)
+          respostes.respostes.foreach{r => 
+            if (p.id == r.apply(0)) {
+              respostesP = respostesP ::: List(new Resposta(id_user,r.apply(1)))
+            } 
+          }
+
+          var preguntaR = new Pregunta(
+            id = p.id,
+            text = p.text,
+            tipus = p.tipus,
+            possiblesRespostes = p.possiblesRespostes,
+            respostes = respostesP
+            )
+          preguntesE =  preguntesE ::: List(preguntaR) //preguntesE.patch(i,preguntaR
+        }
+//case class EnquestaRecord(_id:ObjectId = new ObjectId(), idResp: ObjectId= new ObjectId(),estat:Integer,titol:String, inici:String, fi:String, preguntes:List[Pregunta])
+//case class Pregunta(id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[Resposta])
+        val enquestaR = EnquestaRecord (
+          _id = enquesta._id,
+          idResp = enquesta.idResp,
+          estat = 2,
+          titol = enquesta.titol,
+          inici = enquesta.inici,
+          fi = enquesta.fi,
+          preguntes = preguntesE,
+          finalitzades = enquesta.finalitzades ::: List(idUser)
           )
         enquestesRepository.save(enquestaR)
 

@@ -712,6 +712,7 @@ var pintaPreguntes = function(data){
                 result += "</div>";
                 if(data.estat < 2){
                   result += "<div class='divBotoPregunta'>";
+                  result += "<input type='button' id='"+pregunta.id+"' name='modPreg"+(num+1)+"' value='Modificar Pregunta'/>";
                   result += "<input type='button' id='"+pregunta.id+"' name='deletePreg"+(num+1)+"' value='Elimina Pregunta'/>";
                   result += "</div>";
                 }
@@ -927,6 +928,7 @@ var configuraSeccio = function(data){
                   })
                    
                    $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='enviarResp' name='enviarResp' value='Enviar Respostes'/></div>");
+                   $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='finResp' name='finResp' value='Finalitzar Respostes'/></div>");
                    //Events.botoEnviarResposta();
                 }
             break;
