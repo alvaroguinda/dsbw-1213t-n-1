@@ -163,6 +163,10 @@ function deletePregunta(idEnq,idPreg){
   });
 }
 
+function modPregunta(idEnq,idPreg){
+  console.log("not yet implemented.");
+}
+
 function veureRespostes(idEnq,idUser){
    $.ajax({
         type: "GET",
@@ -650,14 +654,23 @@ var Events = {
             }
         });
    },
+
+   //result += "<input type='button' id='"+pregunta.id+"' name='modPreg"+(num+1)+"' value='Modificar Pregunta'/>";
+   //result += "<input type='button' id='"+pregunta.id+"' name='deletePreg"+(num+1)+"' value='Elimina Pregunta'/>";
+
    botonsPreguntes: function(){
         var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
-        var botonsDelete = $("#divPreguntes input");
+        var botonsDelete = $("#divPreguntes input[name=deletePreg]");
+        var botonsMod = $("#divPreguntes input[name=modPreg]");
         $.each(botonsDelete, function(num,boto) {
             $(boto).click(function(event){
-                //alert(boto.id);
-                deletePregunta(idEnq,boto.id);
+              deletePregunta(idEnq,boto.id);
             });
+        });
+        $.each(botonsMod, function(num,boto) {
+          $(boto).click(function(event){
+            modPregunta(idEnq,boto.id);
+          });
         });
    },
    botonsVeureRespostes: function(){
@@ -712,8 +725,8 @@ var pintaPreguntes = function(data){
                 result += "</div>";
                 if(data.estat < 2){
                   result += "<div class='divBotoPregunta'>";
-                  result += "<input type='button' id='"+pregunta.id+"' name='modPreg"+(num+1)+"' value='Modificar Pregunta'/>";
-                  result += "<input type='button' id='"+pregunta.id+"' name='deletePreg"+(num+1)+"' value='Elimina Pregunta'/>";
+                  result += "<input type='button' id='"+pregunta.id+"' name='modPreg' value='Modificar Pregunta'/>";
+                  result += "<input type='button' id='"+pregunta.id+"' name='deletePreg' value='Elimina Pregunta'/>";
                   result += "</div>";
                 }
                 result += "<div class='divContingutPregunta'>";

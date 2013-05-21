@@ -52,7 +52,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
           pass = passWord,
           admin = false
         )
-        usersRepository.save(userNew)
+        //usersRepository.save(userNew)
     }
   }
 
