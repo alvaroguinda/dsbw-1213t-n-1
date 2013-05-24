@@ -234,7 +234,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 	}
 
 
-  def putOrdrePregunta(idAdmin:String, idEnquesta:String, idPregunta:String, pregunta:NovaPregunta){
+  def putOrdrePregunta(idAdmin:String, idEnquesta:String, idPregunta:String, ordre:String, pregunta:NovaPregunta){
     if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
     if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
     val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
@@ -247,12 +247,14 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
       possiblesRespostes = pregunta.respostes,
       respostes = List()
     )
+    var ordreI = ordre.toInt
     var preguntesN = enquestaOrigin.preguntes
+    if(ordreI == 0){ preguntesN = List(novaPreg):::enquestaOrigin.preguntes.slice(1,enquestaOrigin.preguntes.length) }
+    else if(ordreI == enquestaOrigin.preguntes.length-1){ preguntesN = enquestaOrigin.preguntes.slice(0,ordreI):::List(novaPreg) }
+    else{ preguntesN = enquestaOrigin.preguntes.slice(0,ordreI):::List(novaPreg):::enquestaOrigin.preguntes.slice(ordreI+1,enquestaOrigin.preguntes.length) }
 
-    preguntesN = List(novaPreg):::enquestaOrigin.preguntes.slice(1,enquestaOrigin.preguntes.length)
-
-
-    println(preguntesN)
+    println(ordreI)
+    println(pregunta.enunciat)
 
     val enquestaR = new EnquestaRecord (
       _id = new ObjectId(idEnquesta),

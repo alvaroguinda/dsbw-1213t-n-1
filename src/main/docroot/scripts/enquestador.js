@@ -223,9 +223,9 @@ function ordenaPreguntes(event) {
 
     respostesP = new Array();
 
-    $(this).find(".divFilaPossiblesRespostes input[type=text]").each(function(index){
+    $(this).find(".divFilaPossiblesRespostes input[type=text]").each(function(indexR){
       if($(this).val() != "") {
-        respostesP[index] = $(this).val();
+        respostesP[indexR] = $(this).val();
       }
     });
 
@@ -237,9 +237,11 @@ function ordenaPreguntes(event) {
         respostes: respostesP
     }
 
+    console.log(pregunta)
+
     $.ajax({
         type: "PUT",
-        url: "/api/enquestes/admin0/enq"+enquestaId+"/ordenar/preg"+idPregunta,
+        url: "/api/enquestes/admin0/enq"+enquestaId+"/preg"+idPregunta+"/ordre"+index,
         contentType: "application/json",
         data: JSON.stringify(pregunta),
         success: function(){
