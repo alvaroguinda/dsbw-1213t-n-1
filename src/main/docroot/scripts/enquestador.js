@@ -167,6 +167,91 @@ function modPregunta(idEnq,idPreg){
   console.log("not yet implemented.");
 }
 
+/*function ordenaPreguntes(event, div) {
+  var enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
+  var idPregunta = -1;
+  var tipus = "";
+  var enunciat ="";
+  var respostesP;
+  //$(div.item).find(".divFilaPregunta").each(function(index) {
+    idPregunta = $(div.item).attr("data-ajax-id");
+    tipus = $(div.item).attr("data-ajax-tipus");
+    enunciat = $(div.item).find(".divContingutPregunta input[id^='contingutPregunta']").val();
+
+    respostesP = new Array();
+
+    $(div.item).find(".divFilaPossiblesRespostes input[type=text]").each(function(index){
+      if($(this).val() != "") {
+        respostesP[index] = $(this).val();
+      }
+    });
+
+    if(respostesP[0] == "") respostesP = null;
+
+    var pregunta = {
+        tipus: tipus,
+        enunciat: enunciat,
+        respostes: respostesP
+    }
+
+    $.ajax({
+        type: "PUT",
+        url: "/api/enquestes/admin0/enq"+enquestaId+"/preg"+idPregunta,
+        contentType: "application/json",
+        data: JSON.stringify(pregunta),
+        success: function(){
+            messageContainer("Success");
+        },
+        error: function(){
+            messageContainer("Fail");
+        }
+    });    
+  //});
+
+}*/
+
+function ordenaPreguntes(event) {
+  var enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
+  var idPregunta = -1;
+  var tipus = "";
+  var enunciat ="";
+  var respostesP;
+  $(event.target).closest("#divPreguntes").find(".divFilaPregunta").each(function(index) {
+    idPregunta = $(this).attr("data-ajax-id");
+    tipus = $(this).attr("data-ajax-tipus");
+    enunciat = $(this).find(".divContingutPregunta input[id^='contingutPregunta']").val();
+
+    respostesP = new Array();
+
+    $(this).find(".divFilaPossiblesRespostes input[type=text]").each(function(index){
+      if($(this).val() != "") {
+        respostesP[index] = $(this).val();
+      }
+    });
+
+    if(respostesP[0] == "") respostesP = null;
+
+    var pregunta = {
+        tipus: tipus,
+        enunciat: enunciat,
+        respostes: respostesP
+    }
+
+    $.ajax({
+        type: "PUT",
+        url: "/api/enquestes/admin0/enq"+enquestaId+"/ordenar/preg"+idPregunta,
+        contentType: "application/json",
+        data: JSON.stringify(pregunta),
+        success: function(){
+            messageContainer("Success");
+        },
+        error: function(){
+            messageContainer("Fail");
+        }
+    });    
+  });
+}
+
 function veureRespostes(idEnq,idUser){
    $.ajax({
         type: "GET",
@@ -479,6 +564,9 @@ var Events = {
 
         });
 
+
+        
+
        
         $("#formAfegirPreguntes").submit(function(){
             event.preventDefault();
@@ -662,6 +750,7 @@ var Events = {
         var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
         var botonsDelete = $("#divPreguntes input[name=deletePreg]");
         var botonsMod = $("#divPreguntes input[name=modPreg]");
+        var botoOrdena = $("#divPreguntes input[name=bOrdenaPreguntes]");
         $.each(botonsDelete, function(num,boto) {
             $(boto).click(function(event){
               deletePregunta(idEnq,boto.id);
@@ -671,6 +760,10 @@ var Events = {
           $(boto).click(function(event){
             modPregunta(idEnq,boto.id);
           });
+        });
+
+        $(botoOrdena).click(function(event){
+          ordenaPreguntes(event);
         });
    },
    botonsVeureRespostes: function(){
@@ -717,7 +810,7 @@ var pintaPreguntes = function(data){
           $("#divPreguntes").append(function(index,html){
               console.log(pregunta);
 
-              var result = "<div class='divFilaPregunta'>";
+              var result = "<div class='divFilaPregunta' data-ajax-id='"+pregunta.id+"' data-ajax-tipus='"+pregunta.tipus+"'>";
                 result += "<div class='divTitolFilaPregunta'>";
                   result += "<p>Pregunta "+(num+1)+"</p>";
                   result += "<p class='template'>"+pregunta.id+"</p>";
@@ -731,11 +824,14 @@ var pintaPreguntes = function(data){
                 }
                 result += "<div class='divContingutPregunta'>";
                   result += "<p>"+pregunta.text+"</p>";
+                  result += "<input type='text' id='contingutPregunta"+pregunta.id+"' class='template' value='"+pregunta.text+"'/>";
               if(pregunta.possiblesRespostes.length > 0) {
-                  result += "<br><p><b>Respostes</b></p>";
+                  result += "<div class='divFilaPossiblesRespostes'><br><p><b>Respostes</b></p>";
                   $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
                       result += "<br><p>"+(indexResposta+1)+".- "+resposta+"</p>";
+                      result += "<input type='text' id='contingutResposta"+pregunta.id+"_"+indexResposta+"' class='template' value='"+resposta+"'/>";
                   });
+                  result += "</div>";
                 }
                 result += "</div>";
               result += "</div>";
@@ -746,7 +842,10 @@ var pintaPreguntes = function(data){
       $(".divFilaPregunta:even").addClass("filaEven"); 
       $(".divFilaPregunta:odd").addClass("filaOdd");      
 
+      $("#divPreguntes").append("<div id='divOrdenaPreguntesBoto' class='boto'><input type='button' id='bOrdenaPreguntes' name='bOrdenaPreguntes' value='Confirma Ordre'></div>");      
+
       Events.botonsPreguntes();
+
   }
 }
 

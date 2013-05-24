@@ -263,7 +263,7 @@ var initSortable = (function() {
       axis: "y",
       change: function(event, ui) {
         var index = ui.placeholder.index();
-        //Falta crida ajax al servidor i reordenar les preguntes a la Bd
+        //ordenaPreguntes(event, ui);
       }
     });
     $( ".sortable" ).disableSelection();
