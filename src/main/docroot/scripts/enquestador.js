@@ -113,6 +113,21 @@ function getEnquestaURL(id){
     });
 }
 
+function gePreguntaEnquesta(idEnquesta, idPregunta) {
+  $.ajax({
+        type: "GET",
+        url: "/api/enquestes/admin0/enq"+id+"/preg"+idPregunta,
+        success: function(enquesta) {
+           // alert(enquesta);
+            configuraSeccio(enquesta); //configurem els handlers d'aquesta secció
+        },
+        dataType: "json",
+        error: function(enquesta) {
+            console.log("Error!");
+        }
+    });
+}
+
 // Retorna la enquetsa amb idResp id en format JSON:
 function getEnquestaRespondre(id, idUser){
     $.ajax({
@@ -164,8 +179,144 @@ function deletePregunta(idEnq,idPreg){
   });
 }
 
-function modPregunta(idEnq,idPreg){
-  console.log("not yet implemented.");
+function modPregunta(idEnq,idPreg) {
+  var preguntaEnquesta = "";
+  $.ajax({
+      type: "GET",
+      url: "/api/enquestes/admin0/enq"+idEnq+"/preg"+idPreg,
+      success: function(pregunta) {      
+          formulariModPregunta(idEnq, pregunta)
+          //configuraSeccio(enquesta); //configurem els handlers d'aquesta secció
+      },
+      dataType: "json",
+      error: function(pregunta) {
+          console.log("Error!");
+      }
+  });
+}
+
+function formulariModPregunta(idEnq, pregunta) {
+  var divModificaPregunta = "";
+  var checked = "";
+
+  divModificaPregunta +="<form action='#' id='formModificaPregunta"+pregunta.id+"' class='formModificaPregunta validarFormulari' data-ajax-id='"+pregunta.id+"''>";
+      divModificaPregunta +="<div class='divFormulari'>";
+          divModificaPregunta +="<h3>Modifica la pregunta</h3>";
+          divModificaPregunta +="<div class='inputdata'>";
+              divModificaPregunta +="<label for='titolPregunta'>Pregunta</label>";
+              divModificaPregunta +="<span><input type='text' name='titolPregunta' id='titolPregunta' class='required' value='"+pregunta.text+"'></span>";
+          divModificaPregunta +="</div>";
+
+          divModificaPregunta +="<div class='inputdata'>";
+              divModificaPregunta +="<label for='rbTipusText'>Text</label>";
+              if(pregunta.tipus == "Text") {
+                  checked = "checked='true'"
+              }
+              else checked = ""
+              divModificaPregunta +="<span><input type='radio' name='tipusPregunta' id='rbTipusText' value='Text' "+checked+"/> </span>";
+          divModificaPregunta +="</div>";
+
+          divModificaPregunta +="<div class='inputdata'>";
+              divModificaPregunta +="<label for='rbTipusTest'>Test</label>";
+              if(pregunta.tipus == "Test") {
+                  checked = "checked='true'"
+              }
+              else checked = ""
+              divModificaPregunta +="<span><input type='radio' name='tipusPregunta' id='rbTipusTest' value='Test' "+checked+"></span>";
+          divModificaPregunta +="</div>";
+
+          divModificaPregunta +="<div class='inputdata'>";
+              divModificaPregunta +="<label for='rbTipusMulti'>Multi</label>";
+              if(pregunta.tipus == "Multi") {
+                  checked = "checked='true'"
+              }
+              else checked = ""
+              divModificaPregunta +="<span><input type='radio' name='tipusPregunta' id='rbTipusMulti' value='Multi' "+checked+"></span>";
+          divModificaPregunta +="</div>";
+          var teRespostes = "class='template'";
+          if(pregunta.possiblesRespostes.length > 0) {
+            teRespostes="";
+          }
+          divModificaPregunta +="<div id='preguntaTestModifica' "+teRespostes+">";
+              divModificaPregunta +="<h4>Respostes</h4>";
+              
+              var numResposta = 1;
+
+              divModificaPregunta +="<div id='divAfegirRespostaModifica'>";
+              $(pregunta.possiblesRespostes).each(function(index, value){
+                divModificaPregunta +="<input type='hidden' id='numRespostaModifica' value='"+numResposta+"'/>";
+                  divModificaPregunta +="<div class='inputdata'>";
+                      divModificaPregunta +="<label for='respostaPregunta"+numResposta+"'>Resposta</label>";
+                      divModificaPregunta +="<span><input type='text' name='respostaPregunta"+numResposta+"' id='respostaPregunta"+numResposta+"' value='"+value+"' class='respostaPregunta required'></span>";
+                  divModificaPregunta +="</div>";
+                  numResposta++;
+              });
+              divModificaPregunta +="</div>";
+                  
+              /*divModificaPregunta +="<div id='divAfegirNovaRespostaModifica'></div>";
+
+              divModificaPregunta +="<div id='divAfegirRespostaBoto' class='boto'>";
+                  divModificaPregunta +="<input type='button' id='bAfegirRespostaModifica' name='bAfegirRespostaModifica' value='Afegir resposta'>";
+              divModificaPregunta +="</div>";*/
+          divModificaPregunta +="</div>";
+          //divModificaPregunta +="<div class='boto'>";
+              //divModificaPregunta +="<input type='button' id='bModificaPregunta' name='bModificaPregunta' value='Desa'>";
+          //divModificaPregunta +="</div>";
+      divModificaPregunta +="</div>";
+  divModificaPregunta +="</form>";
+
+  $.alert(divModificaPregunta, {
+    title:"A través d'aquest formulari pot modificar la pregunta de l'Enquesta",
+    icon:'',
+    buttons:[
+        {
+          title:'Desa',
+          callback: function() {
+            $(this).dialog("close");
+            desaModificaPregunta(event);            
+          }
+        }
+    ]
+  });
+}
+
+function desaModificaPregunta(event) {
+  var formulari = $(event.target).closest(".ui-dialog").find('.formModificaPregunta');
+
+  enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
+  idPregunta = $(formulari).attr('data-ajax-id');
+
+  var respostesP = new Array();
+  $(formulari).find("#divAfegirRespostaModifica input[type=text]").each(function(index){
+    if($(this).val() != "") {
+      respostesP[index] = $(this).val();
+    }
+  });
+
+  if(respostesP[0] == "") respostesP = null;
+
+  var pregunta = {
+      tipus: $(formulari).find('input[name=tipusPregunta]:checked').val(),
+      enunciat: $(formulari).find("input#titolPregunta").val(),
+      respostes: respostesP
+  }
+
+  $.ajax({
+      type: "PUT",
+      url: "/api/enquestes/admin0/enq"+enquestaId+"/preg"+idPregunta,
+      contentType: "application/json",
+      data: JSON.stringify(pregunta),
+      success: function(enquesta){
+          messageContainer("Success");
+          $("#divAfegirNovaResposta").empty();
+          $('#numResposta').val('1');
+          configuraEstat(0, 0, 0);
+          pintaPreguntes(enquesta);
+      },
+      error: function(){
+          messageContainer("Fail");
+      }
+  });
 }
 
 function ordenaPreguntes(event) {
@@ -537,9 +688,25 @@ var Events = {
 
         });
 
+        /*$("#bAfegirRespostaModifica").click(function() {
+          //Cada cop que afegim una pregunta incrementem el seu identificador
+          var numRespostes = $('#numRespostaModifica').val();
+          $("#preguntaTestModifica").find("input[type=text]").each(function() {
+            numRespostes++;
+          });
+          $('#numRespostaModifica').val(numRespostes);
+          var novaResposta = "<div class='inputdata'><label for='respostaPregunta" + numRespostes + "'>Resposta</label>";
+          novaResposta += "<span><input type=\"text\" id=\"respostaPregunta"+ numRespostes +"\" class=\"required\" name=\"respostaPregunta"+ numRespostes +"\" /></span>";
+          novaResposta += "<img src='/img/delete.png' id='eliminaResposta" + numRespostes + "' class='deleteResposta' alt='Elimina resposta' title='Elimina Resposta' /></div>";
+          
+          $("#divAfegirNovaRespostaModifica").append(novaResposta);
 
-        
+          Events.botonsDeleteRespostes(numRespostes);
+          
+          //$("#preguntaTest").append("<input type=\"text\" name=\"respostaPregunta\" id=\"respostaPregunta\"/> <br>");
+          //$("#preguntaTest").append($("#preguntaTest input#bAfegirResposta"));
 
+        });*/
        
         $("#formAfegirPreguntes").submit(function(){
             event.preventDefault();
@@ -591,6 +758,60 @@ var Events = {
                   }
               });
             }
+        });
+
+        $(".formModificaPregunta").submit(function(event){
+          event.preventDefault();
+            console.log(11111111)
+            
+
+            /*var isValidate=$("#formAfegirPreguntes").valid();
+
+            if(isValidate) {
+              //var enquestaId = getUrlVars()["id"];
+              enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
+
+              var respostesP = new Array();
+              $("#divAfegirResposta input[type=text]").each(function(index){
+                if($(this).val() != "") {
+                  respostesP[index] = $(this).val();
+                }
+              });
+
+              if(respostesP[0] == "") respostesP = null;
+
+              var pregunta = {
+                  tipus: $('#formAfegirPreguntes input[name=tipusPregunta]:checked').val(),
+                  enunciat: $("#formAfegirPreguntes input#titolPregunta").val(),
+                  respostes: respostesP
+              }
+
+              //console.log(enquestaId);
+              //console.log(pregunta);
+
+              $.ajax({
+                  type: "POST",
+                  url: "/api/enquestes/admin0/enq"+enquestaId,
+                  contentType: "application/json",
+                  data: JSON.stringify(pregunta),
+                  success: function(enquesta){
+                      messageContainer("Success");
+                      $("#afegirPreguntes input[type=text]").each(function() {$(this).val("")});
+                      //$("#rbTipusText").attr('checked', 'checked');
+                      //$("#preguntaTest").addClass("template");
+                      $("#divAfegirNovaResposta").empty();
+                      $('#numResposta').val('1');
+                      configuraEstat(0, 0, 0);
+                      pintaPreguntes(enquesta);
+                      $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                      //window.location = domini+"Enquestes/Enq"+enquestaId+"/";
+                      //history.pushState({page:"Enquesta"}, "Enquesta", domini+"Enquesta/"+enquestaId+"/");
+                  },
+                  error: function(){
+                      messageContainer("Fail");
+                  }
+              });
+            }*/
         });
 
         /** RESPONDRE ENQUESTA **/
@@ -726,7 +947,7 @@ var Events = {
         var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
         var botonsDelete = $("#divPreguntes input[name=deletePreg]");
         var botonsMod = $("#divPreguntes input[name=modPreg]");
-        var botoOrdena = $("#divPreguntes input[name=bOrdenaPreguntes]");
+        //var botoOrdena = $("#divPreguntes input[name=bOrdenaPreguntes]");
         $.each(botonsDelete, function(num,boto) {
             $(boto).click(function(event){
               deletePregunta(idEnq,boto.id);
@@ -738,9 +959,9 @@ var Events = {
           });
         });
 
-        $(botoOrdena).click(function(event){
-          ordenaPreguntes(event);
-        });
+        //$(botoOrdena).click(function(event){
+          //ordenaPreguntes(event);
+        //});
    },
    botonsVeureRespostes: function(){
         var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
@@ -777,19 +998,11 @@ var Events = {
 };
 
 var pintaPreguntes = function(data){
-  $("#divPreguntes").empty();
-  /*console.log(data)
-  if(data.estat == 0) {
-    $("#divPreguntes").addClass("sortable");
-    initSortable();
-  }*/
-  
+  $("#divPreguntes").empty();  
 
   if(data.preguntes){
       $.each(data.preguntes, function(num,pregunta) {
           $("#divPreguntes").append(function(index,html){
-              //console.log(pregunta);
-
               var result = "<div class='divFilaPregunta' data-ajax-id='"+pregunta.id+"' data-ajax-tipus='"+pregunta.tipus+"'>";
                 result += "<div class='divTitolFilaPregunta'>";
                   result += "<p id='pPregunta"+pregunta.id+"' >Pregunta "+(num+1)+"</p>";

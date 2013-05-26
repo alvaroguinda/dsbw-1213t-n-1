@@ -154,6 +154,15 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 		enquestesRepository.save(enquestaR)
 	}
 
+  def getPregunta(idAdmin:String, idEnquesta:String, idPregunta: String):Pregunta= {
+    val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+    val posPreg = enquesta.preguntes.indexWhere(_.id == idPregunta)
+
+    new Pregunta(enquesta.preguntes(posPreg).id, enquesta.preguntes(posPreg).text, enquesta.preguntes(posPreg).tipus, enquesta.preguntes(posPreg).possiblesRespostes, enquesta.preguntes(posPreg).respostes)
+
+  }
+
+
 	def postPregunta(idAdmin:String, idEnquesta:String, pregunta: NovaPregunta):Enquesta= {
 		if(pregunta.tipus == "") throw new HttpException(400, "El tipus no pot estar en blanc")
 		if(pregunta.tipus != "Text" && pregunta.tipus != "Test" && pregunta.tipus != "Multi") throw new HttpException(400, "El tipus ha de ser Text,Test o Multi")
@@ -201,7 +210,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
     new Enquesta(enquestaNew._id.toString(),enquestaNew.idResp.toString(),enquestaNew.estat,enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.finalitzades,enquestaNew.preguntes)
 	}
 
-	def putPregunta(idAdmin:String, idEnquesta:String, idPregunta:String, pregunta:NovaPregunta){
+	def putPregunta(idAdmin:String, idEnquesta:String, idPregunta:String, pregunta:NovaPregunta):Enquesta={
     if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
     if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
     val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
@@ -219,7 +228,6 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
     else if(posPreg == enquestaOrigin.preguntes.length-1){ preguntesN = enquestaOrigin.preguntes.slice(0,posPreg):::List(novaPreg) }
     else{ preguntesN = enquestaOrigin.preguntes.slice(0,posPreg):::List(novaPreg):::enquestaOrigin.preguntes.slice(posPreg+1,enquestaOrigin.preguntes.length) }
 
-    println(preguntesN)
 
     val enquestaR = new EnquestaRecord (
       _id = new ObjectId(idEnquesta),
@@ -232,6 +240,9 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
       preguntes = preguntesN
     )
     enquestesRepository.save(enquestaR)
+
+    val enquestaNew = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+    new Enquesta(enquestaNew._id.toString(),enquestaNew.idResp.toString(),enquestaNew.estat,enquestaNew.titol,enquestaNew.inici,enquestaNew.fi,enquestaNew.finalitzades,enquestaNew.preguntes)
 	}
 
 

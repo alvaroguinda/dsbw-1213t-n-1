@@ -270,6 +270,20 @@ var initSortable = (function() {
       }
     });
     $( ".sortable" ).disableSelection();
+
+    $( ".sortableRespostes" ).sortable({
+      placeholder: "ui-state-highlight",
+      axis: "y",
+      change: function(event, ui) {
+        var index = ui.placeholder.index();
+        //ordenaPreguntes(event, ui);
+      },
+      out: function(event, ui) {
+        var index = ui.placeholder.index();
+        console.log(index)
+        //ordenaPreguntes(event);
+      }
+    });    $( ".sortableRespostes" ).disableSelection();
 });
 
 function resetSortable(div){

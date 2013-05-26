@@ -20,6 +20,7 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
   val getEnquestaAdmin = "GET /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
   val getEnquestaResp = "GET /api/enquestes/user([a-zA-z0-9]+)/enq([a-zA-z0-9]+)".r
   val putEnquestaAdmin = "PUT /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
+  val getPreguntaAdmin = "GET /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
   val postPreguntaAdmin = "POST /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
   val deletePreguntaAdmin = "DELETE /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
   val putPreguntaAdmin = "PUT /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
@@ -42,6 +43,7 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
         case getEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.getEnquesta(idAdmin,idEnquesta))
         case getEnquestaResp(idUser,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.getEnquestaResp(idUser,idEnquesta))
         case putEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.putEnquesta(idAdmin,idEnquesta,JSON.fromJSON[NovaEnquesta](body.getOrElse(throw new Exception("Bad Request")))))
+        case getPreguntaAdmin(idUser,idEnquesta, idPregunta) => Response(HttpStatusCode.Ok, enquestesService.getPregunta(idUser,idEnquesta, idPregunta))
         case postPreguntaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Created, enquestesService.postPregunta(idAdmin,idEnquesta,JSON.fromJSON[NovaPregunta](body.getOrElse(throw new Exception("Bad Request")))))
         case deletePreguntaAdmin(idAdmin,idEnquesta,idPregunta) => Response(HttpStatusCode.Ok, enquestesService.deletePregunta(idAdmin,idEnquesta,idPregunta))
         case putPreguntaAdmin(idAdmin,idEnquesta,idPregunta) => Response(HttpStatusCode.Ok, enquestesService.putPregunta(idAdmin,idEnquesta,idPregunta,JSON.fromJSON[NovaPregunta](body.getOrElse(throw new Exception("Bad Request")))))
