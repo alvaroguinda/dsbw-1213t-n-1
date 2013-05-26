@@ -7,7 +7,8 @@ var secc = {
     Registre : "registre",
     Contacte : "contactar",
     LlistatEnquestes : "llistatEnq",
-    Respondre: "respondEnq"
+    Respondre: "respondEnq",
+    veureRespostes: "veureRespostes"
 };
 
 var domini = "http://" + location.host + "/";
@@ -491,7 +492,8 @@ var Events = {
 
         $("#veureEnquesta .veureR").click(function(e) {
           e.preventDefault();
-          if($("#veureEnquesta .veureR").val() == "Veure Respostes"){
+          carregaSeccio("veureRespostes");
+          /*if($("#veureEnquesta .veureR").val() == "Veure Respostes"){
             $("#veureRespostes").removeClass("template");
             $("#veureEnquesta .veureR").val("Amagar Respostes");
           }
@@ -499,7 +501,7 @@ var Events = {
             $("#veureRespostesUser").addClass("template");
             $("#veureRespostes").addClass("template");
             $("#veureEnquesta .veureR").val("Veure Respostes");
-          }
+          }*/
           
         });
 
@@ -632,7 +634,6 @@ var Events = {
         /** RESPONDRE ENQUESTA **/
         $("#formRespEnq").submit(function(event){
             event.preventDefault();
-
             var isValidate=$("#formRespEnq").valid();
 
             if(isValidate) {
@@ -718,6 +719,11 @@ var Events = {
               } 
             }
         });
+//$("#veureEnquesta .veureR").click(function(e) {
+        $("#respondEnq .finResp").click(function(e) {
+          //event.preventDefault();
+          console.log("enviardefinitivo");
+        });
 
         /** REGISTRAR USUARIS **/
         $("#formReg").submit( function (event){
@@ -725,7 +731,7 @@ var Events = {
             if (checkpass()) {
                 user = $("#emailReg").val(),
                 pass = $("#passReg1").val()
-                console.log("pass correct")
+                //console.log("pass correct")
                 $.ajax({
                   type: "GET",
                   url: "/api/registre?user="+user+"&pass="+pass,
@@ -1048,8 +1054,8 @@ var configuraSeccio = function(data){
                     });
                   })
                    
-                   $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='enviarResp' name='enviarResp' value='Enviar Respostes'/></div>");
-                   $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='finResp' name='finResp' value='Finalitzar Respostes'/></div>");
+                   $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='enviarResp' name='enviarResp' value='Enviar Respostes'/><span>  Es podrà completar l'enquesta posteriorment</span></div>");
+                   $("#divPreguntesResp").append("<div class='boto'><input type='button' class='finResp' id='finResp' name='finResp' value='Finalitzar Enaquesta'/><span>  S'envien les respostes de manera definitiva</span></div>");
                    //Events.botoEnviarResposta();
                 }
             break;
