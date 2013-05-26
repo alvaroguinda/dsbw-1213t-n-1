@@ -287,10 +287,13 @@ function desaModificaPregunta(event) {
   idPregunta = $(formulari).attr('data-ajax-id');
 
   var respostesP = new Array();
+  var faltenRespostes = false;
   $(formulari).find("#divAfegirRespostaModifica input[type=text]").each(function(index){
     if($(this).val() != "") {
       respostesP[index] = $(this).val();
+      
     }
+    else faltenRespostes = true;
   });
 
   if(respostesP[0] == "") respostesP = null;
@@ -301,22 +304,25 @@ function desaModificaPregunta(event) {
       respostes: respostesP
   }
 
-  $.ajax({
-      type: "PUT",
-      url: "/api/enquestes/admin0/enq"+enquestaId+"/preg"+idPregunta,
-      contentType: "application/json",
-      data: JSON.stringify(pregunta),
-      success: function(enquesta){
-          messageContainer("Success");
-          $("#divAfegirNovaResposta").empty();
-          $('#numResposta').val('1');
-          configuraEstat(0, 0, 0);
-          pintaPreguntes(enquesta);
-      },
-      error: function(){
-          messageContainer("Fail");
-      }
-  });
+  if(pregunta.enunciat.length > 0 && faltenRespostes == false) {
+    $.ajax({
+        type: "PUT",
+        url: "/api/enquestes/admin0/enq"+enquestaId+"/preg"+idPregunta,
+        contentType: "application/json",
+        data: JSON.stringify(pregunta),
+        success: function(enquesta){
+            messageContainer("Success");
+            $("#divAfegirNovaResposta").empty();
+            $('#numResposta').val('1');
+            configuraEstat(0, 0, 0);
+            pintaPreguntes(enquesta);
+        },
+        error: function(){
+            messageContainer("Fail");
+        }
+    });
+  }
+  else messageContainer("Fail");
 }
 
 function ordenaPreguntes(event) {
