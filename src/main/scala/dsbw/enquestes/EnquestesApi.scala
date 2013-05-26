@@ -11,6 +11,8 @@ case class NovaEnquesta(titol: String, inici: String, fi: String, preguntes: Lis
 case class NovaPregunta(tipus: String, enunciat: String, respostes: List[String])
 case class EstatEnquesta(ident: Integer)
 case class Respostes(respostes:List[List[String]])
+case class PreguntaO(id: String, tipus: String, enunciat: String, respostes: List[String])
+case class Preguntes(preguntes:List[PreguntaO])
 case class NouUser(userName: String, passWord: String)
 
 /** Enquestes API */
@@ -21,7 +23,7 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
   val postPreguntaAdmin = "POST /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
   val deletePreguntaAdmin = "DELETE /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
   val putPreguntaAdmin = "PUT /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)".r
-  val putOrdrePreguntesAdmin = "PUT /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)/preg([a-zA-z0-9]+)/ordre([0-9]+)".r
+  val putOrdrePreguntesAdmin = "PUT /api/enquestes/ordre/admin([0-9]+)/enq([a-zA-z0-9]+)".r
   val patchEnquestaAdmin = "PATCH /api/enquestes/admin([0-9]+)/enq([a-zA-z0-9]+)".r
   val respondreEnquestaUserPrimera = "POST /api/enquestes/user([a-zA-z0-9]+)/enq([a-zA-z0-9]+)".r
   val respondreEnquestaUser = "PUT /api/enquestes/user([a-zA-z0-9]+)/enq([a-zA-z0-9]+)".r
@@ -43,7 +45,7 @@ class EnquestesApi(enquestesService:EnquestesService) extends Api {
         case postPreguntaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Created, enquestesService.postPregunta(idAdmin,idEnquesta,JSON.fromJSON[NovaPregunta](body.getOrElse(throw new Exception("Bad Request")))))
         case deletePreguntaAdmin(idAdmin,idEnquesta,idPregunta) => Response(HttpStatusCode.Ok, enquestesService.deletePregunta(idAdmin,idEnquesta,idPregunta))
         case putPreguntaAdmin(idAdmin,idEnquesta,idPregunta) => Response(HttpStatusCode.Ok, enquestesService.putPregunta(idAdmin,idEnquesta,idPregunta,JSON.fromJSON[NovaPregunta](body.getOrElse(throw new Exception("Bad Request")))))
-        case putOrdrePreguntesAdmin(idAdmin,idEnquesta,idPregunta,ordre) => Response(HttpStatusCode.Ok, enquestesService.putOrdrePregunta(idAdmin,idEnquesta,idPregunta,ordre,JSON.fromJSON[NovaPregunta](body.getOrElse(throw new Exception("Bad Request")))))
+        case putOrdrePreguntesAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.putOrdrePregunta(idAdmin,idEnquesta,JSON.fromJSON[Preguntes](body.getOrElse(throw new Exception("Bad Request")))))
         case patchEnquestaAdmin(idAdmin,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.patchEnquesta(idAdmin,idEnquesta,JSON.fromJSON[EstatEnquesta](body.getOrElse(throw new Exception("Bad Request")))))
         case respondreEnquestaUserPrimera(idUser,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.postRespondreEnquesta(idUser,idEnquesta,JSON.fromJSON[Respostes](body.getOrElse(throw new Exception("Bad Request")))))
         case respondreEnquestaUser(idUser,idEnquesta) => Response(HttpStatusCode.Ok, enquestesService.putRespondreEnquesta(idUser,idEnquesta,JSON.fromJSON[Respostes](body.getOrElse(throw new Exception("Bad Request")))))

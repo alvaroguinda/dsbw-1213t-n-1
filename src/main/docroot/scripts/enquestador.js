@@ -216,6 +216,7 @@ function ordenaPreguntes(event) {
   var tipus = "";
   var enunciat ="";
   var respostesP;
+  var preguntesO = new Array();
   $(event.target).closest("#divPreguntes").find(".divFilaPregunta").each(function(index) {
     idPregunta = $(this).attr("data-ajax-id");
     tipus = $(this).attr("data-ajax-tipus");
@@ -232,26 +233,32 @@ function ordenaPreguntes(event) {
     if(respostesP[0] == "") respostesP = null;
 
     var pregunta = {
+        id: idPregunta,
         tipus: tipus,
         enunciat: enunciat,
         respostes: respostesP
     }
 
-    console.log(pregunta)
+    preguntesO[index] = pregunta;
+       
+  });
 
-    $.ajax({
+  var ordre = {
+    preguntes: preguntesO
+  }
+
+  $.ajax({
         type: "PUT",
-        url: "/api/enquestes/admin0/enq"+enquestaId+"/preg"+idPregunta+"/ordre"+index,
+        url: "/api/enquestes/ordre/admin0/enq"+enquestaId,
         contentType: "application/json",
-        data: JSON.stringify(pregunta),
+        data: JSON.stringify(ordre),
         success: function(){
             messageContainer("Success");
         },
         error: function(){
             messageContainer("Fail");
         }
-    });    
-  });
+    }); 
 }
 
 function veureRespostes(idEnq,idUser){

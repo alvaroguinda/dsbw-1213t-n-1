@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession
 
 case class Resposta(idEnquestat:String, resposta:String)
 case class Pregunta(id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[Resposta])
+//case class PreguntaOrdre(preguntes:List[Pregunta])
 // estat de l'enquesta: 0 = en creació, 1 = acabada i publicada
 case class Enquesta(id:String, idResp:String, estat:Int, titol: String, inici: String, fi: String,finalitzades:List[String], preguntes:List[Pregunta])
 case class EnquestaID(id:String)
@@ -234,27 +235,16 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 	}
 
 
-  def putOrdrePregunta(idAdmin:String, idEnquesta:String, idPregunta:String, ordre:String, pregunta:NovaPregunta){
+  def putOrdrePregunta(idAdmin:String, idEnquesta:String, preguntes: Preguntes){
     if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
     if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
     val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
     if(enquestaOrigin.estat > 1) throw new HttpException(400, "La enquesta ja no pot ser modificada")
-    val posPreg = enquestaOrigin.preguntes.indexWhere(_.id == idPregunta)
-    val novaPreg = new Pregunta(
-      id = idPregunta,
-      text = pregunta.enunciat,
-      tipus = pregunta.tipus,
-      possiblesRespostes = pregunta.respostes,
-      respostes = List()
-    )
-    var ordreI = ordre.toInt
-    var preguntesN = enquestaOrigin.preguntes
-    if(ordreI == 0){ preguntesN = List(novaPreg):::enquestaOrigin.preguntes.slice(1,enquestaOrigin.preguntes.length) }
-    else if(ordreI == enquestaOrigin.preguntes.length-1){ preguntesN = enquestaOrigin.preguntes.slice(0,ordreI):::List(novaPreg) }
-    else{ preguntesN = enquestaOrigin.preguntes.slice(0,ordreI):::List(novaPreg):::enquestaOrigin.preguntes.slice(ordreI+1,enquestaOrigin.preguntes.length) }
 
-    println(ordreI)
-    println(pregunta.enunciat)
+    var preguntesO:List[Pregunta] = List()
+    preguntes.preguntes.foreach{p =>
+      preguntesO = preguntesO ::: List(new Pregunta(p.id,p.enunciat,p.tipus,p.respostes,List()))
+    }
 
     val enquestaR = new EnquestaRecord (
       _id = new ObjectId(idEnquesta),
@@ -264,7 +254,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
       inici = enquestaOrigin.inici,
       fi = enquestaOrigin.fi,
       finalitzades = enquestaOrigin.finalitzades,
-      preguntes = preguntesN
+      preguntes = preguntesO
     )
     enquestesRepository.save(enquestaR)
   }
