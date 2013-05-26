@@ -168,49 +168,6 @@ function modPregunta(idEnq,idPreg){
   console.log("not yet implemented.");
 }
 
-/*function ordenaPreguntes(event, div) {
-  var enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
-  var idPregunta = -1;
-  var tipus = "";
-  var enunciat ="";
-  var respostesP;
-  //$(div.item).find(".divFilaPregunta").each(function(index) {
-    idPregunta = $(div.item).attr("data-ajax-id");
-    tipus = $(div.item).attr("data-ajax-tipus");
-    enunciat = $(div.item).find(".divContingutPregunta input[id^='contingutPregunta']").val();
-
-    respostesP = new Array();
-
-    $(div.item).find(".divFilaPossiblesRespostes input[type=text]").each(function(index){
-      if($(this).val() != "") {
-        respostesP[index] = $(this).val();
-      }
-    });
-
-    if(respostesP[0] == "") respostesP = null;
-
-    var pregunta = {
-        tipus: tipus,
-        enunciat: enunciat,
-        respostes: respostesP
-    }
-
-    $.ajax({
-        type: "PUT",
-        url: "/api/enquestes/admin0/enq"+enquestaId+"/preg"+idPregunta,
-        contentType: "application/json",
-        data: JSON.stringify(pregunta),
-        success: function(){
-            messageContainer("Success");
-        },
-        error: function(){
-            messageContainer("Fail");
-        }
-    });    
-  //});
-
-}*/
-
 function ordenaPreguntes(event) {
   var enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
   var idPregunta = -1;
@@ -218,6 +175,7 @@ function ordenaPreguntes(event) {
   var enunciat ="";
   var respostesP;
   var preguntesO = new Array();
+  var posicio = 1;
   $(event.target).closest("#divPreguntes").find(".divFilaPregunta").each(function(index) {
     idPregunta = $(this).attr("data-ajax-id");
     tipus = $(this).attr("data-ajax-tipus");
@@ -241,6 +199,10 @@ function ordenaPreguntes(event) {
     }
 
     preguntesO[index] = pregunta;
+
+
+    $("#pPregunta"+idPregunta).text("Pregunta "+posicio)
+    posicio++;
        
   });
 
@@ -519,7 +481,7 @@ var Events = {
                 inici: $("#veureDesM").val(),
                 fi: $("#veureFinsM").val()
               }
-              console.log(enquesta);
+              //console.log(enquesta);
 
               $.ajax({
                 type: "PUT",
@@ -663,7 +625,6 @@ var Events = {
               var resposta = {
                 respostes: respostes
               }
-              console.log(resposta);
 
               if(idUser == "0"){
                 $.ajax({
@@ -817,17 +778,21 @@ var Events = {
 
 var pintaPreguntes = function(data){
   $("#divPreguntes").empty();
-  $("#divPreguntes").addClass("sortable");
-  initSortable();
+  /*console.log(data)
+  if(data.estat == 0) {
+    $("#divPreguntes").addClass("sortable");
+    initSortable();
+  }*/
+  
 
   if(data.preguntes){
       $.each(data.preguntes, function(num,pregunta) {
           $("#divPreguntes").append(function(index,html){
-              console.log(pregunta);
+              //console.log(pregunta);
 
               var result = "<div class='divFilaPregunta' data-ajax-id='"+pregunta.id+"' data-ajax-tipus='"+pregunta.tipus+"'>";
                 result += "<div class='divTitolFilaPregunta'>";
-                  result += "<p>Pregunta "+(num+1)+"</p>";
+                  result += "<p id='pPregunta"+pregunta.id+"' >Pregunta "+(num+1)+"</p>";
                   result += "<p class='template'>"+pregunta.id+"</p>";
                   result += "<p>Tipus: "+pregunta.tipus+"</p>";
                 result += "</div>";
@@ -857,7 +822,7 @@ var pintaPreguntes = function(data){
       $(".divFilaPregunta:even").addClass("filaEven"); 
       $(".divFilaPregunta:odd").addClass("filaOdd");      
 
-      $("#divPreguntes").append("<div id='divOrdenaPreguntesBoto' class='boto'><input type='button' id='bOrdenaPreguntes' name='bOrdenaPreguntes' value='Confirma Ordre'></div>");      
+      //$("#divPreguntes").append("<div id='divOrdenaPreguntesBoto' class='boto'><input type='button' id='bOrdenaPreguntes' name='bOrdenaPreguntes' value='Confirma Ordre'></div>");      
 
       Events.botonsPreguntes();
 
@@ -867,19 +832,30 @@ var pintaPreguntes = function(data){
 //Funció per a pintar l'estat de l'enquesta, cal cridar-la cada vegada que es faci una crida al server si no fem refresh.
 var configuraEstat = function(estat, id, resp){
   $("#estatEnquesta").html("<h2 id ='estatEnq'>Estat de l'enquesta</h2>");
-  if(estat == 0){
+  if(estat == 0){    
     $("#estatEnquesta").append("<h4>En construcció</h4>");
     $("#estatEnquesta").append("<p>L'enquesta està en estat de construcció. Pot ser modificada, i es poden afegir i treure preguntes. Per a finalitzar-la prèmer el botó de Publicar.</p>");
     $("#veureEnquesta .publicar").removeClass("template");
     $("#veureEnquesta .veureR").addClass("template");
+
+    //Mentre l'enquesta no estigui publicada podem canviar l'ordre
+    $("#divPreguntes").addClass("sortable");
+    initSortable();
+
   }
   else if(estat == 1){
+
     $("#estatEnquesta").append("<h4>Publicada</h4>");
     $("#estatEnquesta").append("<p>L'enquesta pot ser resposta per qualsevol persona que accedeixi a l'enllaç que apareix a continuació.</p>");
     $("#estatEnquesta").append("<p>Si es modifica cap de les dades de l'enquesta, aquesta tornarà a l'estat de construcció, i l'enllaç quedarà invalidat</p>");
     $("#estatEnquesta").append("<h6>"+domini+"Respondre/Enq"+id+"</h6>");
     $("#veureEnquesta .publicar").addClass("template");
     $("#veureEnquesta .veureR").addClass("template");
+
+    //Si tenim l'enquesta publicada ja no podem canviar l'ordre
+    if($("#divPreguntes .sortable").length > 0) {
+      resetSortable("#divPreguntes");
+    }
   } 
   else if(estat == 2){
     $("#estatEnquesta").append("<h4>Resposta</h4>");
@@ -889,6 +865,11 @@ var configuraEstat = function(estat, id, resp){
     $("#estatEnquesta").append("<h6>Respostes a l'enquesta: "+resp+"</h6>");
     $("#veureEnquesta .publicar").addClass("template");
     $("#veureEnquesta .veureR").removeClass("template");
+    
+    //Si tenim l'enquesta publicada ja no podem canviar l'ordre
+    if($("#divPreguntes .sortable").length > 0) {
+      resetSortable("#divPreguntes");
+    }
   } 
 }
 
@@ -980,7 +961,7 @@ var configuraSeccio = function(data){
             if(data.preguntes){
                 $.each(data.preguntes, function(num,pregunta) {
                     $("#divPreguntesResp").append(function(index,html){
-                        console.log(pregunta);
+                        //console.log(pregunta);
                           var result = "<div class='divFilaPregunta'>";
                           result += "<div class='divTitolFilaPregunta'>";
                             result += "<p>"+(num+1)+". "+pregunta.text+"</p>";
@@ -1062,7 +1043,7 @@ var configuraSeccio = function(data){
         case "LlistatEnquestes":
             $("#llistatEnq").html("");
             $.each(data.enquestes, function(numEnq,enquesta){
-                console.log(enquesta);
+                //console.log(enquesta);
                 result =  "<div class='enquesta'>";
                 result += "<h2>"+enquesta.titol+"</h2>";
                 if (enquesta.estat == 0) estat = "En construcció";

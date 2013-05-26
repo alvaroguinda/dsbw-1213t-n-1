@@ -264,7 +264,14 @@ var initSortable = (function() {
       change: function(event, ui) {
         var index = ui.placeholder.index();
         //ordenaPreguntes(event, ui);
+      },
+      out: function(event, ui) {
+        ordenaPreguntes(event);
       }
     });
     $( ".sortable" ).disableSelection();
 });
+
+function resetSortable(div){
+    $(div).sortable('disable');
+}
