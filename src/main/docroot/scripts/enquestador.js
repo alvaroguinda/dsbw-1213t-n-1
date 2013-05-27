@@ -37,8 +37,9 @@ var carregaSeccio = function(nomSeccio,data){
                 //console.log(idUser);
                 if(id != "") getEnquestaRespondre(id, idUser);
                 break;
-            default: //si aquet path no existeix al nostre Map es que estem entrant per primer cop a la web i la url té el path en blanc o és "index.html"
-                path = "Inici";
+            default:
+                if(path == "") //si aquet path no existeix al nostre Map es que estem entrant per primer cop a la web i la url té el path en blanc o és "index.html"
+                    path = "Inici";
                 configuraSeccio(data); //configurem els handlers d'aquesta secció
                 history.pushState({page:path}, path, domini+path+"/"); //modifiquem la url de la web + l'historic associat del navegador
         }
@@ -596,6 +597,13 @@ var Events = {
 
         $("#veureEnquesta .publicar").click(function(e) {
             e.preventDefault();
+
+            /** comprovem si la enquesta no té preguntes per impedir que es publiqui buida! **/
+            if($("#divPreguntes > div").length === 0){
+                messageContainer("Fail");
+                return;
+            }
+
             enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
             var estatEnquesta = {
               ident: 1

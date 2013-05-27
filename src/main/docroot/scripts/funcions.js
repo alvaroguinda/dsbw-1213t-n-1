@@ -68,7 +68,7 @@ var validaFormulari = function ( form ) {
         remote: "Please fix this field.",
         email: "Email incorrecte.",
         url: "Please enter a valid URL.",
-        date: "Data incorrecte.",
+        date: "Data incorrecta.",
         dateISO: "Format data incorrecte.",
         number: "Número incorrecte.",
         digits: "Please enter only digits.",
@@ -93,12 +93,11 @@ var validaFormulari = function ( form ) {
         var idDataInici = '#'+$(formulari).find(".from").attr('id');
         var idDataFi = '#'+$(formulari).find(".to").attr('id');
 
-        $(formulari).find(".from").rules("add", {
-            required: true, 
+        /*$(formulari).find(".from").rules("add", {
             dpDate: true,
             catalanDate: true,
-            dpCompareDate: ['before', idDataFi] 
-        });
+            dpCompareDate: ['before', idDataFi]
+        });*/
 
         $(formulari).find(".to").rules("add", {
             required: true, 
@@ -130,7 +129,7 @@ var initLogin = (function() {
         url: "/api/auth",
         contentType: "application/json",
         success: function(authUser){
-            console.log(authUser);
+            //console.log(authUser);
             if(authUser.logged){
                 $("#login").val("Sign out");
                 $("#login").addClass("logout");
@@ -144,7 +143,7 @@ var initLogin = (function() {
                 $("#spanLogin").html(authUser.nom);
                 console.log("Usuari Autenticat");
             }else{
-                console.log("Usuari No Autenticat");
+                //console.log("Usuari No Autenticat");
             }
         },
         error: function(){

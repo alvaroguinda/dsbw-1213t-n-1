@@ -8,7 +8,15 @@ import java.util.Date
 //case class RespostaRecord(idEnquestat:String, resposta:String)
 //case class PreguntaRecord(_id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[RespostaRecord])
 //case class EnquestaRecord(_id:ObjectId = new ObjectId(), titol:String, inici:String, fi:String, preguntes:List[List[String]])
-case class EnquestaRecord(_id:ObjectId = new ObjectId(), idResp: ObjectId= new ObjectId(),estat:Integer,titol:String, inici:String, fi:String,finalitzades:List[String], preguntes:List[Pregunta])
+case class EnquestaRecord(
+                _id:ObjectId = new ObjectId(),
+                idResp: ObjectId= new ObjectId(),
+                estat:Integer,
+                titol:String,
+                inici:String,
+                fi:String,
+                finalitzades:List[String],
+                preguntes:List[Pregunta])
 
 
 class EnquestesDao(db:DB) extends MongoDao[EnquestaRecord](db.enquestes) {

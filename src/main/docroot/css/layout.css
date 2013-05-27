@@ -584,7 +584,10 @@ div.inputdata input[type="checkbox"]{
     margin-bottom: 25px;
 }
 
-
+div#ui-datepicker-div .ui-state-highlight {
+    height: 1.9em;
+    line-height: 1.3em;
+}
 
 .ui-state-highlight {
     height: 5em; line-height: 5em;
