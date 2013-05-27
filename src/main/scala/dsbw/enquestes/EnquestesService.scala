@@ -401,7 +401,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         new EnquestaUser(enquestaR.idResp.toString(),id_user)
   }
 
-  def putRespondreEnquestaFinal(idUser: String, idEnquesta: String, respostes: Respostes):EnquestaUser={
+  def putRespondreEnquestaFinalPut(idUser: String, idEnquesta: String, respostes: Respostes):EnquestaUser={
     val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
         var id_user = idUser
         if(idUser == "0") {
@@ -409,6 +409,55 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
           id_user = _idUser.toString()
         }
 
+        //println(id_user)
+        //for (r <- respostes) println(r)
+        var preguntesE:List[Pregunta] = List()
+        var respostesP:List[Resposta] = List()
+
+        //respostes.respostes.foreach(r => println(r))
+
+        enquesta.preguntes.foreach{p =>
+          //preguntesE = List(p) ::: preguntesE
+          respostesP = p.respostes.filter(_.idEnquestat != id_user)
+          respostes.respostes.foreach{r => 
+            if (p.id == r.apply(0)) {
+              respostesP = respostesP ::: List(new Resposta(id_user,r.apply(1)))
+            } 
+          }
+
+          var preguntaR = new Pregunta(
+            id = p.id,
+            text = p.text,
+            tipus = p.tipus,
+            possiblesRespostes = p.possiblesRespostes,
+            respostes = respostesP
+            )
+          preguntesE =  preguntesE ::: List(preguntaR) //preguntesE.patch(i,preguntaR
+        }
+//case class EnquestaRecord(_id:ObjectId = new ObjectId(), idResp: ObjectId= new ObjectId(),estat:Integer,titol:String, inici:String, fi:String, preguntes:List[Pregunta])
+//case class Pregunta(id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[Resposta])
+        val enquestaR = EnquestaRecord (
+          _id = enquesta._id,
+          idResp = enquesta.idResp,
+          estat = 2,
+          titol = enquesta.titol,
+          inici = enquesta.inici,
+          fi = enquesta.fi,
+          preguntes = preguntesE,
+          finalitzades = enquesta.finalitzades ::: List(idUser)
+          )
+        enquestesRepository.save(enquestaR)
+
+        new EnquestaUser(enquestaR.idResp.toString(),id_user)
+  }
+  def putRespondreEnquestaFinalPost(idUser: String, idEnquesta: String, respostes: Respostes):EnquestaUser={
+    val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
+        var id_user = idUser
+        if(idUser == "0") {
+          var _idUser = new ObjectId()
+          id_user = _idUser.toString()
+        }
+        println(Respostes)
         //println(id_user)
         //for (r <- respostes) println(r)
         var preguntesE:List[Pregunta] = List()

@@ -998,7 +998,89 @@ var Events = {
    },
     botoFinalitzarResposta: function(){
         $("#finResp").click(function(event){
-            console.log("finalitzada");
+            event.preventDefault();
+            var isValidate=$("#formRespEnq").valid();
+
+            if(isValidate) {
+              enquestaId = location.pathname.substring(1).split("/")[1].substring(3);
+
+              var idUser = "0";
+              if(location.pathname.split("/")[3] != null) {
+                idUser = location.pathname.substring(1).split("/")[2].substring(4);                  
+              }
+
+              var respostes = new Array();
+              var posicioResposta = 0;
+              $(event.target).closest(".divFormulariResp").find(".divContingutPregunta :input").each(function(index) {
+                
+                if($(this).is(":radio") || $(this).is(":checkbox")) {
+                  if($(this).is(":checked")) {
+                    respostes[posicioResposta] = [$(this).closest('.inputdata').attr('id'), $(this).val()];
+                    posicioResposta++;
+                  }
+                }
+                else {
+                  respostes[posicioResposta] = [$(this).attr('id'), $(this).val()];
+                  posicioResposta++;
+                }                
+              });
+
+              var resposta = {
+                respostes: respostes
+              }
+
+              if(idUser == "0"){
+                $.ajax({
+                  type: "POST",
+                  url: "/api/enquestes/user"+idUser+"/enq"+enquestaId+"/finish",
+                  contentType: "application/json",
+                  data: JSON.stringify(resposta),
+                  success: function(enquestaUser){
+                      messageContainer("Success");
+                      $("#respondEnq").empty();
+                      resultat="<div class='missatgeCentral'>";
+                      resultat+="<p>Les respostes s'han enviat correctament</p>";
+                      resultat+="</div>";
+                      $("#respondEnq").append(resultat);
+                  },
+                  error: function(){
+                      messageContainer("Fail");
+                      $("#respondEnq").empty();
+                      resultat="<div class='missatgeCentral'>";
+                      resultat+="<p>S'ha produït un error al enviar les respostes. Torni a provar-ho de nou, disculpi les molèsties.</p>";
+                      resultat+="<a href='"+domini+"Respondre/Enq"+enquestaId+"'>"+domini+"Respondre/Enq"+enquestaId+"</a>";
+                      resultat+="</div>";
+                      $("#respondEnq").append(resultat);
+                  }
+                });
+              }
+              else{
+                $.ajax({
+                  type: "PUT",
+                  url: "/api/enquestes/user"+idUser+"/enq"+enquestaId+"/finish",
+                  contentType: "application/json",
+                  data: JSON.stringify(resposta),
+                  success: function(enquestaUser){
+                      messageContainer("Success");
+                      $("#respondEnq").empty();
+                      resultat="<div class='missatgeCentral'>";
+                      resultat+="<p>Les respostes s'han enviat correctament. Pot consultar o modificar la seva enquesta accedint al següent enllaç.</p>";
+                      resultat+="<a href='"+domini+"Respondre/Enq"+enquestaId+"/User"+enquestaUser.idUser+"'>"+domini+"Respondre/Enq"+enquestaId+"/User"+enquestaUser.idUser+"</a>";
+                      resultat+="</div>";
+                      $("#respondEnq").append(resultat);
+                  },
+                  error: function(){
+                      messageContainer("Fail");
+                      $("#respondEnq").empty();
+                      resultat="<div class='missatgeCentral'>";
+                      resultat+="<p>S'ha produït un error al enviar les respostes. Torni a provar-ho de nou, disculpi les molèsties.</p>";
+                      resultat+="<a href='"+domini+"Respondre/Enq"+enquestaId+"'>"+domini+"Respondre/Enq"+enquestaId+"</a>";
+                      resultat+="</div>";
+                      $("#respondEnq").append(resultat);
+                  }
+                });
+              } 
+            }
         });
    }
 
@@ -1152,7 +1234,7 @@ var configuraSeccio = function(data){
             $("#veureDesM").val(data["inici"]);
             $("#veureFinsM").val(data["fi"]);
             var r = 0;
-            if(data.estat > 1) r = data.preguntes[0].respostes.length;
+            if(data.estat > 1) r = data.finalitzades.length;
             configuraEstat(data.estat, data.idResp, r);
             pintaPreguntes(data);
             $("#veureRespostesUser").addClass("template");
