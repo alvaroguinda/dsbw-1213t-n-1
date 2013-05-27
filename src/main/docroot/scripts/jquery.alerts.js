@@ -292,6 +292,8 @@
 				show: 'fade',
                 hide: 'fade',
     			timer: -1,
+                load: -1,
+                width: '',
             	allowEscape: false,
     			onTimeout: function(){ },
     			onClose: function(e, u) { },
@@ -301,13 +303,15 @@
                 		callback: function() {$(this).dialog("close");},
                 		css:""
                 	}
-                ]
+                ],
+                onOpen: function() {}
             };
 
             if (options) {
                 defaultOptions = $.extend(defaultOptions, options);
             }
 
+            var dlgHeight = 'auto';
             var dlgWidth = 'auto';
 
             var btns = {};
@@ -345,6 +349,10 @@
                 }
             }
 
+            if (defaultOptions.width != '') {
+                dlgWidth = defaultOptions.width;
+            }
+
             var timer;
             $dialog.dialog({
             	closeOnEscape: defaultOptions.allowEscape,
@@ -379,6 +387,10 @@
 	                		defaultOptions.onTimeout();
 	                	}, defaultOptions.timer); 
                 	}
+
+                    if (defaultOptions.load !== -1) {                        
+                        defaultOptions.onOpen();
+                    }
                 }
             });
             
