@@ -4,6 +4,7 @@ import org.bson.types.ObjectId
 import java.util.Date
 import com.mongodb.casbah.commons.MongoDBList
 import javax.servlet.http.HttpSession
+import com.github.nscala_time.time.Imports._
 
 case class Resposta(idEnquestat:String, resposta:String)
 case class Pregunta(id:String, text:String, tipus:String, possiblesRespostes:List[String], respostes:List[Resposta])
@@ -114,7 +115,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 		//println(enquesta.inici)
 		//println(enquesta.fi)
 		if(enquesta.titol == "") throw new HttpException(400, "El titol no pot estar en blanc")
-		if(enquesta.inici == "") throw new HttpException(400, "La data inici no pot estar en blanc")
+		//if(enquesta.inici == "") throw new HttpException(400, "La data inici no pot estar en blanc")
 		if(enquesta.fi == "") throw new HttpException(400, "La data fi no pot estar en blanc")
 		//if(enquestesRepository.findByTitol(enquesta.titol).isDefined) throw new HttpException(400,"El Titol ja existeix")
 		val enquestaR = new EnquestaRecord (
@@ -128,12 +129,13 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 			preguntes = List()
 		)
 		enquestesRepository.save(enquestaR)
+    println(enquestaR.toString)
 		new EnquestaID(enquestaR._id.toString())
 	}
 
 	def putEnquesta(idAdmin:String, idEnquesta:String, enquesta: NovaEnquesta){
 		if(enquesta.titol == "") throw new HttpException(400, "El titol no pot estar en blanc")
-		if(enquesta.inici == "") throw new HttpException(400, "La data inici no pot estar en blanc")
+		//if(enquesta.inici == "") throw new HttpException(400, "La data inici no pot estar en blanc")
 		if(enquesta.fi == "") throw new HttpException(400, "La data fi no pot estar en blanc")
 		if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
 		if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
@@ -272,16 +274,23 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 
 	def patchEnquesta(idAdmin:String, idEnquesta:String, estat:EstatEnquesta):Enquesta= {
 		if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
-		if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
+    if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
 		val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
+    if(enquestaOrigin.preguntes.isEmpty)  throw new HttpException(400, "No es pot publicar una enquesta sense preguntes")
 		var idr = new ObjectId()
 		if(estat.ident != 1) idr = null
+
+    var dataInici = enquestaOrigin.inici
+    if(dataInici == "") {
+      dataInici = DateTime.now.dayOfMonth.get + "-" + DateTime.now.monthOfYear.get + "-" + DateTime.now.year.get
+    }
+
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
 			idResp = idr,
 			estat = estat.ident,
 			titol = enquestaOrigin.titol,
-			inici = enquestaOrigin.inici,
+			inici = dataInici,
 			fi = enquestaOrigin.fi,
 			preguntes = enquestaOrigin.preguntes,
       finalitzades = enquestaOrigin.finalitzades
