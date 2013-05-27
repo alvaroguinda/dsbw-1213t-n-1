@@ -909,7 +909,7 @@ var Events = {
         });
 //$("#veureEnquesta .veureR").click(function(e) {
         $("#respondEnq .finResp").click(function(e) {
-          //event.preventDefault();
+          e.preventDefault();
           console.log("enviardefinitivo");
         });
 
