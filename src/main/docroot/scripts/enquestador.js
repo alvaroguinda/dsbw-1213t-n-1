@@ -914,6 +914,12 @@ var Events = {
         });
 
         /** REGISTRAR USUARIS **/
+        $("#registre .tornar").click(function(e) {
+            e.preventDefault();
+            carregaSeccio("Inici");
+            $("#navigation li").removeClass("current");
+            $("#lInici").addClass("current");
+        });
         $("#formReg").submit( function (event){
             event.preventDefault();
             if (checkpass()) {
@@ -926,21 +932,23 @@ var Events = {
                   contentType: "application/json",
                   success: function(data){
                       messageContainer("Success");
-                      $("#registre").empty();
+                      $("#formRegistre").empty();
+                      $("#subRegistre").addClass('template')
                       resultat="<div><p>El usuari ha estat registrat correctament. Ja pots iniciar sessió amb el username y el password.</p></div>";
-                      $("#registre").append(resultat);
+                      $("#formRegistre").append(resultat);
                   },
                   error: function(data){
                       messageContainer("Fail");
-                      $("#registre").empty();
+                      $("#formRegistre").empty();
                       resultat="<div><p>Ha succeït un error en el proces de registre. Torna a realitzar el registre.</p></div>";
-                      $("#registre").append(resultat);
+                      $("#subRegistre").addClass('template')
+                      $("#formRegistre").append(resultat);
                   }
                 });
                 return true;
             }
             else {
-                console.log("error no pass correct")
+                console.log("error no pass correct");
                 return false;
             }
         });
