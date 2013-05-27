@@ -134,7 +134,8 @@ function getEnquestaRespondre(id, idUser){
     $.ajax({
         type: "GET",
         url: "/api/enquestes/user"+idUser+"/enq"+id,
-        success: function(enquesta) {      
+        success: function(enquesta) {
+          console.log(enquesta)      
             configuraSeccio(enquesta); //configurem els handlers d'aquesta secció
         },
         dataType: "json",
@@ -989,7 +990,7 @@ var Events = {
                       messageContainer("Success");
                       $("#respondEnq").empty();
                       resultat="<div class='missatgeCentral'>";
-                      resultat+="<p>Les respostes s'han enviat correctament</p>";
+                      resultat+="<p>Les respostes s'han enviat correctament.</p>";
                       resultat+="</div>";
                       $("#respondEnq").append(resultat);
                   },
@@ -1014,8 +1015,7 @@ var Events = {
                       messageContainer("Success");
                       $("#respondEnq").empty();
                       resultat="<div class='missatgeCentral'>";
-                      resultat+="<p>Les respostes s'han enviat correctament. Pot consultar o modificar la seva enquesta accedint al següent enllaç.</p>";
-                      resultat+="<a href='"+domini+"Respondre/Enq"+enquestaId+"/User"+enquestaUser.idUser+"'>"+domini+"Respondre/Enq"+enquestaId+"/User"+enquestaUser.idUser+"</a>";
+                      resultat+="<p>Les respostes s'han enviat correctament.</p>";
                       resultat+="</div>";
                       $("#respondEnq").append(resultat);
                   },

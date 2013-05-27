@@ -592,3 +592,7 @@ div#ui-datepicker-div .ui-state-highlight {
 .ui-state-highlight {
     height: 5em; line-height: 5em;
 }
+
+.contacte p{
+    text-align: center;
+}
