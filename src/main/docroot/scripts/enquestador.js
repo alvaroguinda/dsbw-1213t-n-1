@@ -907,11 +907,7 @@ var Events = {
               } 
             }
         });
-//$("#veureEnquesta .veureR").click(function(e) {
-        $("#respondEnq .finResp").click(function(e) {
-          //event.preventDefault();
-          console.log("enviardefinitivo");
-        });
+
 
         /** REGISTRAR USUARIS **/
         $("#formReg").submit( function (event){
@@ -1000,7 +996,13 @@ var Events = {
         $("#enviarResp").click(function(event){
             enviarResposta();
         });
+   },
+    botoFinalitzarResposta: function(){
+        $("#finResp").click(function(event){
+            console.log("finalitzada");
+        });
    }
+
 };
 
 var pintaPreguntes = function(data){
@@ -1256,7 +1258,7 @@ var configuraSeccio = function(data){
                    
                    $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='enviarResp' name='enviarResp' value='Enviar Respostes'/><span>  Es podrà completar l'enquesta posteriorment</span></div>");
                    $("#divPreguntesResp").append("<div class='boto'><input type='button' class='finResp' id='finResp' name='finResp' value='Finalitzar Enaquesta'/><span>  S'envien les respostes de manera definitiva</span></div>");
-                   //Events.botoEnviarResposta();
+                   Events.botoFinalitzarResposta();
                 }
             break;
         case "LlistatEnquestes":
