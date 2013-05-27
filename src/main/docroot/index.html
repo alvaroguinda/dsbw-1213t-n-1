@@ -253,14 +253,24 @@
                 <h2>Registre</h2>
                 <form action="#" class="formRegistre" id="formReg" name="formReg">
                     <!--<div><img style="margin: 0 auto; display: block; padding: 10px 10px 30px;"  src="/img/website_under_construction.png" /></div>-->
-                    <label for="titol">E-mail</label>
-                    <input type="email" class="email" name="emailReg" id="emailReg" required><br/>
-                    <label for="titol">Password</label>
-                    <input type="password" class="pass" name="passReg1" id="passReg1" required oninput="checkpass()">
-                    <label for="titol">Retype Password</label>
-                    <input type="password" class="pass" name="passReg2" id="passReg2" required oninput="checkpass()">
-                    <br/><br/>
-                    <input type="submit" value="Registre" id="subRegistre">
+                    <div class="divFormulari">
+                        <div class="inputdata">
+                            <label for="titol">E-mail</label>
+                            <input type="email" class="email" name="emailReg" id="emailReg" required><br/>
+                        </div>
+                        <div class="inputdata">
+                            <label for="titol">Password</label>
+                            <input type="password" class="pass" name="passReg1" id="passReg1" required oninput="checkpass()">
+                        </div>
+                        <div class="inputdata">
+                            <label for="titol">Retype Password</label>
+                            <input type="password" class="pass" name="passReg2" id="passReg2" required oninput="checkpass()">
+                        </div>
+
+                        <div class="boto">
+                            <input type="submit" value="Registre" id="subRegistre">
+                        </div>
+                    </div>
                 </form>
             </div>
             <!-- FI REGISTRE -->
