@@ -134,8 +134,7 @@ function getEnquestaRespondre(id, idUser){
     $.ajax({
         type: "GET",
         url: "/api/enquestes/user"+idUser+"/enq"+id,
-        success: function(enquesta) {
-          console.log(enquesta)      
+        success: function(enquesta) {  
             configuraSeccio(enquesta); //configurem els handlers d'aquesta secció
         },
         dataType: "json",
@@ -1250,96 +1249,122 @@ var configuraSeccio = function(data){
             }
             break;
         case "Respondre":
-            $("#veureTitolResp").text(data["titol"]);
-            $("#veureDesMResp").text(data["inici"]);
-            $("#veureFinsMResp").text(data["fi"]);
+            console.log(data);
+            var dActual = new Date();
 
-            var idUser = "0";
-            if(location.pathname.split("/")[3] != null) {
-              idUser = location.pathname.substring(1).split("/")[2].substring(4);                  
-            }
-            //console.log(idUser)
+            var dia = parseInt(data.inici.substr(0,2));
+            var mes = parseInt(data.inici.substr(3,2));
+            mes--;
+            var any = parseInt(data.inici.substr(6,4))
+            var dIniciEnquesta = new Date(any, mes, dia)
+            
+            if(dActual.getTime() >= dIniciEnquesta.getTime()) {
 
-            if(data.preguntes){
-                $.each(data.preguntes, function(num,pregunta) {
-                    $("#divPreguntesResp").append(function(index,html){
-                        //console.log(pregunta);
-                          var result = "<div class='divFilaPregunta'>";
-                          result += "<div class='divTitolFilaPregunta'>";
-                            result += "<p>"+(num+1)+". "+pregunta.text+"</p>";
-                            result += "<p class='template'>Tipus: "+pregunta.tipus+"</p>";
-                          result += "</div>";
-                          result += "<div class='divContingutPregunta'>";
-                            result += "<p class='template'>Pregunta: "+pregunta.text+"</p>";
-                        switch (pregunta.tipus){
-                            case "Text":
-                                  //console.log(pregunta.respostes)
-                                  var respostaUsuari = "";
-                                  $.each(pregunta.respostes, function(numR,r) {
-                                    if(r.idEnquestat == idUser) {
-                                      respostaUsuari = r.resposta;
-                                    }
-                                  });
-                                  //result += "<span><input type='text' name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'></span>";
-                                  result += "<span><textarea name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'>"+respostaUsuari+"</textarea></span>";
-                                  result += "</div>";
-                                result += "</div>";
-                                break;
-                            case "Test":
-                                if(pregunta.possiblesRespostes.length > 0) {
+              $("#veureTitolResp").text(data["titol"]);
+              $("#veureDesMResp").text(data["inici"]);
+              $("#veureFinsMResp").text(data["fi"]);
 
-                                  var respostaUsuariTest = "";
-                                  $.each(pregunta.respostes, function(numR,r) {
-                                    if(r.idEnquestat == idUser) {
-                                      respostaUsuariTest = r.resposta;
-                                    }
-                                  });
+              var idUser = "0";
+              var finalitzada=false;
 
-                                  result += "<div class='inputdata' id='"+pregunta.id+"'>";
-                                    $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                        var marcada = "";
-                                        if(resposta == respostaUsuariTest) {
-                                          marcada = "checked='true'";
+              if(location.pathname.split("/")[3] != null) {
+                idUser = location.pathname.substring(1).split("/")[2].substring(4);
+                $(data.finalitzades).each(function() {
+                  if(this == idUser) {
+                    finalitzada = true;
+                  }
+                });                  
+              }
+              //console.log(idUser)
+              if(finalitzada == false) {
+                if(data.preguntes){
+                    $.each(data.preguntes, function(num,pregunta) {
+                        $("#divPreguntesResp").append(function(index,html){
+                            //console.log(pregunta);
+                              var result = "<div class='divFilaPregunta'>";
+                              result += "<div class='divTitolFilaPregunta'>";
+                                result += "<p>"+(num+1)+". "+pregunta.text+"</p>";
+                                result += "<p class='template'>Tipus: "+pregunta.tipus+"</p>";
+                              result += "</div>";
+                              result += "<div class='divContingutPregunta'>";
+                                result += "<p class='template'>Pregunta: "+pregunta.text+"</p>";
+                            switch (pregunta.tipus){
+                                case "Text":
+                                      //console.log(pregunta.respostes)
+                                      var respostaUsuari = "";
+                                      $.each(pregunta.respostes, function(numR,r) {
+                                        if(r.idEnquestat == idUser) {
+                                          respostaUsuari = r.resposta;
                                         }
-                                        result += "<span><input name='"+pregunta.text+"' type='radio' value='"+resposta+"' id='test"+pregunta.id+indexResposta+"' "+marcada+" required>"+resposta+"</span>";
-                                    });
-                                  result += "<div class='separadorBlanc'></div></div>";
-                                }
-                                result += "</div>";
-                                result += "</div>";
-                                break;
-                            case "Multi":
-                                if(pregunta.possiblesRespostes.length > 0) {
+                                      });
+                                      //result += "<span><input type='text' name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'></span>";
+                                      result += "<span><textarea name='respostaPregunta' id='"+pregunta.id+"' class='respostaPregunta required'>"+respostaUsuari+"</textarea></span>";
+                                      result += "</div>";
+                                    result += "</div>";
+                                    break;
+                                case "Test":
+                                    if(pregunta.possiblesRespostes.length > 0) {
 
-                                    var respostaUsuariMulti = "";
-                                    $.each(pregunta.respostes, function(numR,r) {
-                                      if(r.idEnquestat == idUser) {
-                                        respostaUsuariTest = r.resposta;
-                                      }
-                                    });
-
-                                    result += "<div class='inputdata' id='"+pregunta.id+"'>";
-                                    $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                        var marcada = "";
-                                        if(resposta == respostaUsuariTest) {
-                                          marcada = "checked='true'";
+                                      var respostaUsuariTest = "";
+                                      $.each(pregunta.respostes, function(numR,r) {
+                                        if(r.idEnquestat == idUser) {
+                                          respostaUsuariTest = r.resposta;
                                         }
-                                      result += "<span><input type='checkbox' name='"+pregunta.text+indexResposta+"' id='multi"+pregunta.id+indexResposta+"' value='"+resposta+"' "+marcada+"/>"+resposta+"</span>"
-                                      //result += "<span><input name='"+pregunta.text+indexResposta+"' type='checkbox' value='"+resposta+"' id='"+pregunta.id+"'>"+resposta+"</span>";                                    
-                                    });
-                                    result += "<div class='separadorBlanc'></div></div>";
-                                }
-                                  result += "</div>";
-                                result += "</div>";
-                                break;
-                        }
-                        return result;
-                    });
-                  })
-                   
-                   $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='enviarResp' name='enviarResp' value='Enviar Respostes'/><span>  Es podrà completar l'enquesta posteriorment</span></div>");
-                   $("#divPreguntesResp").append("<div class='boto'><input type='button' class='finResp' id='finResp' name='finResp' value='Finalitzar Enaquesta'/><span>  S'envien les respostes de manera definitiva</span></div>");
-                   Events.botoFinalitzarResposta();
+                                      });
+
+                                      result += "<div class='inputdata' id='"+pregunta.id+"'>";
+                                        $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
+                                            var marcada = "";
+                                            if(resposta == respostaUsuariTest) {
+                                              marcada = "checked='true'";
+                                            }
+                                            result += "<span><input name='"+pregunta.text+"' type='radio' value='"+resposta+"' id='test"+pregunta.id+indexResposta+"' "+marcada+" required>"+resposta+"</span>";
+                                        });
+                                      result += "<div class='separadorBlanc'></div></div>";
+                                    }
+                                    result += "</div>";
+                                    result += "</div>";
+                                    break;
+                                case "Multi":
+                                    if(pregunta.possiblesRespostes.length > 0) {
+
+                                        var respostaUsuariMulti = "";
+                                        $.each(pregunta.respostes, function(numR,r) {
+                                          if(r.idEnquestat == idUser) {
+                                            respostaUsuariTest = r.resposta;
+                                          }
+                                        });
+
+                                        result += "<div class='inputdata' id='"+pregunta.id+"'>";
+                                        $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
+                                            var marcada = "";
+                                            if(resposta == respostaUsuariTest) {
+                                              marcada = "checked='true'";
+                                            }
+                                          result += "<span><input type='checkbox' name='"+pregunta.text+indexResposta+"' id='multi"+pregunta.id+indexResposta+"' value='"+resposta+"' "+marcada+"/>"+resposta+"</span>"
+                                          //result += "<span><input name='"+pregunta.text+indexResposta+"' type='checkbox' value='"+resposta+"' id='"+pregunta.id+"'>"+resposta+"</span>";                                    
+                                        });
+                                        result += "<div class='separadorBlanc'></div></div>";
+                                    }
+                                      result += "</div>";
+                                    result += "</div>";
+                                    break;
+                            }
+                            return result;
+                        });
+                      })
+                       
+                       $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='enviarResp' name='enviarResp' value='Enviar Respostes'/><span>  Es podrà completar l'enquesta posteriorment</span></div>");
+                       $("#divPreguntesResp").append("<div class='boto'><input type='button' class='finResp' id='finResp' name='finResp' value='Finalitzar Enaquesta'/><span>  S'envien les respostes de manera definitiva</span></div>");
+                       Events.botoFinalitzarResposta();
+                    }
+                  }
+                  else {
+                    $("#respondEnq").html("<div class='missatgeCentral'><p>Ja has finalitzat l'enquesta, per tant no pots tornar a modificar-la.</p></div>")
+                  }
+                }
+                else {
+                  $("#respondEnq").html("<div class='missatgeCentral'><p>L'enquesta encara no ha començat.</p></div>")
                 }
             break;
         case "LlistatEnquestes":
