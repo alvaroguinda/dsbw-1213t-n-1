@@ -350,7 +350,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
               str = r.replaceAllIn(str,"&lt;")
               r = """>""".r
               str = r.replaceAllIn(str,"&gt;")
-              r = """\""".r
+              r = """\"""".r
               str = r.replaceAllIn(str,"&quot;")
               r = """'""".r
               str = r.replaceAllIn(str,"&#039;") 
@@ -415,7 +415,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
               str = r.replaceAllIn(str,"&lt;")
               r = """>""".r
               str = r.replaceAllIn(str,"&gt;")
-              r = """\""".r
+              r = """\"""".r
               str = r.replaceAllIn(str,"&quot;")
               r = """'""".r
               str = r.replaceAllIn(str,"&#039;") 
@@ -478,7 +478,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
               str = r.replaceAllIn(str,"&lt;")
               r = """>""".r
               str = r.replaceAllIn(str,"&gt;")
-              r = """\""".r
+              r = """\"""".r
               str = r.replaceAllIn(str,"&quot;")
               r = """'""".r
               str = r.replaceAllIn(str,"&#039;") 
@@ -540,7 +540,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
               str = r.replaceAllIn(str,"&lt;")
               r = """>""".r
               str = r.replaceAllIn(str,"&gt;")
-              r = """\""".r
+              r = """\"""".r
               str = r.replaceAllIn(str,"&quot;")
               r = """'""".r
               str = r.replaceAllIn(str,"&#039;") 
