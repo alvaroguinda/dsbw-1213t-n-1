@@ -506,7 +506,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
           inici = enquesta.inici,
           fi = enquesta.fi,
           preguntes = preguntesE,
-          finalitzades = enquesta.finalitzades ::: List(idUser)
+          finalitzades = enquesta.finalitzades ::: List(id_user)
           )
         enquestesRepository.save(enquestaR)
 
@@ -568,7 +568,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
           inici = enquesta.inici,
           fi = enquesta.fi,
           preguntes = preguntesE,
-          finalitzades = enquesta.finalitzades ::: List(idUser)
+          finalitzades = enquesta.finalitzades ::: List(id_user)
           )
         enquestesRepository.save(enquestaR)
 
