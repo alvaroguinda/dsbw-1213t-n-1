@@ -1183,15 +1183,18 @@ var posaEnquestats = function(data){
 
   $("#veureRespostes").empty();
   $("#veureRespostes").append("<h2>Persones que han respost l'enquesta</h2>");
-    $.each(data.preguntes[0].respostes, function(num,resposta) {
+  if(data.finalitzades.length == 0){
+    $("#veureRespostes").append("<h4>Encara cap usuari ha respost completament l'enquesta</h4>");
+  }
+    $.each(data.finalitzades, function(num,resposta) {
       $("#veureRespostes").append(function(index,html){
         var result = "<div class='divFilaPregunta'>";
         result += "<div class='divTitolFilaPregunta'>";
         result += "<p>Enquestat "+(num+1)+"</p>";
-        result += "<p class='template'>"+resposta.idEnquestat+"</p>";
+        result += "<p class='template'>"+resposta+"</p>";
         result += "</div>";
         result += "<div class='divBotoEnquestat'>";
-        result += "<input type='button' id='veureEnquestat"+resposta.idEnquestat+"' name='veureEnquestat"+(num+1)+"' value='Veure'/>";
+        result += "<input type='button' id='veureEnquestat"+resposta+"' name='veureEnquestat"+(num+1)+"' value='Veure'/>";
         result += "</div>";
         result += "<div class='divContingutPregunta'>";
         result += "<p>Anònim</p>";
