@@ -905,7 +905,12 @@ var Events = {
                 return false;
             }
         });
-   },
+
+    $("#contactar .tornar").click(function(e) {
+          e.preventDefault();
+          carregaSeccio("Inici");
+    });
+  },
 
    botonsPreguntes: function(){
         var idEnq = location.pathname.substring(1).split("/")[1].substring(3);
@@ -1355,7 +1360,7 @@ var configuraSeccio = function(data){
                       })
                        
                        $("#divPreguntesResp").append("<div class='boto'><input type='submit' id='enviarResp' name='enviarResp' value='Enviar Respostes'/><span>  Es podrà completar l'enquesta posteriorment</span></div>");
-                       $("#divPreguntesResp").append("<div class='boto'><input type='button' class='finResp' id='finResp' name='finResp' value='Finalitzar Enaquesta'/><span>  S'envien les respostes de manera definitiva</span></div>");
+                       $("#divPreguntesResp").append("<div class='boto'><input type='button' class='finResp' id='finResp' name='finResp' value='Finalitzar Enquesta'/><span>  S'envien les respostes de manera definitiva</span></div>");
                        Events.botoFinalitzarResposta();
                     }
                   }

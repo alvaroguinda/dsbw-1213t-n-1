@@ -71,7 +71,21 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
     }
     new User(nom,logged)
   }
-
+/*
+  def escapeHTML(str:String): String = {
+    var r = """<""".r
+    var ans = r.replaceAllIn(str,"&lt;")
+    r = """>""".r
+    ans = r.replaceAllIn(ans,"&gt;")
+    //r = """\"""".r
+    //ans = r.replaceAllIn(ans,"&quot;")
+    r = """'""".r
+    ans = r.replaceAllIn(ans,"&#039;")
+    r = """&""".r
+    ans = r.replaceAllIn(ans,"&amp;")
+    //println(ans)
+  }
+*/
   //private def getEnquestaById(id:ObjectId) = enquestesRepository.findById(id).map(ar=>Author(ar.name,ar.username,ar.avatar))
   //def listEnquestes = enquestesRepository.findAll.map(cr => Enquesta(getEnquestaById(cr.author).get,cr.date,cr.message))
 
@@ -326,9 +340,22 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         enquesta.preguntes.foreach{p =>
         	//preguntesE = List(p) ::: preguntesE
         	respostesP = p.respostes
-          respostes.respostes.foreach{r => 
-        		if (p.id == r.apply(0)) {
-        			respostesP = respostesP ::: List(new Resposta(id_user,r.apply(1)))
+          respostes.respostes.foreach{resp => 
+        		if (p.id == resp.apply(0)) {
+              /* Reemplacem caracter per evitar atacs XSS */
+              var str = resp.apply(1)
+              var r = """&""".r
+              str = r.replaceAllIn(str,"&amp;")
+              r = """<""".r
+              str = r.replaceAllIn(str,"&lt;")
+              r = """>""".r
+              str = r.replaceAllIn(str,"&gt;")
+              r = """\"""".r
+              str = r.replaceAllIn(str,"&quot;")
+              r = """'""".r
+              str = r.replaceAllIn(str,"&#039;") 
+              /* ------ */
+        			respostesP = respostesP ::: List(new Resposta(id_user,str))
         		} 
         	}
 
@@ -378,9 +405,22 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         enquesta.preguntes.foreach{p =>
           //preguntesE = List(p) ::: preguntesE
           respostesP = p.respostes.filter(_.idEnquestat != id_user)
-          respostes.respostes.foreach{r => 
-            if (p.id == r.apply(0)) {
-              respostesP = respostesP ::: List(new Resposta(id_user,r.apply(1)))
+          respostes.respostes.foreach{resp => 
+            if (p.id == resp.apply(0)) {
+              /* Reemplacem caracter per evitar atacs XSS */
+              var str = resp.apply(1)
+              var r = """&""".r
+              str = r.replaceAllIn(str,"&amp;")
+              r = """<""".r
+              str = r.replaceAllIn(str,"&lt;")
+              r = """>""".r
+              str = r.replaceAllIn(str,"&gt;")
+              r = """\"""".r
+              str = r.replaceAllIn(str,"&quot;")
+              r = """'""".r
+              str = r.replaceAllIn(str,"&#039;") 
+              /* ------ */
+              respostesP = respostesP ::: List(new Resposta(id_user,str))
             } 
           }
 
@@ -428,9 +468,22 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         enquesta.preguntes.foreach{p =>
           //preguntesE = List(p) ::: preguntesE
           respostesP = p.respostes.filter(_.idEnquestat != id_user)
-          respostes.respostes.foreach{r => 
-            if (p.id == r.apply(0)) {
-              respostesP = respostesP ::: List(new Resposta(id_user,r.apply(1)))
+          respostes.respostes.foreach{resp => 
+            if (p.id == resp.apply(0)) {
+              /* Reemplacem caracter per evitar atacs XSS */
+              var str = resp.apply(1)
+              var r = """&""".r
+              str = r.replaceAllIn(str,"&amp;")
+              r = """<""".r
+              str = r.replaceAllIn(str,"&lt;")
+              r = """>""".r
+              str = r.replaceAllIn(str,"&gt;")
+              r = """\"""".r
+              str = r.replaceAllIn(str,"&quot;")
+              r = """'""".r
+              str = r.replaceAllIn(str,"&#039;") 
+              /* ------ */
+              respostesP = respostesP ::: List(new Resposta(id_user,str))
             } 
           }
 
@@ -477,9 +530,22 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         enquesta.preguntes.foreach{p =>
           //preguntesE = List(p) ::: preguntesE
           respostesP = p.respostes.filter(_.idEnquestat != id_user)
-          respostes.respostes.foreach{r => 
-            if (p.id == r.apply(0)) {
-              respostesP = respostesP ::: List(new Resposta(id_user,r.apply(1)))
+          respostes.respostes.foreach{resp => 
+            if (p.id == resp.apply(0)) {
+              /* Reemplacem caracter per evitar atacs XSS */
+              var str = resp.apply(1)
+              var r = """&""".r
+              str = r.replaceAllIn(str,"&amp;")
+              r = """<""".r
+              str = r.replaceAllIn(str,"&lt;")
+              r = """>""".r
+              str = r.replaceAllIn(str,"&gt;")
+              r = """\"""".r
+              str = r.replaceAllIn(str,"&quot;")
+              r = """'""".r
+              str = r.replaceAllIn(str,"&#039;") 
+              /* ------ */
+              respostesP = respostesP ::: List(new Resposta(id_user,str))
             } 
           }
 
