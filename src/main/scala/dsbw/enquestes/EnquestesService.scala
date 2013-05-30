@@ -365,7 +365,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         		tipus = p.tipus,
         		possiblesRespostes = p.possiblesRespostes,
         		respostes = respostesP
-        		)
+        	)
         	preguntesE =  preguntesE ::: List(preguntaR) //preguntesE.patch(i,preguntaR
         }
 //case class EnquestaRecord(_id:ObjectId = new ObjectId(), idResp: ObjectId= new ObjectId(),estat:Integer,titol:String, inici:String, fi:String, preguntes:List[Pregunta])
@@ -380,7 +380,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         	preguntes = preguntesE,
           finalitzades = enquesta.finalitzades
         	)
-        println(enquestaR)
+
         enquestesRepository.save(enquestaR)
 
         new EnquestaUser(enquestaR.idResp.toString(),id_user)

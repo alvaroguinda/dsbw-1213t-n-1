@@ -1269,7 +1269,7 @@ var configuraSeccio = function(data){
             }
             break;
         case "Respondre":
-            console.log(data);
+            //console.log(data);
             var dActual = new Date();
 
             var dia = parseInt(data.inici.substr(0,2));
@@ -1300,7 +1300,7 @@ var configuraSeccio = function(data){
                 if(data.preguntes){
                     $.each(data.preguntes, function(num,pregunta) {
                         $("#divPreguntesResp").append(function(index,html){
-                            //console.log(pregunta);
+                              //console.log(pregunta);
                               var result = "<div class='divFilaPregunta'>";
                               result += "<div class='divTitolFilaPregunta'>";
                                 result += "<p>"+(num+1)+". "+pregunta.text+"</p>";
@@ -1348,19 +1348,23 @@ var configuraSeccio = function(data){
                                 case "Multi":
                                     if(pregunta.possiblesRespostes.length > 0) {
 
-                                        var respostaUsuariMulti = "";
+                                        var respostaUsuariMulti = new Array();
+                                        var i=0;
                                         $.each(pregunta.respostes, function(numR,r) {
                                           if(r.idEnquestat == idUser) {
-                                            respostaUsuariTest = r.resposta;
+                                            respostaUsuariMulti[i] = r.resposta;
+                                            i++;
                                           }
                                         });
 
                                         result += "<div class='inputdata' id='"+pregunta.id+"'>";
                                         $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                            var marcada = "";
-                                            if(resposta == respostaUsuariTest) {
+                                          var marcada = "";
+                                          for(var j=0; j<pregunta.possiblesRespostes.length; j++) {
+                                            if(resposta == respostaUsuariMulti[j]) {
                                               marcada = "checked='true'";
                                             }
+                                          }
                                           result += "<span><input type='checkbox' name='"+pregunta.text+indexResposta+"' id='multi"+pregunta.id+indexResposta+"' value='"+resposta+"' "+marcada+"/>"+resposta+"</span>"
                                           //result += "<span><input name='"+pregunta.text+indexResposta+"' type='checkbox' value='"+resposta+"' id='"+pregunta.id+"'>"+resposta+"</span>";                                    
                                         });
