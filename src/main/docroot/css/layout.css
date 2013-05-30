@@ -577,7 +577,7 @@ div.inputdata input[type="checkbox"]{
     margin-bottom: 25px;
     margin-left: 25px;
     margin-right: 25px;
-    text-align: center;
+    text-align: center !important;
 }
 
 .missatgeCentral p{

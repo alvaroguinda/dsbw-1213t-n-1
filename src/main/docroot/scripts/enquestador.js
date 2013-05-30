@@ -811,6 +811,21 @@ var Events = {
                 respostes: respostes
               }
 
+
+              $(event.target).closest(".divFormulariResp").find(".divContingutPregunta :input").each(function(index) {
+                
+              if($(this).is(":radio") || $(this).is(":checkbox")) {
+                  if($(this).is(":checked")) {
+                    respostes[posicioResposta] = [$(this).closest('.inputdata').attr('id'), $(this).val()];
+                    posicioResposta++;
+                  }
+                }
+                else {
+                  respostes[posicioResposta] = [$(this).attr('id'), $(this).val()];
+                  posicioResposta++;
+                }                
+              });
+
               if(idUser == "0"){
                 $.ajax({
                   type: "POST",
@@ -968,7 +983,7 @@ var Events = {
               var posicioResposta = 0;
               $(event.target).closest(".divFormulariResp").find(".divContingutPregunta :input").each(function(index) {
                 
-                if($(this).is(":radio") || $(this).is(":checkbox")) {
+              if($(this).is(":radio") || $(this).is(":checkbox")) {
                   if($(this).is(":checked")) {
                     respostes[posicioResposta] = [$(this).closest('.inputdata').attr('id'), $(this).val()];
                     posicioResposta++;
@@ -1260,14 +1275,14 @@ var configuraSeccio = function(data){
             var dia = parseInt(data.inici.substr(0,2));
             var mes = parseInt(data.inici.substr(3,2));
             mes--;
-            var any = parseInt(data.inici.substr(6,4))
-            var dIniciEnquesta = new Date(any, mes, dia)
-            
-            if(dActual.getTime() >= dIniciEnquesta.getTime()) {
+            var any = parseInt(data.inici.substr(6,4));
+            var dIniciEnquesta = new Date(any, mes, dia);
 
-              $("#veureTitolResp").text(data["titol"]);
-              $("#veureDesMResp").text(data["inici"]);
-              $("#veureFinsMResp").text(data["fi"]);
+            $("#veureTitolResp").text(data["titol"]);
+            $("#veureDesMResp").text(data["inici"]);
+            $("#veureFinsMResp").text(data["fi"]);
+            
+            if(dActual.getTime() >= dIniciEnquesta.getTime()) {             
 
               var idUser = "0";
               var finalitzada=false;
@@ -1365,11 +1380,11 @@ var configuraSeccio = function(data){
                     }
                   }
                   else {
-                    $("#respondEnq").html("<div class='missatgeCentral'><p>Ja has finalitzat l'enquesta, per tant no pots tornar a modificar-la.</p></div>")
+                    $("#divPreguntesResp").html("<div class='missatgeCentral'><p>Ja has finalitzat l'enquesta, per tant no pots tornar a modificar-la.</p></div>")
                   }
                 }
                 else {
-                  $("#respondEnq").html("<div class='missatgeCentral'><p>L'enquesta encara no ha començat.</p></div>")
+                  $("#divPreguntesResp").html("<div class='missatgeCentral'><p>L'enquesta comença el dia <b>"+data["inici"]+"</b> fins aleshores no podras respondre cap pregunta.</p></div>")
                 }
             break;
         case "LlistatEnquestes":
