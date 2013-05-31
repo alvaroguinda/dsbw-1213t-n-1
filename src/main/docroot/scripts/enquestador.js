@@ -1174,7 +1174,7 @@ var configuraEstat = function(estat, id, resp){
     $("#veureEnquesta .veureR").addClass("template");
 
     //Si tenim l'enquesta publicada ja no podem canviar l'ordre
-    if($("#divPreguntes .sortable").length > 0) {
+    if($("#divPreguntes").hasClass("sortable")) {
       resetSortable("#divPreguntes");
     }
   } 
@@ -1188,7 +1188,7 @@ var configuraEstat = function(estat, id, resp){
     $("#veureEnquesta .veureR").removeClass("template");
     
     //Si tenim l'enquesta publicada ja no podem canviar l'ordre
-    if($("#divPreguntes .sortable").length > 0) {
+    if($("#divPreguntes").hasClass("sortable")) {
       resetSortable("#divPreguntes");
     }
   } 
@@ -1225,6 +1225,7 @@ var posaRespostesUser = function(data){
   $("#veureRespostesUser").removeClass("template");
   $("#veureRespostesUser").append("<h2>Respostes de l'usuari</h2>");
     $.each(data.respostes, function(num,resposta) {
+      console.log(resposta)
       $("#veureRespostesUser").append(function(index,html){
         var result = "<div class='divFilaPregunta'>";
         result += "<div class='divTitolFilaPregunta'>";
@@ -1269,7 +1270,7 @@ var configuraSeccio = function(data){
             }
             break;
         case "Respondre":
-            //console.log(data);
+            console.log(data);
             var dActual = new Date();
 
             var dia = parseInt(data.inici.substr(0,2));
@@ -1282,7 +1283,7 @@ var configuraSeccio = function(data){
             $("#veureDesMResp").text(data["inici"]);
             $("#veureFinsMResp").text(data["fi"]);
             
-            if(dActual.getTime() >= dIniciEnquesta.getTime()) {             
+            if(data.estat >= 1 && dActual.getTime() >= dIniciEnquesta.getTime()) {             
 
               var idUser = "0";
               var finalitzada=false;
@@ -1388,7 +1389,12 @@ var configuraSeccio = function(data){
                   }
                 }
                 else {
-                  $("#divPreguntesResp").html("<div class='missatgeCentral'><p>L'enquesta comença el dia <b>"+data["inici"]+"</b> fins aleshores no podras respondre cap pregunta.</p></div>")
+                  if(dActual.getTime() < dIniciEnquesta.getTime()) {
+                    $("#divPreguntesResp").html("<div class='missatgeCentral'><p>L'enquesta comença el dia <b>"+data["inici"]+"</b> fins aleshores no podras respondre cap pregunta.</p></div>")
+                  }
+                  else {
+                    $("#respondEnq").html("<div class='missatgeCentral'><p>Estàs intentant accedir a una enquesta no publicada.</p></div>")
+                  }
                 }
             break;
         case "LlistatEnquestes":

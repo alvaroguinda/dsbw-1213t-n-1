@@ -125,16 +125,14 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 	}
 
 	def creaEnquesta(enquesta: NovaEnquesta):EnquestaID= {
-		//println(enquesta.titol)
-		//println(enquesta.inici)
-		//println(enquesta.fi)
+
 		if(enquesta.titol == "") throw new HttpException(400, "El titol no pot estar en blanc")
 		//if(enquesta.inici == "") throw new HttpException(400, "La data inici no pot estar en blanc")
 		if(enquesta.fi == "") throw new HttpException(400, "La data fi no pot estar en blanc")
 		//if(enquestesRepository.findByTitol(enquesta.titol).isDefined) throw new HttpException(400,"El Titol ja existeix")
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(),
-			idResp = null,
+			idResp = new ObjectId(),
 			estat = 0,
 			titol = enquesta.titol,
 			inici = enquesta.inici,
@@ -143,7 +141,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 			preguntes = List()
 		)
 		enquestesRepository.save(enquestaR)
-    println(enquestaR.toString)
+
 		new EnquestaID(enquestaR._id.toString())
 	}
 
@@ -156,10 +154,11 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 
 		val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
 
+
     if(enquestaOrigin.estat > 1) throw new HttpException(400, "La enquesta ja no pot ser modificada")
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
-			idResp = null,
+			idResp = enquestaOrigin.idResp,
 			estat = 0,
 			titol = enquesta.titol,
 			inici = enquesta.inici,
@@ -187,9 +186,11 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 	//	if(preguntes.respostes == null) throw new HttpException(400, "El tipus ha de ser Text,Test o Multi")
 		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
     if(enquesta.estat > 1) throw new HttpException(400, "La enquesta ja no pot ser modificada")
+
+
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
-			idResp = null,
+			idResp = enquesta.idResp,
 			estat = 0,
 			titol = enquesta.titol,
 			inici = enquesta.inici,
@@ -212,7 +213,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 		val preguntesn = enquesta.preguntes.filter(_.id != idPregunta)
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
-			idResp = null,
+			idResp = enquesta.idResp,
 			estat = 0,
 			titol = enquesta.titol,
 			inici = enquesta.inici,
@@ -247,7 +248,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 
     val enquestaR = new EnquestaRecord (
       _id = new ObjectId(idEnquesta),
-      idResp = null,
+      idResp = enquestaOrigin.idResp,
       estat = 0,
       titol = enquestaOrigin.titol,
       inici = enquestaOrigin.inici,
@@ -266,7 +267,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
     if(idAdmin == "")  throw new HttpException(400, "El ID no pot estar en blanc")
     if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
     val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
-    if(enquestaOrigin.estat > 1) throw new HttpException(400, "La enquesta ja no pot ser modificada")
+    if(enquestaOrigin.estat >= 1) throw new HttpException(400, "La enquesta ja no pot ser modificada")
 
     var preguntesO:List[Pregunta] = List()
     preguntes.preguntes.foreach{p =>
@@ -275,7 +276,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 
     val enquestaR = new EnquestaRecord (
       _id = new ObjectId(idEnquesta),
-      idResp = null,
+      idResp = enquestaOrigin.idResp,
       estat = 0,
       titol = enquestaOrigin.titol,
       inici = enquestaOrigin.inici,
@@ -291,8 +292,6 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
     if(idEnquesta == "")  throw new HttpException(400, "El ID de la enquesta no pot estar en blanc")
 		val enquestaOrigin = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
     if(enquestaOrigin.preguntes.isEmpty)  throw new HttpException(400, "No es pot publicar una enquesta sense preguntes")
-		var idr = new ObjectId()
-		if(estat.ident != 1) idr = null
 
     var dataInici = enquestaOrigin.inici
     if(dataInici == "") {
@@ -301,7 +300,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 
 		val enquestaR = new EnquestaRecord (
 			_id = new ObjectId(idEnquesta),
-			idResp = idr,
+			idResp = enquestaOrigin.idResp,
 			estat = estat.ident,
 			titol = enquestaOrigin.titol,
 			inici = dataInici,
@@ -319,17 +318,14 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 
 	def postRespondreEnquesta(idUser: String, idEnquesta: String, respostes: Respostes):EnquestaUser={
 		val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
+    if(enquesta.estat < 1)  throw new HttpException(400, "L'enquesta no esta publicada")
         //new Enquesta(null,enquesta.idResp.toString(),enquesta.estat,enquesta.titol,enquesta.inici,enquesta.fi,enquesta.preguntes)
-
 
         var id_user = idUser
         if(idUser == "0") {
           var _idUser = new ObjectId()
           id_user = _idUser.toString()
         }
-
-        //println(id_user)
-        //println(respostes)
 
         //for (r <- respostes) println(r)
         var preguntesE:List[Pregunta] = List()
@@ -379,7 +375,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         	fi = enquesta.fi,
         	preguntes = preguntesE,
           finalitzades = enquesta.finalitzades
-        	)
+        )
 
         enquestesRepository.save(enquestaR)
 
@@ -388,6 +384,8 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 
   def putRespondreEnquesta(idUser: String, idEnquesta: String, respostes: Respostes):EnquestaUser={
     val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
+    if(enquesta.estat < 1)  throw new HttpException(400, "L'enquesta no esta publicada")
+
         var id_user = idUser
         if(idUser == "0") {
           var _idUser = new ObjectId()
@@ -452,13 +450,14 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 
   def putRespondreEnquestaFinalPut(idUser: String, idEnquesta: String, respostes: Respostes):EnquestaUser={
     val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
+    if(enquesta.estat < 1)  throw new HttpException(400, "L'enquesta no esta publicada")
+
         var id_user = idUser
         if(idUser == "0") {
           var _idUser = new ObjectId()
           id_user = _idUser.toString()
         }
 
-        //println(id_user)
         //for (r <- respostes) println(r)
         var preguntesE:List[Pregunta] = List()
         var respostesP:List[Resposta] = List()
@@ -514,13 +513,13 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
   }
   def putRespondreEnquestaFinalPost(idUser: String, idEnquesta: String, respostes: Respostes):EnquestaUser={
     val enquesta = enquestesRepository.findByIdResp(new ObjectId(idEnquesta)).get.copy()
+    if(enquesta.estat < 1)  throw new HttpException(400, "L'enquesta no esta publicada")
         var id_user = idUser
         if(idUser == "0") {
           var _idUser = new ObjectId()
           id_user = _idUser.toString()
         }
-        println(Respostes)
-        //println(id_user)
+
         //for (r <- respostes) println(r)
         var preguntesE:List[Pregunta] = List()
         var respostesP:List[Resposta] = List()
@@ -568,8 +567,10 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
           inici = enquesta.inici,
           fi = enquesta.fi,
           preguntes = preguntesE,
-          finalitzades = enquesta.finalitzades ::: List(idUser)
-          )
+          finalitzades = enquesta.finalitzades ::: List(id_user)
+        )
+
+
         enquestesRepository.save(enquestaR)
 
         new EnquestaUser(enquestaR.idResp.toString(),id_user)
