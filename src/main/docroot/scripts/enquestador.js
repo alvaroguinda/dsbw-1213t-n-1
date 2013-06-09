@@ -21,6 +21,10 @@ var carregaSeccio = function(nomSeccio,data){
         var path = location.pathname.substring(1).split("/")[0]; //capturem el path contingut a la url
         switch (path){
             case "Enquestes":
+                if(location.pathname.substring(1).split("/")[2] == "veureRespostes"){ //en cas que refresquem en veure respostes, ens porta a l'enquesta
+                    window.location = domini+location.pathname.substring(1).split("/")[0]+"/"+location.pathname.substring(1).split("/")[1];
+                    break;
+                }
                 id = location.pathname.substring(1).split("/")[1].substring(3);
                 if(id != "") getEnquestaURL(id);
                 break;
@@ -48,7 +52,10 @@ var carregaSeccio = function(nomSeccio,data){
     }
     else { //si hem rebut arguments es tracta d'un click a un botó que ha de conduir a una determinada secció
         if(data && data.id) id = "Enq"+data.id+"/"; //si rebem l'id d'una enquesta el concatenarem a la URL
-        history.pushState({page:nomSeccio}, nomSeccio, domini+nomSeccio+"/"+id); //modifiquem la url de la web + l'historic associat del navegador
+        if(nomSeccio == "veureRespostes"){ //cas en que volem veure les respostes a una enquesta
+          history.pushState({page:nomSeccio}, location.pathname.substring(1).split("/")[0]+"/"+location.pathname.substring(1).split("/")[1]+"/"+nomSeccio, domini+location.pathname.substring(1).split("/")[0]+"/"+location.pathname.substring(1).split("/")[1]+"/"+nomSeccio);
+        }
+        else history.pushState({page:nomSeccio}, nomSeccio, domini+nomSeccio+"/"+id); //modifiquem la url de la web + l'historic associat del navegador
         $("#"+secc[nomSeccio]).removeClass("template"); //mostrem la secció nomSeccio
 
         var path = location.pathname.substring(1).split("/")[0]; //capturem el path contingut a la url
@@ -1228,14 +1235,18 @@ var posaRespostesUser = function(data){
   $("#veureRespostesUser").removeClass("template");
   $("#veureRespostesUser").append("<h2>Respostes de l'usuari</h2>");
     $.each(data.respostes, function(num,resposta) {
-      console.log(resposta)
       $("#veureRespostesUser").append(function(index,html){
         var result = "<div class='divFilaPregunta'>";
         result += "<div class='divTitolFilaPregunta'>";
         result += "<p>Pregunta "+(num+1)+" : </p>";
         result += "<p>"+resposta.pregunta+"</p>";
+        if(resposta.possiblitats){
+          $.each(resposta.possiblitats,function(num,possib){
+            result += "<p> · "+possib+"</p>";
+          });
+        }
         result += "<div class='divContingutPregunta'>";
-        result += "<p>Respostes: "+resposta.respostes+"</p>";
+        result += "<p>Resposta: "+resposta.respostes+"</p>";
         result += "</div>";
         result += "</div>";
         result += "<div class='separadorBlanc'></div></div>";
@@ -1252,6 +1263,7 @@ var configuraSeccio = function(data){
     var path = location.pathname.substring(1).split("/")[0];
     switch (path){
         case "Enquestes":
+            if(location.pathname.substring(1).split("/")[2] == "veureRespostes") break;
             // if(data == null) --> ERROR...
             $("#veureTitol").val(data["titol"]);
             $("#veureDesM").val(data["inici"]);

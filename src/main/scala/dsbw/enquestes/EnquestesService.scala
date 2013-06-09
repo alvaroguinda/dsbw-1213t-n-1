@@ -15,7 +15,7 @@ case class EnquestaID(id:String)
 case class Enquestes(enquestes: Set[EnquestaRecord])
 case class User (nom: String, logged: Boolean)
 case class EnquestaUser(idResp:String, idUser:String)
-case class RespostaPregunta(pregunta:String, respostes:List[String])
+case class RespostaPregunta(pregunta:String, possiblitats:List[String], respostes:List[String])
 case class RespostaUser(respostes:List[RespostaPregunta])
 
 class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository: UsersRepository) {
@@ -581,8 +581,12 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
 		val enquesta = enquestesRepository.findById(new ObjectId(idEnquesta)).get.copy()
         var respostes1:List[RespostaPregunta] = List()
         enquesta.preguntes.foreach{p =>
+          var possiblesR:List[String] = List()
         	//preguntesE = List(p) ::: preguntesE
         	var resposta1:List[String] = List()
+          p.possiblesRespostes.foreach{pr =>
+            possiblesR = possiblesR ::: List(pr)
+          }
         	p.respostes.foreach{r => 
         		if (r.idEnquestat == idUser) {
         			resposta1 = resposta1 ::: List(r.resposta)
@@ -590,6 +594,7 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
         	}
         	val respostaR1 = RespostaPregunta(
         		pregunta = p.text,
+            possiblitats = possiblesR,
         		respostes = resposta1
         	)
         	respostes1 = respostes1 ::: List(respostaR1)
