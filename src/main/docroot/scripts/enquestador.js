@@ -811,6 +811,21 @@ var Events = {
                 respostes: respostes
               }
 
+
+              $(event.target).closest(".divFormulariResp").find(".divContingutPregunta :input").each(function(index) {
+                
+              if($(this).is(":radio") || $(this).is(":checkbox")) {
+                  if($(this).is(":checked")) {
+                    respostes[posicioResposta] = [$(this).closest('.inputdata').attr('id'), $(this).val()];
+                    posicioResposta++;
+                  }
+                }
+                else {
+                  respostes[posicioResposta] = [$(this).attr('id'), $(this).val()];
+                  posicioResposta++;
+                }                
+              });
+
               if(idUser == "0"){
                 $.ajax({
                   type: "POST",
@@ -968,7 +983,7 @@ var Events = {
               var posicioResposta = 0;
               $(event.target).closest(".divFormulariResp").find(".divContingutPregunta :input").each(function(index) {
                 
-                if($(this).is(":radio") || $(this).is(":checkbox")) {
+              if($(this).is(":radio") || $(this).is(":checkbox")) {
                   if($(this).is(":checked")) {
                     respostes[posicioResposta] = [$(this).closest('.inputdata').attr('id'), $(this).val()];
                     posicioResposta++;
@@ -1159,7 +1174,7 @@ var configuraEstat = function(estat, id, resp){
     $("#veureEnquesta .veureR").addClass("template");
 
     //Si tenim l'enquesta publicada ja no podem canviar l'ordre
-    if($("#divPreguntes .sortable").length > 0) {
+    if($("#divPreguntes").hasClass("sortable")) {
       resetSortable("#divPreguntes");
     }
   } 
@@ -1173,7 +1188,7 @@ var configuraEstat = function(estat, id, resp){
     $("#veureEnquesta .veureR").removeClass("template");
     
     //Si tenim l'enquesta publicada ja no podem canviar l'ordre
-    if($("#divPreguntes .sortable").length > 0) {
+    if($("#divPreguntes").hasClass("sortable")) {
       resetSortable("#divPreguntes");
     }
   } 
@@ -1213,6 +1228,7 @@ var posaRespostesUser = function(data){
   $("#veureRespostesUser").removeClass("template");
   $("#veureRespostesUser").append("<h2>Respostes de l'usuari</h2>");
     $.each(data.respostes, function(num,resposta) {
+      console.log(resposta)
       $("#veureRespostesUser").append(function(index,html){
         var result = "<div class='divFilaPregunta'>";
         result += "<div class='divTitolFilaPregunta'>";
@@ -1263,14 +1279,14 @@ var configuraSeccio = function(data){
             var dia = parseInt(data.inici.substr(0,2));
             var mes = parseInt(data.inici.substr(3,2));
             mes--;
-            var any = parseInt(data.inici.substr(6,4))
-            var dIniciEnquesta = new Date(any, mes, dia)
-            
-            if(dActual.getTime() >= dIniciEnquesta.getTime()) {
+            var any = parseInt(data.inici.substr(6,4));
+            var dIniciEnquesta = new Date(any, mes, dia);
 
-              $("#veureTitolResp").text(data["titol"]);
-              $("#veureDesMResp").text(data["inici"]);
-              $("#veureFinsMResp").text(data["fi"]);
+            $("#veureTitolResp").text(data["titol"]);
+            $("#veureDesMResp").text(data["inici"]);
+            $("#veureFinsMResp").text(data["fi"]);
+            
+            if(data.estat >= 1 && dActual.getTime() >= dIniciEnquesta.getTime()) {             
 
               var idUser = "0";
               var finalitzada=false;
@@ -1288,7 +1304,7 @@ var configuraSeccio = function(data){
                 if(data.preguntes){
                     $.each(data.preguntes, function(num,pregunta) {
                         $("#divPreguntesResp").append(function(index,html){
-                            //console.log(pregunta);
+                              //console.log(pregunta);
                               var result = "<div class='divFilaPregunta'>";
                               result += "<div class='divTitolFilaPregunta'>";
                                 result += "<p>"+(num+1)+". "+pregunta.text+"</p>";
@@ -1336,19 +1352,23 @@ var configuraSeccio = function(data){
                                 case "Multi":
                                     if(pregunta.possiblesRespostes.length > 0) {
 
-                                        var respostaUsuariMulti = "";
+                                        var respostaUsuariMulti = new Array();
+                                        var i=0;
                                         $.each(pregunta.respostes, function(numR,r) {
                                           if(r.idEnquestat == idUser) {
-                                            respostaUsuariTest = r.resposta;
+                                            respostaUsuariMulti[i] = r.resposta;
+                                            i++;
                                           }
                                         });
 
                                         result += "<div class='inputdata' id='"+pregunta.id+"'>";
                                         $.each(pregunta.possiblesRespostes, function(indexResposta,resposta) {
-                                            var marcada = "";
-                                            if(resposta == respostaUsuariTest) {
+                                          var marcada = "";
+                                          for(var j=0; j<pregunta.possiblesRespostes.length; j++) {
+                                            if(resposta == respostaUsuariMulti[j]) {
                                               marcada = "checked='true'";
                                             }
+                                          }
                                           result += "<span><input type='checkbox' name='"+pregunta.text+indexResposta+"' id='multi"+pregunta.id+indexResposta+"' value='"+resposta+"' "+marcada+"/>"+resposta+"</span>"
                                           //result += "<span><input name='"+pregunta.text+indexResposta+"' type='checkbox' value='"+resposta+"' id='"+pregunta.id+"'>"+resposta+"</span>";                                    
                                         });
@@ -1368,11 +1388,16 @@ var configuraSeccio = function(data){
                     }
                   }
                   else {
-                    $("#respondEnq").html("<div class='missatgeCentral'><p>Ja has finalitzat l'enquesta, per tant no pots tornar a modificar-la.</p></div>")
+                    $("#divPreguntesResp").html("<div class='missatgeCentral'><p>Ja has finalitzat l'enquesta, per tant no pots tornar a modificar-la.</p></div>")
                   }
                 }
                 else {
-                  $("#respondEnq").html("<div class='missatgeCentral'><p>L'enquesta encara no ha començat.</p></div>")
+                  if(dActual.getTime() < dIniciEnquesta.getTime()) {
+                    $("#divPreguntesResp").html("<div class='missatgeCentral'><p>L'enquesta comença el dia <b>"+data["inici"]+"</b> fins aleshores no podras respondre cap pregunta.</p></div>")
+                  }
+                  else {
+                    $("#respondEnq").html("<div class='missatgeCentral'><p>Estàs intentant accedir a una enquesta no publicada.</p></div>")
+                  }
                 }
             break;
         case "LlistatEnquestes":
