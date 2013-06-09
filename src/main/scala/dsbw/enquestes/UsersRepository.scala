@@ -16,4 +16,6 @@ class UsersRepository(dao: UsersDao) {
 
   def findUserByName(userName: String) = dao.findOne(Map("nom" -> userName))
 
+  def save(u:UserRecord) = dao.save(u)
+
 }

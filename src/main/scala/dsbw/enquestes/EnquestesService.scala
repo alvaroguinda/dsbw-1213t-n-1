@@ -41,21 +41,23 @@ class EnquestesService(enquestesRepository: EnquestesRepository, usersRepository
       session.getAttribute("autenticat").asInstanceOf[Boolean]
   }
 
-  def registreUser( parameters: Map[String, List[String]]) {
+  def registreUser( parameters: Map[String, List[String]]): Boolean = {
     val userName = parameters("user")(0)
     val passWord = parameters("pass")(0)
     println("UserName: "+userName+" , Pass: "+passWord)
     val userNew = usersRepository.findUserByName(userName)
     println("user: "+userNew)
     if (userNew == None){
-        val userNew = new UserRecord(
-          _id = new ObjectId(),
-          nom = userName,
-          pass = passWord,
-          admin = false
-        )
-        //usersRepository.save(userNew)
+      val userNew = new UserRecord(
+        _id = new ObjectId(),
+        nom = userName,
+        pass = passWord,
+        admin = false
+      )
+      usersRepository.save(userNew)
+      return true
     }
+    return false
   }
 
   def tancaSessio(session: HttpSession): Boolean = {
