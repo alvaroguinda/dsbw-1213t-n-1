@@ -1,5 +1,14 @@
 [Aplicació](http://fathomless-basin-9542.herokuapp.com/)
 
+Developers:
+Rubén Ausín
+Andrés Lozano
+Albert Millàs
+Marc Galofré
+Joan Marc Homedes
+Albaro Guinda
+Jordi Ferrer
+
 # DSBW Lab repository
 
 This is the repository that you need to fork for the DSBW Labs. Every group will have a fork of this repository and will work on it's own copy.
